@@ -1,14 +1,14 @@
 import { AppPage } from './app.po';
 
-describe('ngx-drag-to-select App', () => {
+describe('Demo App', () => {
   let page: AppPage;
 
   beforeEach(() => {
     page = new AppPage();
   });
 
-  it('should display welcome message', () => {
+  it('should display headline', () => {
     page.navigateTo();
-    expect(page.getParagraphText()).toEqual('Welcome to app!');
+    expect(page.getHeadline()).toEqual('Angular Drag-to-Select Component');
   });
 });

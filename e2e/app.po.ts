@@ -5,7 +5,7 @@ export class AppPage {
     return browser.get('/');
   }
 
-  getParagraphText() {
-    return element(by.css('app-root h1')).getText();
+  getHeadline() {
+    return element(by.css('ngx-root h1')).getText();
   }
 }
