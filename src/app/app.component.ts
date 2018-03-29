@@ -15,8 +15,8 @@ export class AppComponent implements OnInit {
   selectOnDrag = true;
 
   constructor(private titleService: Title, private iconRegistry: MatIconRegistry, private sanitizer: DomSanitizer) {
-    iconRegistry.addSvgIcon('apple', sanitizer.bypassSecurityTrustResourceUrl('../assets/apple-icon.svg'));
-    iconRegistry.addSvgIcon('windows', sanitizer.bypassSecurityTrustResourceUrl('../assets/windows-icon.svg'));
+    iconRegistry.addSvgIcon('apple', sanitizer.bypassSecurityTrustResourceUrl('assets/apple-icon.svg'));
+    iconRegistry.addSvgIcon('windows', sanitizer.bypassSecurityTrustResourceUrl('assets/windows-icon.svg'));
   }
 
   ngOnInit() {
