@@ -6,7 +6,7 @@ A lightweight, fast, configurable and reactive drag-to-select component for Angu
 
 ## Demo
 
-[Live Demo]()
+[Live Demo](https://d3lm.github.io/ngx-drag-to-select/)
 
 ## Playground
 
