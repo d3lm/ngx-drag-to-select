@@ -2,6 +2,9 @@ sudo: required
 language: node_js
 dist: trusty
 cache: yarn
+branches:
+  only:
+    - master
 notifications:
   email: false
 addons:
