@@ -4,7 +4,7 @@ export const isObject = (item: any) => {
   return item && typeof item === 'object' && !Array.isArray(item) && item !== null;
 };
 
-export const mergeDeep = (target: Object, source: Object) => {
+export function mergeDeep(target: Object, source: Object) {
   if (isObject(target) && isObject(source)) {
     Object.keys(source).forEach(key => {
       if (isObject(source[key])) {
@@ -19,7 +19,7 @@ export const mergeDeep = (target: Object, source: Object) => {
   }
 
   return target;
-};
+}
 
 export const clearSelection = (window: Window) => {
   const selection = window.getSelection();

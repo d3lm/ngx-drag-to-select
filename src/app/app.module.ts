@@ -3,6 +3,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { ModuleMapLoaderModule } from '@nguniversal/module-map-ngfactory-loader';
+
 import {
   MatCheckboxModule,
   MatGridListModule,
@@ -47,7 +49,8 @@ const MATERIAL_MODULES = [
     HeaderComponent
   ],
   imports: [
-    BrowserModule,
+    BrowserModule.withServerTransition({ appId: 'demo-app' }),
+    ModuleMapLoaderModule,
     HttpClientModule,
     BrowserAnimationsModule,
     FormsModule,

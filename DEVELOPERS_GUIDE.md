@@ -43,14 +43,21 @@ This will build the demo app as well as the libary for development.
 ## NPM Scripts
 
 * `start`: Build and serve demo app in watch mode
+* `serve:ssr`: Serve application using dynamic Universal
+* `build`: Build client and server bundles
+* `build:ssr`: Build client and server bundles as well as server and prerendering scripts
+* `build:prerender`: Build all bundles and statically prerender application
 * `build:app`: Build demo demo app for production
 * `build:lib`: Build library only
 * `build:lib:sass`: Compile sass files and copy them to `dist/lib`
 * `packagr`: Runs ng-packagr
 * `copy:styles`: Copy source sass files to `dist/lib/sass`
+* `generate:prerender`: Statically prerender application
+* `webpack:server`: Build express server and prerendering script
 * `format:base`: Run prettier without options
 * `format:check`: Run prettier and list files that don't comply with prettier's formatting
 * `format:fix`: Fix formatting issues
+* `clean`: Remove dist folder
 * `style`: Check linting and formatting
 * `style:fix`: Fix linting and formatting errors
 * `test`: Run test suite including e2e tests

@@ -9,10 +9,12 @@ import {
   AfterViewInit,
   OnDestroy,
   ViewEncapsulation,
-  AfterContentInit,
   Renderer2,
-  QueryList
+  QueryList,
+  OnInit
 } from '@angular/core';
+
+import { Platform } from '@angular/cdk/platform';
 
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
@@ -36,14 +38,12 @@ import {
   scan
 } from 'rxjs/operators';
 
-import { inBoundingBox, calculateBoundingClientRect, cursorWithinElement, clearSelection } from './utils';
-
+import { SelectItemDirective } from './select-item.directive';
+import { ShortcutService } from './shortcut.service';
 import { createSelectBox, observableProxy } from './operators';
 import { Action, SelectBox, SelectBoxInput } from './models';
 import { AUDIT_TIME, NO_SELECT_CLASS, MIN_WIDTH, MIN_HEIGHT } from './constants';
-
-import { SelectItemDirective } from './select-item.directive';
-import { ShortcutService } from './shortcut.service';
+import { inBoundingBox, calculateBoundingClientRect, cursorWithinElement, clearSelection } from './utils';
 
 @Component({
   selector: 'ngx-select-container',
@@ -57,7 +57,7 @@ import { ShortcutService } from './shortcut.service';
   `,
   styleUrls: ['./select-container.component.scss']
 })
-export class SelectContainerComponent implements AfterContentInit, OnDestroy {
+export class SelectContainerComponent implements OnInit, OnDestroy {
   @ViewChild('selectBox') $selectBox: ElementRef;
 
   @ContentChildren(SelectItemDirective, { descendants: true })
@@ -75,90 +75,88 @@ export class SelectContainerComponent implements AfterContentInit, OnDestroy {
   private _selectedItems: Array<any>;
   private destroy$ = new Subject<void>();
 
-  constructor(private shortcuts: ShortcutService, private host: ElementRef, private renderer: Renderer2) {}
+  constructor(
+    private shortcuts: ShortcutService,
+    private platform: Platform,
+    private host: ElementRef,
+    private renderer: Renderer2
+  ) {}
 
-  ngAfterContentInit() {
-    const container = this.host.nativeElement;
+  ngOnInit() {
+    if (this.platform.isBrowser) {
+      const container = this.host.nativeElement;
 
-    const { proxy, proxy$ } = observableProxy([]);
+      this.initProxy();
 
-    this._selectedItems = proxy;
+      const mouseup$ = fromEvent(window, 'mouseup').pipe(tap(() => this.onMouseUp()), share());
+      const mousemove$ = fromEvent(window, 'mousemove').pipe(share());
 
-    proxy$
-      .pipe(auditTime(AUDIT_TIME), map(_ => this._selectedItems), takeUntil(this.destroy$))
-      .subscribe(selectedItems => {
-        this.select.emit(selectedItems);
-        this.selectedItemsChange.emit(selectedItems);
-      });
+      const mousedown$ = fromEvent(container, 'mousedown').pipe(
+        tap((event: MouseEvent) => this.onMouseDown(event)),
+        share()
+      );
 
-    const mouseup$ = fromEvent(window, 'mouseup').pipe(tap(() => this.onMouseUp()), share());
-    const mousemove$ = fromEvent(window, 'mousemove').pipe(share());
+      const dragging$ = mousedown$.pipe(switchMap(() => mousemove$.pipe(takeUntil(mouseup$))), share());
 
-    const mousedown$ = fromEvent(container, 'mousedown').pipe(
-      tap((event: MouseEvent) => this.onMouseDown(event)),
-      share()
-    );
+      const initalSelectBoxPosition$: Observable<Partial<SelectBox<number>>> = mousedown$.pipe(
+        map((event: MouseEvent) => ({
+          top: event.pageY,
+          left: event.pageX
+        }))
+      );
 
-    const dragging$ = mousedown$.pipe(switchMap(() => mousemove$.pipe(takeUntil(mouseup$))), share());
+      const show$ = dragging$.pipe(mapTo(1));
+      const hide$ = mouseup$.pipe(mapTo(0));
+      const opacity$ = merge(show$, hide$, asap).pipe(distinctUntilChanged());
 
-    const initalSelectBoxPosition$: Observable<Partial<SelectBox<number>>> = mousedown$.pipe(
-      map((event: MouseEvent) => ({
-        top: event.pageY,
-        left: event.pageX
-      }))
-    );
+      const selectBox$ = combineLatest(dragging$, opacity$, initalSelectBoxPosition$).pipe(
+        filter(([event]: SelectBoxInput) => !this.shortcuts.disableSelection(event)),
+        createSelectBox(),
+        share()
+      );
 
-    const show$ = dragging$.pipe(mapTo(1));
-    const hide$ = mouseup$.pipe(mapTo(0));
-    const opacity$ = merge(show$, hide$, asap).pipe(distinctUntilChanged());
+      mouseup$
+        .pipe(
+          filter((event: MouseEvent) => this.cursorWithinHost(event)),
+          filter(() => !this.selectOnDrag),
+          filter(
+            (event: MouseEvent) =>
+              (!this.shortcuts.disableSelection(event) && !this.shortcuts.toggleSingleItem(event)) ||
+              this.shortcuts.removeFromSelection(event)
+          ),
+          withLatestFrom(selectBox$, (event, selectBox) => ({
+            selectBox,
+            event
+          })),
+          tap(({ selectBox, event }) => this.selectItems(selectBox, event)),
+          takeUntil(this.destroy$)
+        )
+        .subscribe();
 
-    const selectBox$ = combineLatest(dragging$, opacity$, initalSelectBoxPosition$).pipe(
-      filter(([event]: SelectBoxInput) => !this.shortcuts.disableSelection(event)),
-      createSelectBox(),
-      share()
-    );
+      selectBox$
+        .pipe(
+          auditTime(AUDIT_TIME),
+          withLatestFrom(mousemove$, (selectBox, event: MouseEvent) => ({
+            selectBox,
+            event
+          })),
+          filter(() => this.selectOnDrag),
+          filter(({ selectBox }) => selectBox.width > MIN_WIDTH || selectBox.height > MIN_HEIGHT),
+          tap(({ selectBox, event }) => this.selectItems(selectBox, event)),
+          takeUntil(this.destroy$)
+        )
+        .subscribe();
 
-    mouseup$
-      .pipe(
-        filter((event: MouseEvent) => this.cursorWithinHost(event)),
-        filter(() => !this.selectOnDrag),
-        filter(
-          (event: MouseEvent) =>
-            (!this.shortcuts.disableSelection(event) && !this.shortcuts.toggleSingleItem(event)) ||
-            this.shortcuts.removeFromSelection(event)
-        ),
-        withLatestFrom(selectBox$, (event, selectBox) => ({
-          selectBox,
-          event
-        })),
-        tap(({ selectBox, event }) => this.selectItems(selectBox, event)),
-        takeUntil(this.destroy$)
-      )
-      .subscribe();
-
-    selectBox$
-      .pipe(
-        auditTime(AUDIT_TIME),
-        withLatestFrom(mousemove$, (selectBox, event: MouseEvent) => ({
-          selectBox,
-          event
-        })),
-        filter(() => this.selectOnDrag),
-        filter(({ selectBox }) => selectBox.width > MIN_WIDTH || selectBox.height > MIN_HEIGHT),
-        tap(({ selectBox, event }) => this.selectItems(selectBox, event)),
-        takeUntil(this.destroy$)
-      )
-      .subscribe();
-
-    this.selectBoxStyles$ = selectBox$.pipe(
-      map(selectBox => ({
-        top: `${selectBox.top}px`,
-        left: `${selectBox.left}px`,
-        width: `${selectBox.width}px`,
-        height: `${selectBox.height}px`,
-        opacity: selectBox.opacity
-      }))
-    );
+      this.selectBoxStyles$ = selectBox$.pipe(
+        map(selectBox => ({
+          top: `${selectBox.top}px`,
+          left: `${selectBox.left}px`,
+          width: `${selectBox.width}px`,
+          height: `${selectBox.height}px`,
+          opacity: selectBox.opacity
+        }))
+      );
+    }
   }
 
   selectAll() {
@@ -178,6 +176,19 @@ export class SelectContainerComponent implements AfterContentInit, OnDestroy {
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  private initProxy() {
+    const { proxy, proxy$ } = observableProxy([]);
+
+    this._selectedItems = proxy;
+
+    proxy$
+      .pipe(auditTime(AUDIT_TIME), map(_ => this._selectedItems), takeUntil(this.destroy$))
+      .subscribe(selectedItems => {
+        this.select.emit(selectedItems);
+        this.selectedItemsChange.emit(selectedItems);
+      });
   }
 
   private cursorWithinHost(event: MouseEvent) {
