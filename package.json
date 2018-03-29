@@ -16,6 +16,7 @@
     "build:lib": "npm run packagr && npm run build:lib:sass && npm run copy:styles",
     "build:lib:sass": "node-sass src/lib/scss/drag-to-select.scss -o dist/lib",
     "packagr": "ng-packagr -p src/lib/package.json",
+    "deploy": "ngh --dir dist/browser",
     "copy:styles": "cpr src/lib/scss dist/lib/scss",
     "generate:prerender": "node dist/prerender.js",
     "webpack:server": "webpack --config webpack.server.config.js --progress --colors",
