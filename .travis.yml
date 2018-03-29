@@ -1,0 +1,21 @@
+sudo: required
+language: node_js
+dist: trusty
+cache: yarn
+notifications:
+  email: false
+addons:
+  apt:
+    sources:
+      - google-chrome
+    packages:
+      - google-chrome-stable
+script:
+  - npm run ci
+deploy:
+  provider: pages
+  skip_cleanup: true
+  local_dir: dist/browser
+  github_token: $GH_TOKEN
+  on:
+    branch: master

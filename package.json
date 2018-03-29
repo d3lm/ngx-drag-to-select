@@ -28,7 +28,8 @@
     "test": "ng test",
     "lint:check": "ng lint",
     "lint:fix": "ng lint --fix",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "ci": "npm run lint:check && npm run format:check && npm run e2e && npm run build:prerender-ghpages"
   },
   "private": true,
   "dependencies": {
