@@ -35,11 +35,6 @@ export const inBoundingBox = (point, box) => {
   return box.x <= point.x && point.x <= box.x + box.width && box.y <= point.y && point.y <= box.y + box.height;
 };
 
-export const cursorWithinElement = (event: MouseEvent, element: HTMLElement, window: Window) => {
-  const mousePoint = { x: event.pageX, y: event.pageY };
-  return inBoundingBox(mousePoint, calculateBoundingClientRect(element, window));
-};
-
 export const calculateBoundingClientRect = (element: HTMLElement, window: Window) => {
   const boundingRect = <ClientRect>element.getBoundingClientRect();
   const { pageXOffset, pageYOffset } = window;
@@ -52,4 +47,9 @@ export const calculateBoundingClientRect = (element: HTMLElement, window: Window
     width: boundingRect.width,
     height: boundingRect.height
   };
+};
+
+export const cursorWithinElement = (event: MouseEvent, element: HTMLElement, window: Window) => {
+  const mousePoint = { x: event.pageX, y: event.pageY };
+  return inBoundingBox(mousePoint, calculateBoundingClientRect(element, window));
 };
