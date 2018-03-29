@@ -64,7 +64,7 @@ export class SelectContainerComponent implements OnInit, OnDestroy {
   $selectItems: QueryList<SelectItemDirective>;
 
   @Input() selectedItems: any;
-  @Input() selectOnDrag = false;
+  @Input() selectOnDrag = true;
 
   @Output() selectedItemsChange = new EventEmitter<any>();
   @Output() select = new EventEmitter<any>();
