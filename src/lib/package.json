@@ -1,0 +1,41 @@
+{
+  "$schema": "../../node_modules/ng-packagr/package.schema.json",
+  "name": "ngx-drag-to-select",
+  "version": "1.0.0",
+  "description": "A lightweight and reactive drag-to-select component for Angular",
+  "sideEffects": false,
+  "peerDependencies": {
+    "@angular/core": ">=5.0.0",
+    "@angular/common": ">=5.0.0",
+    "@angular/cdk": ">=5.0.0",
+    "rxjs": ">=5.5.0"
+  },
+  "ngPackage": {
+    "lib": {
+      "entryFile": "public_api.ts",
+      "languageLevel": ["es2017", "dom"],
+      "comments": "none"
+    },
+    "dest": "../../dist/lib"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/d3lm/ngx-drag-to-select.git"
+  },
+  "keywords": [
+    "angular",
+    "ng2",
+    "ngx",
+    "ng",
+    "typescript",
+    "angular2",
+    "select",
+    "drag"
+  ],
+  "author": "Dominic Elm",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/d3lm/ngx-drag-to-select/issues"
+  },
+  "homepage": "https://github.com/d3lm/ngx-drag-to-select#readme"
+}

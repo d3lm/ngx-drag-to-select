@@ -1,27 +1,337 @@
-# NgxDragToSelect
+# ngx-drag-to-select
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.7.3.
+[![styled with prettier](https://img.shields.io/badge/styled_with-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
 
-## Development server
+A lightweight, fast, configurable and reactive drag-to-select component for Angular 5 and beyond
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+## Demo
 
-## Code scaffolding
+[Live Demo]()
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+## Playground
 
-## Build
+You can also fiddle with the library using [StackBlitz](). Credits for the template go to [Bram Borggreve](https://twitter.com/beeman_nl).
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `-prod` flag for a production build.
+## Features
 
-## Running unit tests
+* Drag to Select
+* Shortcuts
+* Customizable 💅
+* Lightweight
+* Easy to use
+* Ready for AoT and SSR
+* Complies with the [Angular Package Format](https://docs.google.com/document/d/1CZC2rcpxffTDfRDs6p1cfbmKNLA6x5O-NtkJglDaBVs/preview)
+* Includes FESM2015, FESM5, and UMD bundles 📦
+* It's fast 🏎
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+## Installation
 
-## Running end-to-end tests
+```
+npm install ngx-drag-to-select @angular/cdk
+```
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+or
 
-## Further help
+```
+yarn add ngx-drag-to-select @angular/cdk
+```
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+## Setup
+
+Setting up `ngx-drag-to-select` is easy, and it only takes a few steps!
+
+### Adding the CSS
+
+The first step is to add the CSS and for that you have two options. Either you use the **default styles** or you can import the `ngx-drag-to-select` sass package directly. The latter gives you the option to override variables and customize for instance the look and feel of the selection rectangle.
+
+**Using the default styles**
+
+Copy `ngx-drag-to-select.css` to your project and add it as a `style` tag to your `index.html`.
+
+If you are using sass you can import the css as follows:
+
+```
+@import "~ngx-drag-to-select/ngx-drag-to-select.css";
+```
+
+If you are using the [Angular CLI](https://github.com/angular/angular-cli) you can add it to your `.angular-cli.json`
+
+```
+"styles": [
+  "styles.scss",
+  "../node_modules/ngx-drag-to-select/ngx-drag-to-select.css"
+]
+```
+
+**Using the sass package**
+
+If you're using sass you can simply import the sass package. This allows you to override the default variables to customize the library to your needs.
+
+```
+// Example for overriding the color of the selection retangle
+$select-box-color: red;
+
+@import "~ngx-drag-to-select/scss/ngx-drag-to-select";
+```
+
+You can override the following variables:
+
+| Variable                      | Type    | Default   | Description                                       |
+| ----------------------------- | ------- | --------- | ------------------------------------------------- |
+| `$select-box-color`           | Color   | `#7ddafc` | Color of the selection rectangle                  |
+| `$select-box-border-size`     | Unit    | `2px`     | Border size for the selection rectangle           |
+| `$selected-item-border`       | Boolean | `true`    | Whether the selected item should get a border     |
+| `$selected-item-border-color` | Color   | `#d2d2d2` | Border color of the selected item                 |
+| `$selected-item-border-size`  | Unit    | `1px`     | Border size of the selected item                  |
+| `$box-shadow`                 | Boolean | `true`    | Whether the selected item should get a box shadow |
+
+If you wish to override one of these variables, make sure to do that **before** you import the sass package.
+
+### Adding the module
+
+In your `AppModule` import `DragToSelectModule` from `ngx-drag-to-select` and add it to the module imports:
+
+```
+import { DragToSelectModule } from 'ngx-drag-to-select';
+
+@NgModule({
+  imports: [
+    DragToSelectModule.forRoot()
+  ]
+})
+export class AppModule { }
+```
+
+That's it. You are now ready to use this library in your project. Make sure to call `forRoot()` only **once** in your `AppModule` and for feature modules you simply add the `DragToSelectModule` as is **without** calling `forRoot()`.
+
+### Configuration Options
+
+This library allows to you override certain options, such as
+
+**`selectedClass`** (String)
+
+Class that is added to an item when it's selected. The default class is `selected`. Note that if you override this option, you'll lose the default styling and must take care of this yourself.
+
+**`shortcuts`** (Object)
+
+`ngx-drag-to-select` supports a hand full of shortcuts to make our live easier when selecting items.
+
+| Shortcut            | Default          | Description                                                                       |
+| ------------------- | ---------------- | --------------------------------------------------------------------------------- |
+| disableSelection    | `alt`            | Disable selection mode to allow selecting text on the screen within the drag area |
+| toggleSingleItem    | `meta`           | Add or remove single item to / from selection                                     |
+| addToSelection      | `shift`          | Add items to selection                                                            |
+| removeFromSelection | `shift` + `meta` | Remove items from selection                                                       |
+
+You can override these options by passing a configuration object to `forRoot()`.
+
+Here's an example:
+
+```
+import { DragToSelectModule } from 'ngx-drag-to-select';
+
+@NgModule({
+  imports: [
+    DragToSelectModule.forRoot({
+      selectedClass: 'my-selected-item',
+      shortcuts: {
+        disableSelection: ''
+      }
+    })
+  ]
+})
+export class AppModule { }
+```
+
+When overriding the default shortcuts you can use the following modifier keys:
+
+**`shift`**
+**`alt`**
+**`ctrl`**
+**`meta`**
+
+When using `meta`, it will be substituted with `ctrl` (for Windows) **and** `cmd` (for Mac). This allows for cross-platform shortcuts.
+
+**Note**: If you override one of the shortscut you have to make sure they do not interfear with one another to ensure a smooth selecting experience.
+
+## Usage
+
+Once you have installed the library and added the `DragToSelectModule` to your application you are ready to go.
+
+Anywhere in your template add the `ngx-select-container` component and wrap all items that you want to be selectable in this component.
+
+Next, mark all selectable items with the `selectItem` directive. This connects each item with the container component.
+
+Here's a complete example:
+
+```
+<ngx-select-container #container="ngx-select-container" [(selectedItems)]="selectedDocuments" (select)="someMethod($event)">
+  <ul>
+    <li [selectItem]="document" *ngFor="let document of documents">{{ document.name }}</li>
+  </ul>
+</ngx-select-container>
+```
+
+To get ahold of the selected items you can use a two-way data binding (`[()]`) aka _banana-in-the-box_ syntax. This means that whenever the selection changes, your property is updated accordingly. It will always reflect the current selection.
+
+The `selectItem` directive takes an input to control the value that is used when the item was selected. If the input is not specified, it will use the directive instance as a default value.
+
+To call public APIs on the select container component you can use template reference variables.
+
+Last but not least, there's an event `select` that is fired whenever the selection changed.
+
+## API
+
+`ngx-drag-to-select` comes with two main building blocks, a `ngx-select-container` component and a `selectItem` directive.
+
+### `ngx-select-container`
+
+**Inputs**
+
+| Input         | Type       | Default | Description                                     |
+| ------------- | ---------- | ------- | ----------------------------------------------- |
+| selectedItems | Array<any> | /       | Collection of items that are currently selected |
+| selectOnDrag  | Boolean    | `true`  | Whether items should be selected while dragging |
+
+Here's an example of both inputs in action:
+
+```
+<ngx-select-container [(selectedItems)]="selectedDocuments" [selectOnDrag]="selectOnDrag">
+  ...
+</ngx-select-container>
+```
+
+**Outputs**
+
+| Input  | Payload Type | Description                                                                                                    |
+| ------ | ------------ | -------------------------------------------------------------------------------------------------------------- |
+| select | Array<any>   | Event that is fired whenever the selection changes. The payload (`$event`) will be the list of selected items. |
+
+Example:
+
+```
+<ngx-select-container (select)="someMethod($event)">
+  ...
+</ngx-select-container>
+```
+
+**Public Methods**
+
+| Methods        | Description                           |
+| -------------- | ------------------------------------- |
+| selectAll      | Select all items within the drag area |
+| clearSelection | Clear the selection                   |
+
+To access these methods on the container component you can either use the `@ViewChild()` decorator
+
+```
+import { Component, ViewChild } from '@angular/core';
+import { SelectContainerComponent } from 'ngx-drag-to-select';
+
+@Component({
+  ...
+})
+export class AppComponent {
+  @ViewChild(SelectContainerComponent) selectContainer: SelectContainerComponent;
+
+  someMethod() {
+    this.selectContainer.clearSelection();
+  }
+}
+```
+
+or use it within the template with a template reference variable
+
+```
+<button (click)="selectContainer.selectAll()">Select All</button>
+<button (click)="selectContainer.clearSelection()">Clear Selection</button>
+
+<ngx-select-container #selectContainer="ngx-select-container" [(selectedItems)]="selectedDocuments">
+  ...
+</ngx-select-container>
+```
+
+> What if I want to use the `@ViewChild()` decorator but have multiple instances of the `ngx-select-container` in my template?
+
+In that case I would recommend to add template reference variables to your select containers and query them one by one using the variable name.
+
+Here's an example:
+
+```
+<ngx-select-container #documents>
+  ...
+</ngx-select-container>
+
+...
+
+<ngx-select-container #images>
+  ...
+</ngx-select-container>
+```
+
+In the component you can then query them one by one:
+
+```
+import { Component, ViewChild } from '@angular/core';
+import { SelectContainerComponent } from 'ngx-drag-to-select';
+
+@Component({
+  ...
+})
+export class AppComponent {
+  @ViewChild('documents') documentContainer: SelectContainerComponent;
+  @ViewChild('images') imagesContainer: SelectContainerComponent;
+
+  someMethod() {
+    this.documentContainer.clearSelection();
+  }
+
+  someOtherMethod() {
+    this.imagesContainer.selectAll();
+  }
+}
+```
+
+### `selectItem`
+
+**Inputs**
+
+| Input      | Type  | Default            | Description                                  |
+| ---------- | ----- | ------------------ | -------------------------------------------- |
+| selectItem | `any` | Directive Instance | Value that is used when the item is selected |
+
+Example:
+
+```
+<ngx-select-container>
+  <ul>
+    <li [selectItem]="document" *ngFor="let document of documents">{{ document.name }}</li>
+  </ul>
+</ngx-select-container>
+```
+
+## Want to contribute?
+
+If you want to file a bug, contribute some code, or improve our documentation, read up on our [contributing guidelines](CONTRIBUTING.md) and [code of conduct](CODE_OF_CONDUCT.md), and check out [open issues](/issues).
+
+## For developers
+
+If you want to set up `ngx-drag-to-select` on your machine for development, head over to our [developers guide](DEVELOPERS_GUIDE.md) and follow the described instructions.
+
+## Versioning
+
+`ngx-drag-to-select` will be maintained under the Semantic Versioning guidelines. Releases are numbered with the following format:
+
+```
+<MAJOR>.<MINOR>.<PATCH>
+```
+
+1.  **MAJOR** versions indicate incompatible API changes,
+2.  **MINOR** versions add functionality in a backwards-compatible manner, and
+3.  **PATCH** versions introduce backwards-compatible bug fixes.
+
+For more information on SemVer, please visit [http://semver.org](http://semver.org).
+
+## Licence
+
+MIT © [Dominic Elm](http://github.com/d3lm)

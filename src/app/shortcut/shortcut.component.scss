@@ -1,0 +1,42 @@
+ngx-shortcut {
+  display: block;
+
+  & > .shortcut-container {
+    display: inline-block;
+  }
+}
+
+ngx-shortcut {
+  & + ngx-shortcut,
+  &:first-of-type {
+    margin-top: 1rem;
+  }
+
+  &:last-of-type {
+    margin-bottom: 1rem;
+  }
+}
+
+ngx-modifier-key {
+  & ngx-key {
+    min-width: 34px;
+  }
+}
+
+ngx-key {
+  font-family: Raleway;
+  font-size: 1rem;
+  text-align: center;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 0.1em 0.5em;
+  margin: 0 0.2em;
+  box-shadow: 0 1px 0px rgba(0, 0, 0, 0.2), 0 0 0 2px #fff inset;
+  background-color: #f7f7f7;
+}
+
+ngx-shortcut-description {
+  color: #424242;
+  margin-left: 1rem;
+}

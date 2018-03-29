@@ -1,0 +1,32 @@
+@import 'variables';
+
+.ngx-no-select {
+  user-select: none;
+}
+
+.ngx-select-box {
+  contain: layout;
+  transform: translate3d(0, 0, 0);
+  box-sizing: border-box;
+  color: $select-box-color;
+  background: rgba($select-box-color, 0.3);
+  border: $select-box-border-size solid currentColor;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+  opacity: 0;
+  z-index: 1;
+}
+
+.ngx-select-item.selected {
+  @if $selected-item-border {
+    border: $selected-item-border-size solid $selected-item-border-color;
+  }
+
+  @if $box-shadow {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.1);
+  }
+}

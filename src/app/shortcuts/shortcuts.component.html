@@ -1,0 +1,34 @@
+<ngx-shortcut>
+  <ngx-key>Click</ngx-key>
+  <ngx-shortcut-description>
+    Select single item
+  </ngx-shortcut-description>
+</ngx-shortcut>
+
+<ngx-shortcut>
+  <ngx-key>alt</ngx-key>
+  <ngx-shortcut-description>
+    Disable selection box to select text on the screen
+  </ngx-shortcut-description>
+</ngx-shortcut>
+
+<ngx-shortcut>
+  <ngx-modifier-key [os]="os"></ngx-modifier-key> + <ngx-key>Click</ngx-key>
+  <ngx-shortcut-description>
+    Add or remove single item to selection
+  </ngx-shortcut-description>
+</ngx-shortcut>
+
+<ngx-shortcut>
+  <ngx-key>⇧</ngx-key> + <ngx-key>Drag</ngx-key>
+  <ngx-shortcut-description>
+    Add items to selection
+  </ngx-shortcut-description>
+</ngx-shortcut>
+
+<ngx-shortcut>
+  <ngx-key>⇧</ngx-key> + <ngx-modifier-key [os]="os"></ngx-modifier-key> + <ngx-key>Drag</ngx-key>
+  <ngx-shortcut-description>
+    Remove items from selection
+  </ngx-shortcut-description>
+</ngx-shortcut>
