@@ -46,8 +46,11 @@ This will build the demo app as well as the libary for development.
 * `serve:ssr`: Serve application using dynamic Universal
 * `build`: Build client and server bundles
 * `build:ssr`: Build client and server bundles as well as server and prerendering scripts
+* `build:ghpages`: Build app for GitHub Pages
 * `build:prerender`: Build all bundles and statically prerender application
+* `build:prerender-ghpages`: Build all bundles and statically prerender application for GitHub Pages
 * `build:app`: Build demo demo app for production
+* `build:server`: Build server bundle for production
 * `build:lib`: Build library only
 * `build:lib:sass`: Compile sass files and copy them to `dist/lib`
 * `packagr`: Runs ng-packagr
