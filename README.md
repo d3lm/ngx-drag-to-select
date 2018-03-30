@@ -1,6 +1,6 @@
 # ngx-drag-to-select
 
-[![travis](https://travis-ci.org/d3lm/ngx-drag-to-select.svg?branch=master)](http://travis-ci.org/)
+[![travis](https://travis-ci.org/d3lm/ngx-drag-to-select.svg?branch=master)](https://travis-ci.org/d3lm/ngx-drag-to-select)
 [![styled with prettier](https://img.shields.io/badge/styled_with-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
 
 A lightweight, fast, configurable and reactive drag-to-select component for Angular 5 and beyond
