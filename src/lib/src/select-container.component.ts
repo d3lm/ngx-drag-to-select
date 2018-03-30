@@ -270,7 +270,7 @@ export class SelectContainerComponent implements OnInit, OnDestroy {
       (!inSelection && !item.selected && this.shortcuts.removeFromSelection(event) && this._tmpItems.has(item));
 
     if (shoudlAdd) {
-      item.selected ? item.unselect() : item.select();
+      item.selected ? item.deselect() : item.select();
 
       const action = this.shortcuts.removeFromSelection(event)
         ? Action.Delete
@@ -278,7 +278,7 @@ export class SelectContainerComponent implements OnInit, OnDestroy {
 
       this._tmpItems.set(item, action);
     } else if (shouldRemove) {
-      this.shortcuts.removeFromSelection(event) ? item.select() : item.unselect();
+      this.shortcuts.removeFromSelection(event) ? item.select() : item.deselect();
       this._tmpItems.delete(item);
     }
   }
@@ -317,7 +317,7 @@ export class SelectContainerComponent implements OnInit, OnDestroy {
     const index = this._selectedItems.indexOf(item.value);
 
     if (index > -1) {
-      item.unselect();
+      item.deselect();
       this._selectedItems.splice(index, 1);
     }
   }

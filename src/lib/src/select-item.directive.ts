@@ -83,7 +83,7 @@ export class SelectItemDirective implements AfterViewInit, OnDestroy, DoCheck {
     this.selected = true;
   }
 
-  unselect() {
+  deselect() {
     this.selected = false;
   }
 
