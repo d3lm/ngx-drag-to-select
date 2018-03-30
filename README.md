@@ -66,27 +66,11 @@ If you are using the [Angular CLI](https://github.com/angular/angular-cli) you c
 
 **Using the sass package**
 
-If you're using sass you can simply import the sass package. This allows you to override the default variables to customize the library to your needs.
+If you're using sass you can simply import the sass package. This allows you to [override the default variables](#overriding-sass-variables) to customize the library to your needs.
 
 ```
-// Example for overriding the color of the selection retangle
-$select-box-color: red;
-
 @import "~ngx-drag-to-select/scss/ngx-drag-to-select";
 ```
-
-You can override the following variables:
-
-| Variable                      | Type    | Default   | Description                                       |
-| ----------------------------- | ------- | --------- | ------------------------------------------------- |
-| `$select-box-color`           | Color   | `#7ddafc` | Color of the selection rectangle                  |
-| `$select-box-border-size`     | Unit    | `2px`     | Border size for the selection rectangle           |
-| `$selected-item-border`       | Boolean | `true`    | Whether the selected item should get a border     |
-| `$selected-item-border-color` | Color   | `#d2d2d2` | Border color of the selected item                 |
-| `$selected-item-border-size`  | Unit    | `1px`     | Border size of the selected item                  |
-| `$box-shadow`                 | Boolean | `true`    | Whether the selected item should get a box shadow |
-
-If you wish to override one of these variables, make sure to do that **before** you import the sass package.
 
 ### Adding the module
 
@@ -105,7 +89,53 @@ export class AppModule { }
 
 That's it. You are now ready to use this library in your project. Make sure to call `forRoot()` only **once** in your `AppModule` and for feature modules you simply add the `DragToSelectModule` as is **without** calling `forRoot()`.
 
-### Configuration Options
+## Usage
+
+Once you have installed the library and added the `DragToSelectModule` to your application you are ready to go.
+
+Anywhere in your template add the `ngx-select-container` component and wrap all items that you want to be selectable in this component.
+
+Next, mark all selectable items with the `selectItem` directive. This connects each item with the container component.
+
+Here's a complete example:
+
+```
+<ngx-select-container #container="ngx-select-container" [(selectedItems)]="selectedDocuments" (select)="someMethod($event)">
+  <ul>
+    <li [selectItem]="document" *ngFor="let document of documents">{{ document.name }}</li>
+  </ul>
+</ngx-select-container>
+```
+
+## Configuration Options
+
+This section gives you an overview of things you can customize and configure.
+
+### Overriding sass variables
+
+You can override the following variables:
+
+| Variable                      | Type    | Default   | Description                                       |
+| ----------------------------- | ------- | --------- | ------------------------------------------------- |
+| `$select-box-color`           | Color   | `#7ddafc` | Color of the selection rectangle                  |
+| `$select-box-border-size`     | Unit    | `2px`     | Border size for the selection rectangle           |
+| `$selected-item-border`       | Boolean | `true`    | Whether the selected item should get a border     |
+| `$selected-item-border-color` | Color   | `#d2d2d2` | Border color of the selected item                 |
+| `$selected-item-border-size`  | Unit    | `1px`     | Border size of the selected item                  |
+| `$box-shadow`                 | Boolean | `true`    | Whether the selected item should get a box shadow |
+
+If you wish to override one of these variables, make sure to do that **before** you import the sass package.
+
+Example:
+
+```
+// Example for overriding the color of the selection retangle
+$select-box-color: red;
+
+@import "~ngx-drag-to-select/scss/ngx-drag-to-select";
+```
+
+### Configuring `DragToSelectModule`
 
 This library allows to you override certain options, such as
 
@@ -155,32 +185,6 @@ When using `meta`, it will be substituted with `ctrl` (for Windows) **and** `cmd
 
 **Note**: If you override one of the shortscut you have to make sure they do not interfear with one another to ensure a smooth selecting experience.
 
-## Usage
-
-Once you have installed the library and added the `DragToSelectModule` to your application you are ready to go.
-
-Anywhere in your template add the `ngx-select-container` component and wrap all items that you want to be selectable in this component.
-
-Next, mark all selectable items with the `selectItem` directive. This connects each item with the container component.
-
-Here's a complete example:
-
-```
-<ngx-select-container #container="ngx-select-container" [(selectedItems)]="selectedDocuments" (select)="someMethod($event)">
-  <ul>
-    <li [selectItem]="document" *ngFor="let document of documents">{{ document.name }}</li>
-  </ul>
-</ngx-select-container>
-```
-
-To get ahold of the selected items you can use a two-way data binding (`[()]`) aka _banana-in-the-box_ syntax. This means that whenever the selection changes, your property is updated accordingly. It will always reflect the current selection.
-
-The `selectItem` directive takes an input to control the value that is used when the item was selected. If the input is not specified, it will use the directive instance as a default value.
-
-To call public APIs on the select container component you can use template reference variables.
-
-Last but not least, there's an event `select` that is fired whenever the selection changed.
-
 ## API
 
 `ngx-drag-to-select` comes with two main building blocks, a `ngx-select-container` component and a `selectItem` directive.
@@ -201,6 +205,10 @@ Here's an example of both inputs in action:
   ...
 </ngx-select-container>
 ```
+
+* To get ahold of the selected items you can use a two-way data binding (`[()]`) aka _banana-in-the-box_ syntax. This means that whenever the selection changes, your property is updated accordingly. It will always reflect the current selection.
+
+* Binding an expression to `selectOnDrag` will override the default value. When this option is set to `false`, it will **increase the performance** but you'll trade this for a slighly worse user experience.
 
 **Outputs**
 
@@ -294,6 +302,8 @@ export class AppComponent {
 ```
 
 ### `selectItem`
+
+The `selectItem` directive is used to mark DOM elements as selectable items. It takes an input to control the value that is used when the item was selected. If the input is not specified, it will use the directive instance as a default value.
 
 **Inputs**
 
