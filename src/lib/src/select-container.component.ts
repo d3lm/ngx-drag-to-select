@@ -6,9 +6,7 @@ import {
   Output,
   EventEmitter,
   Input,
-  AfterViewInit,
   OnDestroy,
-  ViewEncapsulation,
   Renderer2,
   QueryList,
   OnInit
@@ -18,7 +16,6 @@ import { Platform } from '@angular/cdk/platform';
 
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
-import { of } from 'rxjs/observable/of';
 import { combineLatest } from 'rxjs/observable/combineLatest';
 import { merge } from 'rxjs/observable/merge';
 import { fromEvent } from 'rxjs/observable/fromEvent';
@@ -34,8 +31,7 @@ import {
   mapTo,
   share,
   withLatestFrom,
-  distinctUntilChanged,
-  scan
+  distinctUntilChanged
 } from 'rxjs/operators';
 
 import { SelectItemDirective } from './select-item.directive';

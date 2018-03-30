@@ -1,5 +1,4 @@
 import { Observable } from 'rxjs/Observable';
-import { SelectItemDirective } from '../public_api';
 
 export interface ObservableProxy<T> {
   proxy$: Observable<any>;

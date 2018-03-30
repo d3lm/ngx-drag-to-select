@@ -1,5 +1,3 @@
-import { SelectItemDirective } from './select-item.directive';
-
 export const isObject = (item: any) => {
   return item && typeof item === 'object' && !Array.isArray(item) && item !== null;
 };

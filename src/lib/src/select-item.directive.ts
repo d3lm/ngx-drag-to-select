@@ -1,7 +1,6 @@
 import {
   Directive,
   ElementRef,
-  HostBinding,
   Input,
   NgZone,
   AfterViewInit,
