@@ -1,7 +1,7 @@
 import { Observable } from 'rxjs/Observable';
 import { map, finalize } from 'rxjs/operators';
 import { Subject } from 'rxjs/Subject';
-import { SelectBox, SelectBoxInput, ObservableProxy } from './models';
+import { SelectBox, SelectBoxInput, ObservableProxy, MousePosition } from './models';
 
 export const createSelectBox = () => (source: Observable<SelectBoxInput>): Observable<SelectBox<number>> =>
   source.pipe(
