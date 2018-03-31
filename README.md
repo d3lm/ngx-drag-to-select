@@ -11,7 +11,7 @@ A lightweight, fast, configurable and reactive drag-to-select component for Angu
 
 ## Playground
 
-You can also fiddle with the library using [StackBlitz](). Credits for the template go to [Bram Borggreve](https://twitter.com/beeman_nl).
+You can also fiddle with the library using [StackBlitz](https://stackblitz.com/edit/ngx-drag-to-select?file=app%2Fpages%2Fhome%2Fhome.component.html). Credits for the template go to [Bram Borggreve](https://twitter.com/beeman_nl).
 
 ## Features
 
