@@ -88,7 +88,7 @@ export class SelectItemDirective implements AfterViewInit, OnDestroy, DoCheck {
   }
 
   private setBoundingClientRect() {
-    this._boundingClientRect = calculateBoundingClientRect(this.host.nativeElement, window);
+    this._boundingClientRect = calculateBoundingClientRect(this.host.nativeElement);
   }
 
   private applySelectedClass() {

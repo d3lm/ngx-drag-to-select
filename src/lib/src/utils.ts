@@ -1,3 +1,5 @@
+import { MousePosition } from './models';
+
 export const isObject = (item: any) => {
   return item && typeof item === 'object' && !Array.isArray(item) && item !== null;
 };
@@ -29,25 +31,30 @@ export const clearSelection = (window: Window) => {
   }
 };
 
-export const inBoundingBox = (point, box) => {
-  return box.x <= point.x && point.x <= box.x + box.width && box.y <= point.y && point.y <= box.y + box.height;
+export const inBoundingBox = (point: MousePosition, box: ClientRect) => {
+  return (
+    box.left <= point.x && point.x <= box.left + box.width && box.top <= point.y && point.y <= box.top + box.height
+  );
 };
 
-export const calculateBoundingClientRect = (element: HTMLElement, window: Window) => {
-  const boundingRect = <ClientRect>element.getBoundingClientRect();
-  const { pageXOffset, pageYOffset } = window;
-
-  return {
-    x: boundingRect.left + pageXOffset,
-    y: boundingRect.top + pageYOffset,
-    top: boundingRect.top + pageYOffset,
-    left: boundingRect.left,
-    width: boundingRect.width,
-    height: boundingRect.height
-  };
+export const boxIntersects = (boxA: ClientRect, boxB: ClientRect) => {
+  return (
+    boxA.left <= boxB.left + boxB.width &&
+    boxA.left + boxA.width >= boxB.left &&
+    boxA.top <= boxB.top + boxB.height &&
+    boxA.top + boxA.height >= boxB.top
+  );
 };
 
-export const cursorWithinElement = (event: MouseEvent, element: HTMLElement, window: Window) => {
-  const mousePoint = { x: event.pageX, y: event.pageY };
-  return inBoundingBox(mousePoint, calculateBoundingClientRect(element, window));
+export const calculateBoundingClientRect = (element: HTMLElement) => {
+  return element.getBoundingClientRect();
+};
+
+export const getCurrentMousePosition = (event: MouseEvent): MousePosition => {
+  return { x: event.clientX, y: event.clientY };
+};
+
+export const cursorWithinElement = (event: MouseEvent, element: HTMLElement) => {
+  const mousePoint = getCurrentMousePosition(event);
+  return inBoundingBox(mousePoint, calculateBoundingClientRect(element));
 };

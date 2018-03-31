@@ -17,7 +17,12 @@ export interface DragToSelectConfig {
   shortcuts: Partial<Shortcuts>;
 }
 
-export type SelectBoxInput = [MouseEvent, number, Partial<SelectBox<number>>];
+export interface MousePosition {
+  x: number;
+  y: number;
+}
+
+export type SelectBoxInput = [MouseEvent, number, MousePosition];
 
 export interface SelectBox<T> {
   top: T;

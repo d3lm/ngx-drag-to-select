@@ -11,7 +11,7 @@
   color: $select-box-color;
   background: rgba($select-box-color, 0.3);
   border: $select-box-border-size solid currentColor;
-  position: absolute;
+  position: fixed;
   left: 0;
   top: 0;
   width: 0;

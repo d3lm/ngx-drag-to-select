@@ -5,13 +5,13 @@ import { SelectBox, SelectBoxInput, ObservableProxy } from './models';
 
 export const createSelectBox = () => (source: Observable<SelectBoxInput>): Observable<SelectBox<number>> =>
   source.pipe(
-    map(([mouseEvent, opacity, { top, left }]) => {
-      const width = opacity > 0 ? mouseEvent.pageX - left : 0;
-      const height = opacity > 0 ? mouseEvent.pageY - top : 0;
+    map(([mouseEvent, opacity, { x, y }]) => {
+      const width = opacity > 0 ? mouseEvent.clientX - x : 0;
+      const height = opacity > 0 ? mouseEvent.clientY - y : 0;
 
       return {
-        top: height < 0 ? mouseEvent.pageY : top,
-        left: width < 0 ? mouseEvent.pageX : left,
+        top: height < 0 ? mouseEvent.clientY : y,
+        left: width < 0 ? mouseEvent.clientX : x,
         width: Math.abs(width),
         height: Math.abs(height),
         opacity

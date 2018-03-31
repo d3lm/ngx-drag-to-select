@@ -37,9 +37,9 @@ import {
 import { SelectItemDirective } from './select-item.directive';
 import { ShortcutService } from './shortcut.service';
 import { createSelectBox, observableProxy } from './operators';
-import { Action, SelectBox, SelectBoxInput } from './models';
+import { Action, SelectBox, SelectBoxInput, MousePosition } from './models';
 import { AUDIT_TIME, NO_SELECT_CLASS, MIN_WIDTH, MIN_HEIGHT } from './constants';
-import { inBoundingBox, calculateBoundingClientRect, cursorWithinElement, clearSelection } from './utils';
+import { inBoundingBox, cursorWithinElement, clearSelection, getCurrentMousePosition, boxIntersects } from './utils';
 
 @Component({
   selector: 'ngx-select-container',
@@ -94,18 +94,15 @@ export class SelectContainerComponent implements OnInit, OnDestroy {
 
       const dragging$ = mousedown$.pipe(switchMap(() => mousemove$.pipe(takeUntil(mouseup$))), share());
 
-      const initalSelectBoxPosition$: Observable<Partial<SelectBox<number>>> = mousedown$.pipe(
-        map((event: MouseEvent) => ({
-          top: event.pageY,
-          left: event.pageX
-        }))
+      const currentMousePosition$: Observable<MousePosition> = mousedown$.pipe(
+        map((event: MouseEvent) => getCurrentMousePosition(event))
       );
 
       const show$ = dragging$.pipe(mapTo(1));
       const hide$ = mouseup$.pipe(mapTo(0));
       const opacity$ = merge(show$, hide$, asap).pipe(distinctUntilChanged());
 
-      const selectBox$ = combineLatest(dragging$, opacity$, initalSelectBoxPosition$).pipe(
+      const selectBox$ = combineLatest(dragging$, opacity$, currentMousePosition$).pipe(
         filter(([event]: SelectBoxInput) => !this.shortcuts.disableSelection(event)),
         createSelectBox(),
         share()
@@ -188,7 +185,7 @@ export class SelectContainerComponent implements OnInit, OnDestroy {
   }
 
   private cursorWithinHost(event: MouseEvent) {
-    return cursorWithinElement(event, this.host.nativeElement, window);
+    return cursorWithinElement(event, this.host.nativeElement);
   }
 
   private onMouseUp() {
@@ -204,7 +201,7 @@ export class SelectContainerComponent implements OnInit, OnDestroy {
     clearSelection(window);
     this.renderer.addClass(document.body, NO_SELECT_CLASS);
 
-    const mousePoint = { x: event.pageX, y: event.pageY };
+    const mousePoint = getCurrentMousePosition(event);
 
     this.$selectItems.forEach((item, index) => {
       const itemRect = item.getBoundingClientRect();
@@ -243,7 +240,7 @@ export class SelectContainerComponent implements OnInit, OnDestroy {
   }
 
   private normalSelectionMode(selectBox, item: SelectItemDirective, event: MouseEvent) {
-    const inSelection = this.boxIntersects(selectBox, item.getBoundingClientRect());
+    const inSelection = boxIntersects(selectBox, item.getBoundingClientRect());
 
     const shouldAdd = inSelection && !item.selected && !this.shortcuts.removeFromSelection(event);
 
@@ -259,7 +256,7 @@ export class SelectContainerComponent implements OnInit, OnDestroy {
   }
 
   private extendedSelectionMode(selectBox, item: SelectItemDirective, event: MouseEvent) {
-    const inSelection = this.boxIntersects(selectBox, item.getBoundingClientRect());
+    const inSelection = boxIntersects(selectBox, item.getBoundingClientRect());
 
     const shoudlAdd =
       (inSelection && !item.selected && !this.shortcuts.removeFromSelection(event) && !this._tmpItems.has(item)) ||
@@ -295,15 +292,6 @@ export class SelectContainerComponent implements OnInit, OnDestroy {
     });
 
     this._tmpItems.clear();
-  }
-
-  private boxIntersects(boxA: ClientRect, boxB: ClientRect) {
-    return (
-      boxA.left <= boxB.left + boxB.width &&
-      boxA.left + boxA.width >= boxB.left &&
-      boxA.top <= boxB.top + boxB.height &&
-      boxA.top + boxA.height >= boxB.top
-    );
   }
 
   private addItem(item: SelectItemDirective) {
