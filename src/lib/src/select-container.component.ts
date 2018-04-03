@@ -99,7 +99,11 @@ export class SelectContainerComponent implements OnInit, OnDestroy {
         share()
       );
 
-      const dragging$ = mousedown$.pipe(switchMap(() => mousemove$.pipe(takeUntil(mouseup$))), share());
+      const dragging$ = mousedown$.pipe(
+        filter(event => !this.shortcuts.disableSelection(event)),
+        switchMap(() => mousemove$.pipe(takeUntil(mouseup$))),
+        share()
+      );
 
       const currentMousePosition$: Observable<MousePosition> = mousedown$.pipe(
         map((event: MouseEvent) => getCurrentMousePosition(event))
@@ -108,12 +112,7 @@ export class SelectContainerComponent implements OnInit, OnDestroy {
       const show$ = dragging$.pipe(mapTo(1));
       const hide$ = mouseup$.pipe(mapTo(0));
       const opacity$ = merge(show$, hide$, asap).pipe(distinctUntilChanged());
-
-      const selectBox$ = combineLatest(dragging$, opacity$, currentMousePosition$).pipe(
-        filter(([event]: SelectBoxInput) => !this.shortcuts.disableSelection(event)),
-        createSelectBox(),
-        share()
-      );
+      const selectBox$ = combineLatest(dragging$, opacity$, currentMousePosition$).pipe(createSelectBox(), share());
 
       mouseup$
         .pipe(
