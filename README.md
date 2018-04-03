@@ -199,11 +199,12 @@ When using `meta`, it will be substituted with `ctrl` (for Windows) **and** `cmd
 | ------------- | ---------- | ------- | ----------------------------------------------- |
 | selectedItems | Array<any> | /       | Collection of items that are currently selected |
 | selectOnDrag  | Boolean    | `true`  | Whether items should be selected while dragging |
+| disabled      | Boolean    | `false` | Disable selection                               |
 
 Here's an example of both inputs in action:
 
 ```
-<ngx-select-container [(selectedItems)]="selectedDocuments" [selectOnDrag]="selectOnDrag">
+<ngx-select-container [(selectedItems)]="selectedDocuments" [disabled]="false" [selectOnDrag]="selectOnDrag">
   ...
 </ngx-select-container>
 ```
@@ -231,7 +232,7 @@ Example:
 | Methods        | Description                           |
 | -------------- | ------------------------------------- |
 | selectAll      | Select all items within the drag area |
-| clearSelection | Clear the selection                   |
+| clearSelection | Clear current selection               |
 
 To access these methods on the container component you can either use the `@ViewChild()` decorator
 
@@ -309,9 +310,9 @@ The `selectItem` directive is used to mark DOM elements as selectable items. It 
 
 **Inputs**
 
-| Input      | Type  | Default            | Description                                  |
-| ---------- | ----- | ------------------ | -------------------------------------------- |
-| selectItem | `any` | Directive Instance | Value that is used when the item is selected |
+| Input      | Type | Default            | Description                                  |
+| ---------- | ---- | ------------------ | -------------------------------------------- |
+| selectItem | any  | Directive Instance | Value that is used when the item is selected |
 
 Example:
 
@@ -319,6 +320,27 @@ Example:
 <ngx-select-container>
   <ul>
     <li [selectItem]="document" *ngFor="let document of documents">{{ document.name }}</li>
+  </ul>
+</ngx-select-container>
+```
+
+**Public Properties**
+
+| Methods  | Type    | Description                         |
+| -------- | ------- | ----------------------------------- |
+| selected | Boolean | Whether the item is selected or not |
+
+You can access this property in a similar why you access methods on the `select-container` component using either a template reference variable or programmatically with the `@ViewChild()` decorator.
+
+Example:
+
+```
+<ngx-select-container>
+  <ul>
+    <li [selectItem]="document" #item *ngFor="let document of documents">
+      {{ document.name }}
+      <i class="fa fa-check" *ngIf="item.selected"></i>
+    </li>
   </ul>
 </ngx-select-container>
 ```
