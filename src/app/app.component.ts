@@ -13,6 +13,7 @@ export class AppComponent implements OnInit {
   documents: Array<any> = [];
   selectedDocuments: Array<any> = [];
   selectOnDrag = true;
+  disable = false;
 
   constructor(private titleService: Title, private iconRegistry: MatIconRegistry, private sanitizer: DomSanitizer) {
     iconRegistry.addSvgIcon('apple', sanitizer.bypassSecurityTrustResourceUrl('assets/apple-icon.svg'));

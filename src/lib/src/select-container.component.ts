@@ -54,13 +54,14 @@ import { inBoundingBox, cursorWithinElement, clearSelection, getCurrentMousePosi
   styleUrls: ['./select-container.component.scss']
 })
 export class SelectContainerComponent implements OnInit, OnDestroy {
-  @ViewChild('selectBox') $selectBox: ElementRef;
+  @ViewChild('selectBox') private $selectBox: ElementRef;
 
   @ContentChildren(SelectItemDirective, { descendants: true })
-  $selectItems: QueryList<SelectItemDirective>;
+  private $selectItems: QueryList<SelectItemDirective>;
 
   @Input() selectedItems: any;
   @Input() selectOnDrag = true;
+  @Input() disabled = false;
 
   @Output() selectedItemsChange = new EventEmitter<any>();
   @Output() select = new EventEmitter<any>();
@@ -84,10 +85,16 @@ export class SelectContainerComponent implements OnInit, OnDestroy {
 
       this.initProxy();
 
-      const mouseup$ = fromEvent(window, 'mouseup').pipe(tap(() => this.onMouseUp()), share());
-      const mousemove$ = fromEvent(window, 'mousemove').pipe(share());
+      const mouseup$ = fromEvent(window, 'mouseup').pipe(
+        filter(() => !this.disabled),
+        tap(() => this.onMouseUp()),
+        share()
+      );
+
+      const mousemove$ = fromEvent(window, 'mousemove').pipe(filter(() => !this.disabled), share());
 
       const mousedown$ = fromEvent(container, 'mousedown').pipe(
+        filter(() => !this.disabled),
         tap((event: MouseEvent) => this.onMouseDown(event)),
         share()
       );
