@@ -37,7 +37,7 @@ import {
 import { SelectItemDirective } from './select-item.directive';
 import { ShortcutService } from './shortcut.service';
 import { createSelectBox, observableProxy } from './operators';
-import { Action, SelectBox, SelectBoxInput, MousePosition } from './models';
+import { Action, SelectBox, MousePosition } from './models';
 import { AUDIT_TIME, NO_SELECT_CLASS, MIN_WIDTH, MIN_HEIGHT } from './constants';
 import { inBoundingBox, cursorWithinElement, clearSelection, getCurrentMousePosition, boxIntersects } from './utils';
 
