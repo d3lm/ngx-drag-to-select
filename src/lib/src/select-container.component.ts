@@ -32,7 +32,8 @@ import {
   mapTo,
   share,
   withLatestFrom,
-  distinctUntilChanged
+  distinctUntilChanged,
+  startWith
 } from 'rxjs/operators';
 
 import { SelectItemDirective } from './select-item.directive';
@@ -209,6 +210,9 @@ export class SelectContainerComponent implements OnInit, OnDestroy {
   }
 
   private observeBoundingRectChanges() {
+    // Initialize client bounding rect
+    setTimeout(() => this.calculateBoundingClientRect());
+
     this.ngZone.runOutsideAngular(() => {
       const resize$ = fromEvent(window, 'resize');
       const windowScroll$ = fromEvent(window, 'scroll');
@@ -221,6 +225,10 @@ export class SelectContainerComponent implements OnInit, OnDestroy {
           this.$selectableItems.forEach(item => item.calculateBoundingClientRect());
         });
     });
+  }
+
+  private calculateBoundingClientRect() {
+    this.host.boundingClientRect = calculateBoundingClientRect(this.host);
   }
 
   private cursorWithinHost(event: MouseEvent) {

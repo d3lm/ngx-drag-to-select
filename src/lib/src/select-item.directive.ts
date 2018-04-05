@@ -1,4 +1,4 @@
-import { Directive, ElementRef, Input, Inject, Renderer2, DoCheck } from '@angular/core';
+import { Directive, ElementRef, Input, Inject, Renderer2, DoCheck, OnInit } from '@angular/core';
 import { Platform } from '@angular/cdk/platform';
 
 import { CONFIG } from './tokens';
@@ -12,7 +12,7 @@ import { calculateBoundingClientRect } from './utils';
     class: 'ngx-select-item'
   }
 })
-export class SelectItemDirective implements DoCheck {
+export class SelectItemDirective implements OnInit, DoCheck {
   private _boundingClientRect;
 
   selected = false;
@@ -28,6 +28,10 @@ export class SelectItemDirective implements DoCheck {
     private host: ElementRef,
     private renderer: Renderer2
   ) {}
+
+  ngOnInit() {
+    setTimeout(() => this.calculateBoundingClientRect());
+  }
 
   ngDoCheck() {
     this.applySelectedClass();
