@@ -1,25 +1,8 @@
-import {
-  Directive,
-  ElementRef,
-  Input,
-  NgZone,
-  AfterViewInit,
-  OnDestroy,
-  Inject,
-  Renderer2,
-  DoCheck
-} from '@angular/core';
-
+import { Directive, ElementRef, Input, Inject, Renderer2, DoCheck } from '@angular/core';
 import { Platform } from '@angular/cdk/platform';
-
-import { Subject } from 'rxjs/Subject';
-import { fromEvent } from 'rxjs/observable/fromEvent';
-import { merge } from 'rxjs/observable/merge';
-import { auditTime, takeUntil } from 'rxjs/operators';
 
 import { CONFIG } from './tokens';
 import { DragToSelectConfig } from './models';
-import { AUDIT_TIME } from './constants';
 import { calculateBoundingClientRect } from './utils';
 
 @Directive({
@@ -29,9 +12,8 @@ import { calculateBoundingClientRect } from './utils';
     class: 'ngx-select-item'
   }
 })
-export class SelectItemDirective implements AfterViewInit, OnDestroy, DoCheck {
+export class SelectItemDirective implements DoCheck {
   private _boundingClientRect;
-  private readonly destroy$ = new Subject<void>();
 
   selected = false;
 
@@ -44,35 +26,11 @@ export class SelectItemDirective implements AfterViewInit, OnDestroy, DoCheck {
   constructor(
     @Inject(CONFIG) private config: DragToSelectConfig,
     private host: ElementRef,
-    private ngZone: NgZone,
-    private platform: Platform,
     private renderer: Renderer2
   ) {}
 
   ngDoCheck() {
     this.applySelectedClass();
-  }
-
-  ngAfterViewInit() {
-    if (this.platform.isBrowser) {
-      this.ngZone.runOutsideAngular(() => {
-        const resize$ = fromEvent(window, 'resize');
-        const scroll$ = fromEvent(window, 'scroll');
-
-        merge(resize$, scroll$)
-          .pipe(auditTime(AUDIT_TIME), takeUntil(this.destroy$))
-          .subscribe(() => this.setBoundingClientRect());
-      });
-
-      setTimeout(() => {
-        this.setBoundingClientRect();
-      });
-    }
-  }
-
-  ngOnDestroy() {
-    this.destroy$.next();
-    this.destroy$.complete();
   }
 
   getBoundingClientRect() {
@@ -87,7 +45,7 @@ export class SelectItemDirective implements AfterViewInit, OnDestroy, DoCheck {
     this.selected = false;
   }
 
-  private setBoundingClientRect() {
+  calculateBoundingClientRect() {
     this._boundingClientRect = calculateBoundingClientRect(this.host.nativeElement);
   }
 

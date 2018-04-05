@@ -1,4 +1,4 @@
-import { MousePosition } from './models';
+import { MousePosition, SelectBox, BoundingBox, SelectContainerHost } from './models';
 
 export const isObject = (item: any) => {
   return item && typeof item === 'object' && !Array.isArray(item) && item !== null;
@@ -31,13 +31,13 @@ export const clearSelection = (window: Window) => {
   }
 };
 
-export const inBoundingBox = (point: MousePosition, box: ClientRect) => {
+export const inBoundingBox = (point: MousePosition, box: BoundingBox) => {
   return (
     box.left <= point.x && point.x <= box.left + box.width && box.top <= point.y && point.y <= box.top + box.height
   );
 };
 
-export const boxIntersects = (boxA: ClientRect, boxB: ClientRect) => {
+export const boxIntersects = (boxA: BoundingBox, boxB: BoundingBox) => {
   return (
     boxA.left <= boxB.left + boxB.width &&
     boxA.left + boxA.width >= boxB.left &&
@@ -46,15 +46,31 @@ export const boxIntersects = (boxA: ClientRect, boxB: ClientRect) => {
   );
 };
 
-export const calculateBoundingClientRect = (element: HTMLElement) => {
+export const calculateBoundingClientRect = (element: HTMLElement): BoundingBox => {
   return element.getBoundingClientRect();
 };
 
-export const getCurrentMousePosition = (event: MouseEvent): MousePosition => {
-  return { x: event.clientX, y: event.clientY };
+export const getMousePosition = (event: MouseEvent) => {
+  return {
+    x: event.clientX,
+    y: event.clientY
+  };
+};
+
+export const getRelativeMousePosition = (event: MouseEvent, container: SelectContainerHost): MousePosition => {
+  const { x: clientX, y: clientY } = getMousePosition(event);
+
+  const borderSize = (container.boundingClientRect.width - container.clientWidth) / 2;
+  const offsetLeft = container.boundingClientRect.left + document.documentElement.scrollLeft;
+  const offsetTop = container.boundingClientRect.top + document.documentElement.scrollTop;
+
+  return {
+    x: clientX - borderSize - (offsetLeft - window.pageXOffset) + container.scrollLeft,
+    y: clientY - borderSize - (offsetTop - window.pageYOffset) + container.scrollTop
+  };
 };
 
 export const cursorWithinElement = (event: MouseEvent, element: HTMLElement) => {
-  const mousePoint = getCurrentMousePosition(event);
+  const mousePoint = getMousePosition(event);
   return inBoundingBox(mousePoint, calculateBoundingClientRect(element));
 };

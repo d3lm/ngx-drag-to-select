@@ -1,15 +1,16 @@
 import {
   Component,
   ElementRef,
-  ViewChild,
-  ContentChildren,
   Output,
   EventEmitter,
   Input,
   OnDestroy,
   Renderer2,
-  QueryList,
-  OnInit
+  OnInit,
+  ViewChild,
+  NgZone,
+  ContentChildren,
+  QueryList
 } from '@angular/core';
 
 import { Platform } from '@angular/cdk/platform';
@@ -36,10 +37,20 @@ import {
 
 import { SelectItemDirective } from './select-item.directive';
 import { ShortcutService } from './shortcut.service';
+
 import { createSelectBox, observableProxy } from './operators';
-import { Action, SelectBox, MousePosition } from './models';
+import { Action, SelectBox, MousePosition, SelectContainerHost } from './models';
 import { AUDIT_TIME, NO_SELECT_CLASS, MIN_WIDTH, MIN_HEIGHT } from './constants';
-import { inBoundingBox, cursorWithinElement, clearSelection, getCurrentMousePosition, boxIntersects } from './utils';
+
+import {
+  inBoundingBox,
+  cursorWithinElement,
+  clearSelection,
+  boxIntersects,
+  calculateBoundingClientRect,
+  getRelativeMousePosition,
+  getMousePosition
+} from './utils';
 
 @Component({
   selector: 'ngx-select-container',
@@ -54,10 +65,13 @@ import { inBoundingBox, cursorWithinElement, clearSelection, getCurrentMousePosi
   styleUrls: ['./select-container.component.scss']
 })
 export class SelectContainerComponent implements OnInit, OnDestroy {
+  host: SelectContainerHost;
+  selectBoxStyles$: Observable<SelectBox<string>>;
+
   @ViewChild('selectBox') private $selectBox: ElementRef;
 
   @ContentChildren(SelectItemDirective, { descendants: true })
-  private $selectItems: QueryList<SelectItemDirective>;
+  private $selectableItems: QueryList<SelectItemDirective>;
 
   @Input() selectedItems: any;
   @Input() selectOnDrag = true;
@@ -66,8 +80,6 @@ export class SelectContainerComponent implements OnInit, OnDestroy {
   @Output() selectedItemsChange = new EventEmitter<any>();
   @Output() select = new EventEmitter<any>();
 
-  selectBoxStyles$: Observable<SelectBox<string>>;
-
   private _tmpItems = new Map<SelectItemDirective, Action>();
   private _selectedItems: Array<any>;
   private destroy$ = new Subject<void>();
@@ -75,15 +87,17 @@ export class SelectContainerComponent implements OnInit, OnDestroy {
   constructor(
     private shortcuts: ShortcutService,
     private platform: Platform,
-    private host: ElementRef,
-    private renderer: Renderer2
+    private hostElementRef: ElementRef,
+    private renderer: Renderer2,
+    private ngZone: NgZone
   ) {}
 
   ngOnInit() {
     if (this.platform.isBrowser) {
-      const container = this.host.nativeElement;
+      this.host = this.hostElementRef.nativeElement;
 
       this.initProxy();
+      this.observeBoundingRectChanges();
 
       const mouseup$ = fromEvent(window, 'mouseup').pipe(
         filter(() => !this.disabled),
@@ -93,7 +107,7 @@ export class SelectContainerComponent implements OnInit, OnDestroy {
 
       const mousemove$ = fromEvent(window, 'mousemove').pipe(filter(() => !this.disabled), share());
 
-      const mousedown$ = fromEvent(container, 'mousedown').pipe(
+      const mousedown$ = fromEvent(this.host, 'mousedown').pipe(
         filter(() => !this.disabled),
         tap((event: MouseEvent) => this.onMouseDown(event)),
         share()
@@ -106,18 +120,22 @@ export class SelectContainerComponent implements OnInit, OnDestroy {
       );
 
       const currentMousePosition$: Observable<MousePosition> = mousedown$.pipe(
-        map((event: MouseEvent) => getCurrentMousePosition(event))
+        map((event: MouseEvent) => getRelativeMousePosition(event, this.host))
       );
 
       const show$ = dragging$.pipe(mapTo(1));
       const hide$ = mouseup$.pipe(mapTo(0));
       const opacity$ = merge(show$, hide$, asap).pipe(distinctUntilChanged());
-      const selectBox$ = combineLatest(dragging$, opacity$, currentMousePosition$).pipe(createSelectBox(), share());
+
+      const selectBox$ = combineLatest(dragging$, opacity$, currentMousePosition$).pipe(
+        createSelectBox(this.host),
+        share()
+      );
 
       mouseup$
         .pipe(
-          filter((event: MouseEvent) => this.cursorWithinHost(event)),
           filter(() => !this.selectOnDrag),
+          filter((event: MouseEvent) => this.cursorWithinHost(event)),
           filter(
             (event: MouseEvent) =>
               (!this.shortcuts.disableSelection(event) && !this.shortcuts.toggleSingleItem(event)) ||
@@ -159,7 +177,7 @@ export class SelectContainerComponent implements OnInit, OnDestroy {
   }
 
   selectAll() {
-    this.$selectItems.forEach(item => {
+    this.$selectableItems.forEach(item => {
       if (!this.hasItem(item)) {
         this.addItem(item);
       }
@@ -167,7 +185,7 @@ export class SelectContainerComponent implements OnInit, OnDestroy {
   }
 
   clearSelection() {
-    this.$selectItems.forEach(item => {
+    this.$selectableItems.forEach(item => {
       this.removeItem(item);
     });
   }
@@ -190,8 +208,23 @@ export class SelectContainerComponent implements OnInit, OnDestroy {
       });
   }
 
+  private observeBoundingRectChanges() {
+    this.ngZone.runOutsideAngular(() => {
+      const resize$ = fromEvent(window, 'resize');
+      const windowScroll$ = fromEvent(window, 'scroll');
+      const containerScroll$ = fromEvent(this.host, 'scroll');
+
+      merge(resize$, windowScroll$, containerScroll$)
+        .pipe(auditTime(AUDIT_TIME), takeUntil(this.destroy$))
+        .subscribe(() => {
+          this.host.boundingClientRect = calculateBoundingClientRect(this.host);
+          this.$selectableItems.forEach(item => item.calculateBoundingClientRect());
+        });
+    });
+  }
+
   private cursorWithinHost(event: MouseEvent) {
-    return cursorWithinElement(event, this.host.nativeElement);
+    return cursorWithinElement(event, this.host);
   }
 
   private onMouseUp() {
@@ -207,9 +240,9 @@ export class SelectContainerComponent implements OnInit, OnDestroy {
     clearSelection(window);
     this.renderer.addClass(document.body, NO_SELECT_CLASS);
 
-    const mousePoint = getCurrentMousePosition(event);
+    const mousePoint = getMousePosition(event);
 
-    this.$selectItems.forEach((item, index) => {
+    this.$selectableItems.forEach((item, index) => {
       const itemRect = item.getBoundingClientRect();
       const withinBoundingBox = inBoundingBox(mousePoint, itemRect);
 
@@ -235,12 +268,14 @@ export class SelectContainerComponent implements OnInit, OnDestroy {
     });
   }
 
-  private selectItems(selectBox, event: MouseEvent) {
-    this.$selectItems.forEach((item, index) => {
+  private selectItems(selectBox: SelectBox<number>, event: MouseEvent) {
+    const selectionBox = calculateBoundingClientRect(this.$selectBox.nativeElement);
+
+    this.$selectableItems.forEach((item, index) => {
       if (this.shortcuts.extendedSelectionShortcut(event) && this.selectOnDrag) {
-        this.extendedSelectionMode(selectBox, item, event);
+        this.extendedSelectionMode(selectionBox, item, event);
       } else {
-        this.normalSelectionMode(selectBox, item, event);
+        this.normalSelectionMode(selectionBox, item, event);
       }
     });
   }

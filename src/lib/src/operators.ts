@@ -1,17 +1,22 @@
 import { Observable } from 'rxjs/Observable';
 import { map, finalize } from 'rxjs/operators';
 import { Subject } from 'rxjs/Subject';
-import { SelectBox, SelectBoxInput, ObservableProxy, MousePosition } from './models';
+import { SelectBox, SelectBoxInput, ObservableProxy, MousePosition, SelectContainerHost } from './models';
+import { getRelativeMousePosition } from './utils';
 
-export const createSelectBox = () => (source: Observable<SelectBoxInput>): Observable<SelectBox<number>> =>
+export const createSelectBox = (container: SelectContainerHost) => (
+  source: Observable<SelectBoxInput>
+): Observable<SelectBox<number>> =>
   source.pipe(
-    map(([mouseEvent, opacity, { x, y }]) => {
-      const width = opacity > 0 ? mouseEvent.clientX - x : 0;
-      const height = opacity > 0 ? mouseEvent.clientY - y : 0;
+    map(([event, opacity, { x, y }]) => {
+      const mousePosition = getRelativeMousePosition(event, container);
+
+      const width = opacity > 0 ? mousePosition.x - x : 0;
+      const height = opacity > 0 ? mousePosition.y - y : 0;
 
       return {
-        top: height < 0 ? mouseEvent.clientY : y,
-        left: width < 0 ? mouseEvent.clientX : x,
+        top: height < 0 ? mousePosition.y : y,
+        left: width < 0 ? mousePosition.x : x,
         width: Math.abs(width),
         height: Math.abs(height),
         opacity

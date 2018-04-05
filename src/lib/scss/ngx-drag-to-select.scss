@@ -6,12 +6,12 @@
 
 .ngx-select-box {
   contain: layout;
-  transform: translate3d(0, 0, 0);
+  transform: translateZ(0);
   box-sizing: border-box;
   color: $select-box-color;
   background: rgba($select-box-color, 0.3);
   border: $select-box-border-size solid currentColor;
-  position: fixed;
+  position: absolute;
   left: 0;
   top: 0;
   width: 0;

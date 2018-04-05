@@ -5,6 +5,10 @@ export interface ObservableProxy<T> {
   proxy: T;
 }
 
+export interface SelectContainerHost extends HTMLElement {
+  boundingClientRect: BoundingBox;
+}
+
 export interface Shortcuts {
   disableSelection: string;
   toggleSingleItem: string;
@@ -20,6 +24,13 @@ export interface DragToSelectConfig {
 export interface MousePosition {
   x: number;
   y: number;
+}
+
+export interface BoundingBox {
+  top: number;
+  left: number;
+  width: number;
+  height: number;
 }
 
 export type SelectBoxInput = [MouseEvent, number, MousePosition];
