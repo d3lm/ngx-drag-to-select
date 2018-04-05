@@ -57,12 +57,27 @@ export const getMousePosition = (event: MouseEvent) => {
   };
 };
 
+export const getScroll = () => {
+  if (!document) {
+    return {
+      x: 0,
+      y: 0
+    };
+  }
+
+  return {
+    x: document.documentElement.scrollLeft || document.body.scrollLeft,
+    y: document.documentElement.scrollTop || document.body.scrollTop
+  };
+};
+
 export const getRelativeMousePosition = (event: MouseEvent, container: SelectContainerHost): MousePosition => {
   const { x: clientX, y: clientY } = getMousePosition(event);
+  const scroll = getScroll();
 
   const borderSize = (container.boundingClientRect.width - container.clientWidth) / 2;
-  const offsetLeft = container.boundingClientRect.left + document.documentElement.scrollLeft;
-  const offsetTop = container.boundingClientRect.top + document.documentElement.scrollTop;
+  const offsetLeft = container.boundingClientRect.left + scroll.x;
+  const offsetTop = container.boundingClientRect.top + scroll.y;
 
   return {
     x: clientX - borderSize - (offsetLeft - window.pageXOffset) + container.scrollLeft,
