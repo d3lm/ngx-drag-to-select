@@ -36,6 +36,6 @@ export class AppComponent implements OnInit {
   }
 
   onSelect(items: Array<any>) {
-    console.log('onSelect', items);
+    // Do something with the selected items
   }
 }
