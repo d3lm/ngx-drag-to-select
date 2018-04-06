@@ -34,7 +34,7 @@ $controls-height: 80px;
     align-items: flex-end;
     height: $controls-height;
     background: #2196f3;
-    padding: 0 25px;
+    padding: 0 25px 5px;
     color: white;
     border-radius: 40px 40px 0 0;
     position: relative;
@@ -47,7 +47,7 @@ $controls-height: 80px;
     .select-count {
       position: absolute;
       right: 32px;
-      bottom: 10px;
+      bottom: 15px;
     }
   }
 
