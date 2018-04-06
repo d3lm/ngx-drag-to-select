@@ -210,12 +210,15 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy {
 
     this._selectedItems = proxy;
 
-    proxy$
-      .pipe(auditTime(AUDIT_TIME), map(_ => this._selectedItems), takeUntil(this.destroy$))
-      .subscribe(selectedItems => {
+    proxy$.pipe(auditTime(AUDIT_TIME), map(_ => this._selectedItems), takeUntil(this.destroy$)).subscribe({
+      next: selectedItems => {
         this.selectedItemsChange.emit(selectedItems);
         this.select.emit(selectedItems);
-      });
+      },
+      complete: () => {
+        this.selectedItemsChange.emit([]);
+      }
+    });
   }
 
   private observeSelectableItems() {
