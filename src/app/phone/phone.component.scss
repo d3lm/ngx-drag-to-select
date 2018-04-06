@@ -22,7 +22,7 @@ $controls-height: 80px;
     position: absolute;
     top: 0;
     left: 0;
-    background-image: url(assets/iphone.svg);
+    background-image: url('../../assets/iphone.svg');
     background-size: $phone-width $phone-height;
     background-repeat: no-repeat;
     width: $phone-width;
