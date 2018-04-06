@@ -28,6 +28,7 @@ import { ShortcutsComponent } from './shortcuts/shortcuts.component';
 import { FooterComponent } from './footer/footer.component';
 import { HeaderComponent } from './header/header.component';
 import { PhoneComponent } from './phone/phone.component';
+import { LayoutModule } from '@angular/cdk/layout';
 
 const MATERIAL_MODULES = [
   MatCheckboxModule,
@@ -55,6 +56,7 @@ const MATERIAL_MODULES = [
     ModuleMapLoaderModule,
     HttpClientModule,
     BrowserAnimationsModule,
+    LayoutModule,
     FormsModule,
     ...MATERIAL_MODULES,
     DragToSelectModule.forRoot()

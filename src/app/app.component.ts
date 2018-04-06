@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Title, DomSanitizer } from '@angular/platform-browser';
 import { MatIconRegistry } from '@angular/material';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 
 const json = require('../lib/package.json');
 
@@ -14,8 +15,14 @@ export class AppComponent implements OnInit {
   selectedDocuments: Array<any> = [];
   selectOnDrag = true;
   disable = false;
+  isDesktop = false;
 
-  constructor(private titleService: Title, private iconRegistry: MatIconRegistry, private sanitizer: DomSanitizer) {
+  constructor(
+    private titleService: Title,
+    private breakpointObserver: BreakpointObserver,
+    private iconRegistry: MatIconRegistry,
+    private sanitizer: DomSanitizer
+  ) {
     iconRegistry.addSvgIcon('apple', sanitizer.bypassSecurityTrustResourceUrl('assets/apple-icon.svg'));
     iconRegistry.addSvgIcon('windows', sanitizer.bypassSecurityTrustResourceUrl('assets/windows-icon.svg'));
   }
@@ -26,6 +33,10 @@ export class AppComponent implements OnInit {
     if (json) {
       this.titleService.setTitle(`${currentTitle}: v${json.version}`);
     }
+
+    this.breakpointObserver.observe(Breakpoints.Large).subscribe(state => {
+      this.isDesktop = state.matches;
+    });
 
     for (let id = 1; id <= 12; id++) {
       this.documents.push({

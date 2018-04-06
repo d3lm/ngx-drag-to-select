@@ -1,6 +1,6 @@
 <ngx-header></ngx-header>
 <main>
-  <section>
+  <section *ngIf="isDesktop">
     <h3>Keyboard Shortcuts</h3>
     <mat-tab-group [@.disabled]="true">
       <mat-tab>
@@ -18,9 +18,9 @@
     </mat-tab-group>
   </section>
 
-  <section>
+  <section *ngIf="isDesktop">
     <h3>
-      <span>Demo</span>
+      <span>Desktop Demo</span>
       <a href="https://github.com/d3lm/ngx-drag-to-select/blob/master/src/app">SOURCE</a>
     </h3>
 
