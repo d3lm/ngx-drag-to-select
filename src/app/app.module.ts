@@ -27,6 +27,7 @@ import {
 import { ShortcutsComponent } from './shortcuts/shortcuts.component';
 import { FooterComponent } from './footer/footer.component';
 import { HeaderComponent } from './header/header.component';
+import { PhoneComponent } from './phone/phone.component';
 
 const MATERIAL_MODULES = [
   MatCheckboxModule,
@@ -46,7 +47,8 @@ const MATERIAL_MODULES = [
     ShortcutsComponent,
     ModifierKeyComponent,
     FooterComponent,
-    HeaderComponent
+    HeaderComponent,
+    PhoneComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'demo-app' }),

@@ -1,38 +1,56 @@
 <ngx-header></ngx-header>
 <main>
-  <h3>Keyboard Shortcuts</h3>
-  <mat-tab-group [@.disabled]="true">
-    <mat-tab>
-      <ng-template mat-tab-label>
-        <mat-icon svgIcon="apple"></mat-icon>
-      </ng-template>
-      <ngx-shortcuts os="mac"></ngx-shortcuts>
-    </mat-tab>
-    <mat-tab>
-      <ng-template mat-tab-label>
-        <mat-icon svgIcon="windows"></mat-icon>
-      </ng-template>
-      <ngx-shortcuts os="windows"></ngx-shortcuts>
-    </mat-tab>
-  </mat-tab-group>
+  <section>
+    <h3>Keyboard Shortcuts</h3>
+    <mat-tab-group [@.disabled]="true">
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon svgIcon="apple"></mat-icon>
+        </ng-template>
+        <ngx-shortcuts os="mac"></ngx-shortcuts>
+      </mat-tab>
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon svgIcon="windows"></mat-icon>
+        </ng-template>
+        <ngx-shortcuts os="windows"></ngx-shortcuts>
+      </mat-tab>
+    </mat-tab-group>
+  </section>
 
-  <h3>Demo</h3>
+  <section>
+    <h3>
+      <span>Demo</span>
+      <a href="https://github.com/d3lm/ngx-drag-to-select/blob/master/src/app">SOURCE</a>
+    </h3>
 
-  <mat-checkbox [(ngModel)]="selectOnDrag">Select on Drag</mat-checkbox>
-  <mat-checkbox [(ngModel)]="disable">Disable</mat-checkbox>
+    <mat-checkbox [(ngModel)]="selectOnDrag">Select on Drag</mat-checkbox>
+    <mat-checkbox [(ngModel)]="disable">Disable</mat-checkbox>
 
-  <button mat-raised-button (click)="selectContainer.selectAll()">Select All</button>
-  <button mat-raised-button (click)="selectContainer.clearSelection()">Clear Selection</button>
+    <button mat-raised-button (click)="selectContainer.selectAll()">Select All</button>
+    <button mat-raised-button (click)="selectContainer.clearSelection()">Clear Selection</button>
 
-  <div class="drag-area">
-    <ngx-select-container #selectContainer="ngx-select-container" [(selectedItems)]="selectedDocuments" [disabled]="disable"
-      [selectOnDrag]="selectOnDrag" (select)="onSelect($event)">
-      <mat-grid-list cols="4" rowHeight="200px" gutterSize="20px">
-        <mat-grid-tile [selectItem]="document" *ngFor="let document of documents">
-          {{ document.name }}
-        </mat-grid-tile>
-      </mat-grid-list>
-    </ngx-select-container>
-  </div>
+    <div class="drag-area">
+      <ngx-select-container #selectContainer="ngx-select-container" [(selectedItems)]="selectedDocuments" [disabled]="disable"
+        [selectOnDrag]="selectOnDrag" (select)="onSelect($event)">
+        <mat-grid-list cols="4" rowHeight="200px" gutterSize="20px">
+          <mat-grid-tile [selectItem]="document" *ngFor="let document of documents">
+            {{ document.name }}
+          </mat-grid-tile>
+        </mat-grid-list>
+      </ngx-select-container>
+    </div>
+  </section>
+
+  <section>
+    <h3>
+      <span>Mobile Demo</span>
+      <a href="https://github.com/d3lm/ngx-drag-to-select/blob/master/src/app/phone">SOURCE</a>
+    </h3>
+
+    <div class="mobile-wrapper">
+      <ngx-phone></ngx-phone>
+    </div>
+  </section>
 </main>
 <ngx-footer></ngx-footer>

@@ -6,11 +6,12 @@ import {
   Input,
   OnDestroy,
   Renderer2,
-  OnInit,
   ViewChild,
   NgZone,
   ContentChildren,
-  QueryList
+  QueryList,
+  HostBinding,
+  AfterViewInit
 } from '@angular/core';
 
 import { Platform } from '@angular/cdk/platform';
@@ -65,7 +66,7 @@ import {
   `,
   styleUrls: ['./select-container.component.scss']
 })
-export class SelectContainerComponent implements OnInit, OnDestroy {
+export class SelectContainerComponent implements AfterViewInit, OnDestroy {
   host: SelectContainerHost;
   selectBoxStyles$: Observable<SelectBox<string>>;
 
@@ -77,6 +78,12 @@ export class SelectContainerComponent implements OnInit, OnDestroy {
   @Input() selectedItems: any;
   @Input() selectOnDrag = true;
   @Input() disabled = false;
+  @Input() disableDrag = false;
+  @Input() selectMode = false;
+
+  @Input()
+  @HostBinding('class.ngx-custom')
+  custom = false;
 
   @Output() selectedItemsChange = new EventEmitter<any>();
   @Output() select = new EventEmitter<any>();
@@ -93,12 +100,14 @@ export class SelectContainerComponent implements OnInit, OnDestroy {
     private ngZone: NgZone
   ) {}
 
-  ngOnInit() {
+  ngAfterViewInit() {
     if (this.platform.isBrowser) {
       this.host = this.hostElementRef.nativeElement;
 
       this.initProxy();
+
       this.observeBoundingRectChanges();
+      this.observeSelectableItems();
 
       const mouseup$ = fromEvent(window, 'mouseup').pipe(
         filter(() => !this.disabled),
@@ -116,6 +125,8 @@ export class SelectContainerComponent implements OnInit, OnDestroy {
 
       const dragging$ = mousedown$.pipe(
         filter(event => !this.shortcuts.disableSelection(event)),
+        filter(event => !this.selectMode),
+        filter(event => !this.disableDrag),
         switchMap(() => mousemove$.pipe(takeUntil(mouseup$))),
         share()
       );
@@ -179,15 +190,13 @@ export class SelectContainerComponent implements OnInit, OnDestroy {
 
   selectAll() {
     this.$selectableItems.forEach(item => {
-      if (!this.hasItem(item)) {
-        this.addItem(item);
-      }
+      this.selectItem(item);
     });
   }
 
   clearSelection() {
     this.$selectableItems.forEach(item => {
-      this.removeItem(item);
+      this.deselectItem(item);
     });
   }
 
@@ -204,9 +213,24 @@ export class SelectContainerComponent implements OnInit, OnDestroy {
     proxy$
       .pipe(auditTime(AUDIT_TIME), map(_ => this._selectedItems), takeUntil(this.destroy$))
       .subscribe(selectedItems => {
-        this.select.emit(selectedItems);
         this.selectedItemsChange.emit(selectedItems);
+        this.select.emit(selectedItems);
       });
+  }
+
+  private observeSelectableItems() {
+    // Update the container as well as all selectable items if the list has changed
+    this.$selectableItems.changes.pipe(takeUntil(this.destroy$)).subscribe((items: QueryList<SelectItemDirective>) => {
+      const newList = items.toArray();
+      const removedItems = this._selectedItems.filter(item => !newList.includes(item.value));
+
+      setTimeout(() => {
+        if (removedItems.length) {
+          removedItems.forEach(item => this.removeItem(item));
+        }
+        this.update();
+      });
+    });
   }
 
   private observeBoundingRectChanges() {
@@ -221,10 +245,14 @@ export class SelectContainerComponent implements OnInit, OnDestroy {
       merge(resize$, windowScroll$, containerScroll$)
         .pipe(auditTime(AUDIT_TIME), takeUntil(this.destroy$))
         .subscribe(() => {
-          this.host.boundingClientRect = calculateBoundingClientRect(this.host);
-          this.$selectableItems.forEach(item => item.calculateBoundingClientRect());
+          this.update();
         });
     });
+  }
+
+  private update() {
+    this.calculateBoundingClientRect();
+    this.$selectableItems.forEach(item => item.calculateBoundingClientRect());
   }
 
   private calculateBoundingClientRect() {
@@ -241,12 +269,15 @@ export class SelectContainerComponent implements OnInit, OnDestroy {
   }
 
   private onMouseDown(event: MouseEvent) {
-    if (this.shortcuts.disableSelection(event)) {
+    if (this.shortcuts.disableSelection(event) || this.disabled) {
       return;
     }
 
     clearSelection(window);
-    this.renderer.addClass(document.body, NO_SELECT_CLASS);
+
+    if (!this.disableDrag) {
+      this.renderer.addClass(document.body, NO_SELECT_CLASS);
+    }
 
     const mousePoint = getMousePosition(event);
 
@@ -259,19 +290,23 @@ export class SelectContainerComponent implements OnInit, OnDestroy {
       }
 
       const shouldAdd =
-        (withinBoundingBox && !this.shortcuts.toggleSingleItem(event)) ||
+        (withinBoundingBox && !this.shortcuts.toggleSingleItem(event) && !this.selectMode) ||
         (withinBoundingBox && this.shortcuts.toggleSingleItem(event) && !item.selected) ||
-        (!withinBoundingBox && this.shortcuts.toggleSingleItem(event) && item.selected);
+        (!withinBoundingBox && this.shortcuts.toggleSingleItem(event) && item.selected) ||
+        (withinBoundingBox && !item.selected && this.selectMode) ||
+        (!withinBoundingBox && item.selected && this.selectMode);
 
       const shouldRemove =
-        (!withinBoundingBox && !this.shortcuts.toggleSingleItem(event)) ||
+        (!withinBoundingBox && !this.shortcuts.toggleSingleItem(event) && !this.selectMode) ||
         (!withinBoundingBox && this.shortcuts.toggleSingleItem(event) && !item.selected) ||
-        (withinBoundingBox && this.shortcuts.toggleSingleItem(event) && item.selected);
+        (withinBoundingBox && this.shortcuts.toggleSingleItem(event) && item.selected) ||
+        (!withinBoundingBox && !item.selected && this.selectMode) ||
+        (withinBoundingBox && item.selected && this.selectMode);
 
       if (shouldAdd) {
-        this.addItem(item);
+        this.selectItem(item);
       } else if (shouldRemove) {
-        this.removeItem(item);
+        this.deselectItem(item);
       }
     });
   }
@@ -298,9 +333,9 @@ export class SelectContainerComponent implements OnInit, OnDestroy {
       (inSelection && item.selected && this.shortcuts.removeFromSelection(event));
 
     if (shouldAdd) {
-      this.addItem(item);
+      this.selectItem(item);
     } else if (shouldRemove) {
-      this.removeItem(item);
+      this.deselectItem(item);
     }
   }
 
@@ -332,11 +367,11 @@ export class SelectContainerComponent implements OnInit, OnDestroy {
   private flushItems() {
     this._tmpItems.forEach((action, item) => {
       if (action === Action.Add) {
-        this.addItem(item);
+        this.selectItem(item);
       }
 
       if (action === Action.Delete) {
-        this.removeItem(item);
+        this.deselectItem(item);
       }
     });
 
@@ -344,18 +379,38 @@ export class SelectContainerComponent implements OnInit, OnDestroy {
   }
 
   private addItem(item: SelectItemDirective) {
+    let success = false;
+
     if (!this.hasItem(item)) {
-      item.select();
+      success = true;
       this._selectedItems.push(item.value);
+    }
+
+    return success;
+  }
+
+  private removeItem(item: SelectItemDirective | any) {
+    let success = false;
+    const value = item instanceof SelectItemDirective ? item.value : item;
+    const index = this._selectedItems.indexOf(value);
+
+    if (index > -1) {
+      success = true;
+      this._selectedItems.splice(index, 1);
+    }
+
+    return success;
+  }
+
+  private selectItem(item: SelectItemDirective) {
+    if (this.addItem(item)) {
+      item.select();
     }
   }
 
-  private removeItem(item: SelectItemDirective) {
-    const index = this._selectedItems.indexOf(item.value);
-
-    if (index > -1) {
+  private deselectItem(item: SelectItemDirective) {
+    if (this.removeItem(item)) {
       item.deselect();
-      this._selectedItems.splice(index, 1);
     }
   }
 

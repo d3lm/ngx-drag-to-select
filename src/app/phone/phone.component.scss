@@ -1,0 +1,140 @@
+$phone-width: 300px;
+$phone-height: 624px;
+$controls-height: 80px;
+
+:host {
+  display: flex;
+  align-items: center;
+}
+
+.phone-wrapper {
+  position: relative;
+  box-sizing: border-box;
+  background-position: center;
+  width: $phone-width;
+  height: $phone-height;
+  overflow: hidden;
+
+  &::after {
+    content: '';
+    pointer-events: none;
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-image: url(/assets/iphone.svg);
+    background-size: $phone-width $phone-height;
+    background-repeat: no-repeat;
+    width: $phone-width;
+    height: $phone-height;
+  }
+
+  .controls {
+    display: flex;
+    align-items: flex-end;
+    height: $controls-height;
+    background: #2196f3;
+    padding: 0 25px;
+    color: white;
+    border-radius: 40px 40px 0 0;
+    position: relative;
+
+    .add-button {
+      position: absolute;
+      right: 25px;
+    }
+
+    .select-count {
+      position: absolute;
+      right: 32px;
+      bottom: 10px;
+    }
+  }
+
+  .home-button {
+    position: absolute;
+    bottom: 20px;
+    height: 5px;
+    left: 80px;
+    width: 140px;
+    border-radius: 10px;
+    background: #5c5c5c;
+  }
+
+  .phone-screen {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+  }
+
+  .content {
+    position: absolute;
+    left: 20px;
+    right: 20px;
+    bottom: 50px;
+    top: 80px;
+    overflow: scroll;
+    margin: 0 -65px;
+    padding: 10px 65px;
+    border-bottom: 1px solid #f1f1f1;
+
+    &.select-mode {
+      .sender-avatar:not(.selected) {
+        border: 2px solid gray;
+        background: white !important;
+      }
+    }
+  }
+}
+
+.email {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+
+  & + & {
+    border-top: 1px solid #f1f1f1;
+  }
+
+  .sender-avatar {
+    cursor: pointer;
+    user-select: none;
+    color: white;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    border-radius: 50%;
+    align-items: center;
+    margin-right: 15px;
+    transition: background-color 0.2s ease-in-out;
+
+    &.selected {
+      background: gray !important;
+      border: 0;
+    }
+  }
+
+  .sender {
+    color: #525252;
+  }
+}
+
+.no-contacts {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  margin-top: 10px;
+
+  img {
+    margin-bottom: 10px;
+  }
+
+  .message {
+    margin-top: 15px;
+  }
+}

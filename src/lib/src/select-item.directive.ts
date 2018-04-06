@@ -1,8 +1,7 @@
-import { Directive, ElementRef, Input, Inject, Renderer2, DoCheck, OnInit } from '@angular/core';
 import { Platform } from '@angular/cdk/platform';
-
-import { CONFIG } from './tokens';
+import { Directive, DoCheck, ElementRef, Inject, Input, OnInit, Renderer2 } from '@angular/core';
 import { DragToSelectConfig } from './models';
+import { CONFIG } from './tokens';
 import { calculateBoundingClientRect } from './utils';
 
 @Directive({
@@ -25,12 +24,15 @@ export class SelectItemDirective implements OnInit, DoCheck {
 
   constructor(
     @Inject(CONFIG) private config: DragToSelectConfig,
+    private platform: Platform,
     private host: ElementRef,
     private renderer: Renderer2
   ) {}
 
   ngOnInit() {
-    setTimeout(() => this.calculateBoundingClientRect());
+    if (this.platform.isBrowser) {
+      setTimeout(() => this.calculateBoundingClientRect());
+    }
   }
 
   ngDoCheck() {

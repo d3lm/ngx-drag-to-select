@@ -1,12 +1,36 @@
+$primary-color: #0087f7;
+$link-color: #9C27B0;
+
 h3 {
-  color: #0087f7;
+  color: $primary-color;
   font-weight: bold;
   margin-bottom: 1.5rem;
   border-bottom: 3px solid;
-  padding: 0 0 0.5rem;
+  padding: 0 0 1rem;
 
-  &:not(:first-of-type) {
+  a {
+    color: $link-color;
+    padding: 5px;
+    font-size: 1rem;
+    border: 1px solid $link-color;
+    text-decoration: none;
+    margin-left: 10px;
+    transition: background-color 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+
+    &:hover {
+      background: $link-color;
+      color: white;
+    }
+  }
+}
+
+section {
+  & + & {
     margin-top: 2rem;
+  }
+
+  &:last-of-type {
+    margin-bottom: 2rem;
   }
 }
 
@@ -22,6 +46,10 @@ mat-grid-list {
 mat-grid-tile {
   border: 1px solid gainsboro;
   border-radius: 5px;
+
+  mat-checkbox {
+    margin-right: 10px;
+  }
 }
 
 hr {
@@ -33,14 +61,14 @@ hr {
 
 ngx-select-container {
   padding: 1rem;
-  border: 2px dashed #0087f7;
+  border: 2px dashed $primary-color;
   border-radius: 5px;
   margin: 2.5rem 0;
 
   &:before {
     content: 'DRAG AREA';
     font-family: Raleway;
-    color: #0087f7;
+    color: $primary-color;
   }
 }
 
@@ -55,4 +83,11 @@ button {
   & + & {
     margin-left: 1rem;
   }
+}
+
+.mobile-wrapper {
+  display: flex;
+  justify-content: center;
+  margin: 0 auto;
+  padding: 15px 0;
 }

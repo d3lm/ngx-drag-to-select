@@ -26,6 +26,12 @@ You can also fiddle with the library using [StackBlitz](https://stackblitz.com/e
 * Complies with the [Angular Package Format](https://docs.google.com/document/d/1CZC2rcpxffTDfRDs6p1cfbmKNLA6x5O-NtkJglDaBVs/preview)
 * Includes FESM2015, FESM5, and UMD bundles 📦
 * It's fast 🏎
+* Mobile friendly 📱
+
+## Examples
+
+* [Simple Example](https://github.com/d3lm/ngx-drag-to-select/blob/master/src/app): Check out the `AppComponent`!
+* [Mobile Example](https://github.com/d3lm/ngx-drag-to-select/blob/master/src/app/phone): There's a dedicated `PhoneComponent` component that uses all the tools and features from this library to implement a Google Inbox-like selection experience.
 
 ## Installation
 
@@ -137,6 +143,8 @@ $select-box-color: red;
 @import "~ngx-drag-to-select/scss/ngx-drag-to-select";
 ```
 
+Keep in mind that default styles are applied to all drag-to-select instances in your application. This means that if you override the color of the select box and set it so something like `red` then all instances render a `red` selection rectangle.
+
 ### Configuring `DragToSelectModule`
 
 This library allows to you override certain options, such as
@@ -195,16 +203,25 @@ When using `meta`, it will be substituted with `ctrl` (for Windows) **and** `cmd
 
 **Inputs**
 
-| Input         | Type       | Default | Description                                     |
-| ------------- | ---------- | ------- | ----------------------------------------------- |
-| selectedItems | Array<any> | /       | Collection of items that are currently selected |
-| selectOnDrag  | Boolean    | `true`  | Whether items should be selected while dragging |
-| disabled      | Boolean    | `false` | Disable selection                               |
+| Input         | Type       | Default | Description                                                                                                   |
+| ------------- | ---------- | ------- | ------------------------------------------------------------------------------------------------------------- |
+| selectedItems | Array<any> | /       | Collection of items that are currently selected                                                               |
+| selectOnDrag  | Boolean    | `true`  | Whether items should be selected while dragging                                                               |
+| disabled      | Boolean    | `false` | Disable selection                                                                                             |
+| disableDrag   | Boolean    | `false` | Disable selection by dragging with the mouse. May be useful for mobile.                                       |
+| selectMode    | Boolean    | `false` | If set to `true`, a _toggle_ mode is activated similar to the `toggleSingleItem` shortcut. Useful for mobile. |
+| custom        | Boolean    | `false` | If set to `true`, all default styles for selected items will not be applied.                                  |
 
-Here's an example of both inputs in action:
+Here's an example of all inputs in action:
 
 ```
-<ngx-select-container [(selectedItems)]="selectedDocuments" [disabled]="false" [selectOnDrag]="selectOnDrag">
+<ngx-select-container
+  [(selectedItems)]="selectedDocuments"
+  [selectOnDrag]="selectOnDrag"
+  [disabled]="false"
+  [disableDrag]="true"
+  [selectMode]="true"
+  [custom]="true">
   ...
 </ngx-select-container>
 ```
