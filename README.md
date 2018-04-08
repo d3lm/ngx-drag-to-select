@@ -5,7 +5,7 @@
 [![npm](https://img.shields.io/npm/v/ngx-drag-to-select.svg)](https://www.npmjs.com/package/ng-packagr)
 [![npm License](https://img.shields.io/npm/l/ngx-drag-to-select.svg)](https://github.com/d3lm/ngx-drag-to-select/blob/master/LICENSE)
 
-A lightweight, fast, configurable and reactive drag-to-select component for Angular 5 and beyond
+A lightweight, fast, configurable and reactive drag-to-select component for Angular 6 and beyond
 
 ## Demo
 
