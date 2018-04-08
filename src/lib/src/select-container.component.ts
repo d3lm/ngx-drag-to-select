@@ -18,16 +18,7 @@ import {
 
 import { isPlatformBrowser } from '@angular/common';
 
-import { Observable } from 'rxjs/Observable';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { async } from 'rxjs/scheduler/async';
-import { Subject } from 'rxjs/Subject';
-import { combineLatest } from 'rxjs/observable/combineLatest';
-import { merge } from 'rxjs/observable/merge';
-import { empty } from 'rxjs/observable/empty';
-import { forkJoin } from 'rxjs/observable/forkJoin';
-import { fromEvent } from 'rxjs/observable/fromEvent';
-import { asap } from 'rxjs/scheduler/asap';
+import { Observable, Subject, combineLatest, merge, fromEvent, BehaviorSubject, asyncScheduler } from 'rxjs';
 
 import {
   switchMap,
@@ -40,11 +31,8 @@ import {
   share,
   withLatestFrom,
   distinctUntilChanged,
-  take,
   observeOn,
-  startWith,
-  concatMap,
-  mergeMap
+  startWith
 } from 'rxjs/operators';
 
 import { SelectItemDirective } from './select-item.directive';
@@ -154,7 +142,7 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy {
 
       const show$ = dragging$.pipe(mapTo(1));
       const hide$ = mouseup$.pipe(mapTo(0));
-      const opacity$ = merge(show$, hide$, asap).pipe(distinctUntilChanged());
+      const opacity$ = merge(show$, hide$).pipe(distinctUntilChanged());
 
       const selectBox$ = combineLatest(dragging$, opacity$, currentMousePosition$).pipe(
         createSelectBox(this.host),
@@ -274,7 +262,7 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy {
     this.$selectableItems.changes
       .pipe(
         withLatestFrom(this._selectedItems$),
-        observeOn(async),
+        observeOn(asyncScheduler),
         tap(([items, selectedItems]: [QueryList<SelectItemDirective>, any[]]) => {
           const newList = items.toArray();
           const removedItems = selectedItems.filter(item => !newList.includes(item.value));
