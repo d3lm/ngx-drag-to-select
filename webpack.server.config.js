@@ -2,6 +2,7 @@ const path = require('path');
 const webpack = require('webpack');
 
 module.exports = {
+  mode: 'development',
   entry: {
     server: './server.ts',
     prerender: './prerender.ts'

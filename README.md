@@ -5,7 +5,7 @@
 [![npm](https://img.shields.io/npm/v/ngx-drag-to-select.svg)](https://www.npmjs.com/package/ngx-drag-to-select)
 [![npm License](https://img.shields.io/npm/l/ngx-drag-to-select.svg)](https://github.com/d3lm/ngx-drag-to-select/blob/master/LICENSE)
 
-A lightweight, fast, configurable and reactive drag-to-select component for Angular 5 and beyond
+A lightweight, fast, configurable and reactive drag-to-select component for Angular 6 and beyond
 
 ## Demo
 
@@ -17,22 +17,22 @@ You can also fiddle with the library using [StackBlitz](https://stackblitz.com/e
 
 ## Features
 
-* Drag to Select
-* Shortcuts
-* Customizable 💅
-* Lightweight
-* Easy to use
-* Ready for AoT and SSR
-* Complies with the [Angular Package Format](https://docs.google.com/document/d/1CZC2rcpxffTDfRDs6p1cfbmKNLA6x5O-NtkJglDaBVs/preview)
-* Includes FESM2015, FESM5, and UMD bundles 📦
-* It's fast 🏎
-* Mobile friendly 📱
-* Thoroughly tested 🚨
+- Drag to Select
+- Shortcuts
+- Customizable 💅
+- Lightweight
+- Easy to use
+- Ready for AoT and SSR
+- Complies with the [Angular Package Format](https://docs.google.com/document/d/1CZC2rcpxffTDfRDs6p1cfbmKNLA6x5O-NtkJglDaBVs/preview)
+- Includes FESM2015, FESM5, and UMD bundles 📦
+- It's fast 🏎
+- Mobile friendly 📱
+- Thoroughly tested 🚨
 
 ## Examples
 
-* [Desktop Example](https://github.com/d3lm/ngx-drag-to-select/blob/master/src/app): Check out the `AppComponent`!
-* [Mobile Example](https://github.com/d3lm/ngx-drag-to-select/blob/master/src/app/phone): There's a dedicated `PhoneComponent` component that uses all the tools and features from this library to implement a Google Inbox-like selection experience.
+- [Desktop Example](https://github.com/d3lm/ngx-drag-to-select/blob/master/src/app): Check out the `AppComponent`!
+- [Mobile Example](https://github.com/d3lm/ngx-drag-to-select/blob/master/src/app/phone): There's a dedicated `PhoneComponent` component that uses all the tools and features from this library to implement a Google Inbox-like selection experience.
 
 ## Installation
 
@@ -204,15 +204,15 @@ When using `meta`, it will be substituted with `ctrl` (for Windows) **and** `cmd
 
 **Inputs**
 
-| Input                 | Type       | Default | Description                                                                                                   |
-| --------------------- | ---------- | ------- | ------------------------------------------------------------------------------------------------------------- |
-| selectedItems         | Array<any> | /       | Collection of items that are currently selected                                                               |
-| selectOnDrag          | Boolean    | `true`  | Whether items should be selected while dragging                                                               |
-| disabled              | Boolean    | `false` | Disable selection                                                                                             |
-| disableDrag           | Boolean    | `false` | Disable selection by dragging with the mouse. May be useful for mobile.                                       |
-| selectMode            | Boolean    | `false` | If set to `true`, a _toggle_ mode is activated similar to the `toggleSingleItem` shortcut. Useful for mobile. |
-| custom                | Boolean    | `false` | If set to `true`, all default styles for selected items will not be applied.                                  |
-| selectWithShortcut    | Boolean    | `false` | If set to `true`, items can only be selected when single clicking and applying a keyboard shortcut
+| Input              | Type       | Default | Description                                                                                                   |
+| ------------------ | ---------- | ------- | ------------------------------------------------------------------------------------------------------------- |
+| selectedItems      | Array<any> | /       | Collection of items that are currently selected                                                               |
+| selectOnDrag       | Boolean    | `true`  | Whether items should be selected while dragging                                                               |
+| disabled           | Boolean    | `false` | Disable selection                                                                                             |
+| disableDrag        | Boolean    | `false` | Disable selection by dragging with the mouse. May be useful for mobile.                                       |
+| selectMode         | Boolean    | `false` | If set to `true`, a _toggle_ mode is activated similar to the `toggleSingleItem` shortcut. Useful for mobile. |
+| custom             | Boolean    | `false` | If set to `true`, all default styles for selected items will not be applied.                                  |
+| selectWithShortcut | Boolean    | `false` | If set to `true`, items can only be selected when single clicking and applying a keyboard shortcut            |
 
 Here's an example of all inputs in action:
 
@@ -228,9 +228,9 @@ Here's an example of all inputs in action:
 </ngx-select-container>
 ```
 
-* To get ahold of the selected items you can use a two-way data binding (`[()]`) aka _banana-in-the-box_ syntax. This means that whenever the selection changes, your property is updated accordingly. It will always reflect the current selection.
+- To get ahold of the selected items you can use a two-way data binding (`[()]`) aka _banana-in-the-box_ syntax. This means that whenever the selection changes, your property is updated accordingly. It will always reflect the current selection.
 
-* Binding an expression to `selectOnDrag` will override the default value. When this option is set to `false`, it will **increase the performance** but you'll trade this for a slighly worse user experience.
+- Binding an expression to `selectOnDrag` will override the default value. When this option is set to `false`, it will **increase the performance** but you'll trade this for a slighly worse user experience.
 
 **Outputs**
 
