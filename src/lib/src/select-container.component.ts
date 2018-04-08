@@ -16,7 +16,8 @@ import {
 
 import { Platform } from '@angular/cdk/platform';
 
-import { Observable, Subject, combineLatest, merge, fromEvent, animationFrameScheduler } from 'rxjs';
+import { Observable, Subject, combineLatest, merge, fromEvent } from 'rxjs';
+
 import {
   switchMap,
   takeUntil,
@@ -131,7 +132,7 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy {
 
       const show$ = dragging$.pipe(mapTo(1));
       const hide$ = mouseup$.pipe(mapTo(0));
-      const opacity$ = merge(show$, hide$, animationFrameScheduler).pipe(distinctUntilChanged());
+      const opacity$ = merge(show$, hide$).pipe(distinctUntilChanged());
 
       const selectBox$ = combineLatest(dragging$, opacity$, currentMousePosition$).pipe(
         createSelectBox(this.host),
