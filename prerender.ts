@@ -13,7 +13,7 @@ enableProdMode();
 export const ROUTES = ['/'];
 
 // NOTE: Leave this as require() since this file is built Dynamically from webpack
-const { AppServerModuleNgFactory, LAZY_MODULE_MAP } = require('./dist/server/main.bundle');
+const { AppServerModuleNgFactory, LAZY_MODULE_MAP } = require('./dist/server/main');
 
 const DIST_FOLDER = join(process.cwd(), 'dist');
 const BROWSER_FOLDER = join(DIST_FOLDER, 'browser');
