@@ -11,7 +11,7 @@
     "build:ssr": "npm run build && npm run webpack:server",
     "build:prerender": "npm run build:ssr && npm run generate:prerender",
     "build:prerender-ghpages": "npm run build:ghpages && npm run webpack:server && npm run generate:prerender",
-    "build:app": "ng build --prod",
+    "build:app": "ng build --prod --project=app",
     "build:server": "ng build --prod --project=app-server",
     "build:lib": "npm run clean && npm run packagr && npm run build:lib:sass && npm run copy:styles && npm run copy:readme",
     "build:lib:sass": "node-sass src/lib/scss/ngx-drag-to-select.scss -o dist/lib",
