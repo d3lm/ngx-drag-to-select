@@ -34,8 +34,10 @@ export class AppComponent implements OnInit {
       this.titleService.setTitle(`${currentTitle}: v${json.version}`);
     }
 
-    this.breakpointObserver.observe([Breakpoints.Medium, Breakpoints.Large, Breakpoints.XLarge]).subscribe(state => {
-      this.isDesktop = state.matches;
+    const breakpoints = [Breakpoints.Medium, Breakpoints.Large, Breakpoints.XLarge];
+
+    this.breakpointObserver.observe(breakpoints).subscribe(state => {
+      this.isDesktop = this.breakpointObserver.isMatched(breakpoints);
     });
 
     for (let id = 1; id <= 12; id++) {
