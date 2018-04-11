@@ -2,7 +2,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "ngx-drag-to-select": {
+    "app": {
       "root": "",
       "projectType": "application",
       "architect": {
@@ -56,18 +56,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "ngx-drag-to-select:build"
+            "browserTarget": "app:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "ngx-drag-to-select:build:production"
+              "browserTarget": "app:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "ngx-drag-to-select:build"
+            "browserTarget": "app:build"
           }
         },
         "test": {
@@ -106,7 +106,7 @@
         }
       }
     },
-    "ngx-drag-to-select-e2e": {
+    "app-e2e": {
       "root": "",
       "projectType": "application",
       "cli": {},
@@ -116,7 +116,7 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "./protractor.conf.js",
-            "devServerTarget": "ngx-drag-to-select:serve"
+            "devServerTarget": "app:serve"
           }
         },
         "lint": {
@@ -128,7 +128,7 @@
         }
       }
     },
-    "ngx-drag-to-select-server": {
+    "server": {
       "root": "",
       "projectType": "application",
       "architect": {
