@@ -27,6 +27,7 @@ You can also fiddle with the library using [StackBlitz](https://stackblitz.com/e
 * Includes FESM2015, FESM5, and UMD bundles 📦
 * It's fast 🏎
 * Mobile friendly 📱
+* Thoroughly tested 🚨
 
 ## Examples
 

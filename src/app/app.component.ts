@@ -14,6 +14,7 @@ export class AppComponent implements OnInit {
   documents: Array<any> = [];
   selectedDocuments: Array<any> = [];
   selectOnDrag = true;
+  selectMode = false;
   disable = false;
   isDesktop = false;
 

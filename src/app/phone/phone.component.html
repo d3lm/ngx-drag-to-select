@@ -2,18 +2,18 @@
   <div class="phone-screen">
     <div class="controls">
       <div @editButtons *ngIf="selectMode">
-        <button mat-icon-button (click)="selectContainer.clearSelection()">
+        <button cy-data="clearSelection" mat-icon-button (click)="selectContainer.clearSelection()">
           <mat-icon>clear</mat-icon>
         </button>
-        <button mat-icon-button (click)="selectContainer.selectAll()">
+        <button cy-data="selectAll" mat-icon-button (click)="selectContainer.selectAll()">
           <mat-icon>select_all</mat-icon>
         </button>
-        <button mat-icon-button (click)="deleteContacts(selectedContacts)">
+        <button cy-data="delete" mat-icon-button (click)="deleteContacts(selectedContacts)">
           <mat-icon>delete</mat-icon>
         </button>
       </div>
-      <span @selectCount class="select-count" *ngIf="selectedContacts.length">( {{ selectedContacts.length }} )</span>
-      <button @fade *ngIf="!selectMode" class="add-button" mat-icon-button (click)="addContact()">
+      <span @selectCount cy-data="select-count" class="select-count" *ngIf="selectedContacts.length">{{ selectedContacts.length }}</span>
+      <button cy-data="add" @fade *ngIf="!selectMode" class="add-button" mat-icon-button (click)="addContact()">
         <mat-icon>add</mat-icon>
       </button>
     </div>
@@ -21,11 +21,11 @@
       [class.select-mode]="selectMode" (select)="toggleSelectMode()" class="content" [selectMode]="selectMode">
       <ul *ngIf="contacts.length; else noContacts">
         <li class="email" *ngFor="let contact of contacts">
-          <div class="sender-avatar" #selectItem="selectItem" [selectItem]="contact" [style.background]="contact.color">
+          <div class="contact-avatar" #selectItem="selectItem" [selectItem]="contact" [style.background]="contact.color">
             <mat-icon *ngIf="selectItem.selected && selectMode">check</mat-icon>
             <span *ngIf="!selectMode">{{ contact.initials }}</span>
           </div>
-          <div class="sender">{{ contact.name }}</div>
+          <div class="contact">{{ contact.name }}</div>
         </li>
       </ul>
       <ng-template #noContacts>

@@ -91,3 +91,41 @@ button {
   margin: 0 auto;
   padding: 15px 0;
 }
+
+.meta {
+  h4 {
+    font-weight: bold;
+    color: #9c27b0;
+    border-bottom: 3px solid #9a28b0;
+    margin-bottom: 10px;
+    padding-bottom: 5px;
+  }
+
+  label {
+    font-weight: bold;
+  }
+
+  [cy-data='select-count'] {
+    &::before {
+      content: '(';
+    }
+
+    &::after {
+      content: ')';
+    }
+  }
+
+  .selected-items {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 10px;
+  }
+
+  .selected-item {
+    padding: 10px;
+    border: 1px solid #a5a5a5;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    background: #f9f9f9;
+  }
+}

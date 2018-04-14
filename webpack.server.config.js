@@ -14,7 +14,7 @@ module.exports = {
     filename: '[name].js'
   },
   module: {
-    rules: [{ test: /\.ts$/, loader: 'ts-loader' }]
+    rules: [{ test: /\.ts$/, loader: 'ts-loader', include: /src/ }]
   },
   plugins: [
     new webpack.ContextReplacementPlugin(/(.+)?angular(\\|\/)core(.+)?/, path.join(__dirname, 'src'), {}),

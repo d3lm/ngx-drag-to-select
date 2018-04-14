@@ -48,6 +48,14 @@ $controls-height: 80px;
       position: absolute;
       right: 32px;
       bottom: 15px;
+
+      &::before {
+        content: '( ';
+      }
+
+      &::after {
+        content: ' )';
+      }
     }
   }
 
@@ -81,7 +89,7 @@ $controls-height: 80px;
     border-bottom: 1px solid #f1f1f1;
 
     &.select-mode {
-      .sender-avatar:not(.selected) {
+      .contact-avatar:not(.selected) {
         border: 2px solid gray;
         background: white !important;
       }
@@ -98,7 +106,7 @@ $controls-height: 80px;
     border-top: 1px solid #f1f1f1;
   }
 
-  .sender-avatar {
+  .contact-avatar {
     cursor: pointer;
     user-select: none;
     color: white;
@@ -117,7 +125,7 @@ $controls-height: 80px;
     }
   }
 
-  .sender {
+  .contact {
     color: #525252;
   }
 }

@@ -358,7 +358,9 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy {
 
       const action = this.shortcuts.removeFromSelection(event)
         ? Action.Delete
-        : this.shortcuts.addToSelection(event) ? Action.Add : Action.None;
+        : this.shortcuts.addToSelection(event)
+          ? Action.Add
+          : Action.None;
 
       this._tmpItems.set(item, action);
     } else if (shouldRemove) {
