@@ -22,7 +22,7 @@ const SUPPORTED_SHORTCUTS = {
   removeFromSelection: true
 };
 
-const ERROR_PREFIX = '[ngx-drag-to-select#ShortcutService]';
+const ERROR_PREFIX = '[ShortcutService]';
 
 @Injectable()
 export class ShortcutService {
