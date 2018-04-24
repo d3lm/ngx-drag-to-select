@@ -54,6 +54,7 @@ This will build the demo app as well as the libary for development.
 * `build:lib`: Build library only
 * `build:lib:sass`: Compile sass files and copy them to `dist/lib`
 * `packagr`: Runs ng-packagr
+* `deploy`: Deploy demo app to GitHub Pages
 * `copy:styles`: Copy source sass files to `dist/lib/sass`
 * `generate:prerender`: Statically prerender application
 * `webpack:server`: Build express server and prerendering script
@@ -63,20 +64,25 @@ This will build the demo app as well as the libary for development.
 * `clean`: Remove dist folder
 * `style`: Check linting and formatting
 * `style:fix`: Fix linting and formatting errors
-* `test`: Run test suite including e2e tests
+* `test`: Run unit tests
+* `test:watch`: Run unit tests in watch mode
+* `test:ci`: Run test suite for CI build including unit and e2e tests
 * `lint:check`: Check for linting errors
 * `lint:fix`: Fix linting errors
 * `e2e`: Run end-to-end test suite
+* `e2e:ci`: Run end-to-end test suite for CI build
+* `ci`: Run CI pipeline (includes linting, formatting, tests and deployment to GitHub Pages)
+* `commitmsg`: Git hook to validate the commit message
 
 ## Folder Structure
 
-The most important folders are `app` and `lib`. Both can be found in `src`. The `app` folder contains all the code for the demo app and `lib` contains the code for the library.
+The most important folders are `cypress`, `app` and `lib`. Inside `cypress` you'll find all of the e2e tests. Both `app` and `lib` can be found in `src`. The `app` folder contains all the code for the demo app and `lib` contains the code for the library.
 
 Build artifacts related to the lib can be found in `dist/lib`.
 
 ```
 dist
-e2e
+cypress
 src
 ├── app
 ├── assets
