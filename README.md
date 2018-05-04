@@ -2,7 +2,7 @@
 
 [![travis](https://img.shields.io/travis/d3lm/ngx-drag-to-select/master.svg?label=Travis%20CI)](https://travis-ci.org/d3lm/ngx-drag-to-select)
 [![styled with prettier](https://img.shields.io/badge/styled_with-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
-[![npm](https://img.shields.io/npm/v/ngx-drag-to-select.svg)](https://www.npmjs.com/package/ng-packagr)
+[![npm](https://img.shields.io/npm/v/ngx-drag-to-select.svg)](https://www.npmjs.com/package/ngx-drag-to-select)
 [![npm License](https://img.shields.io/npm/l/ngx-drag-to-select.svg)](https://github.com/d3lm/ngx-drag-to-select/blob/master/LICENSE)
 
 A lightweight, fast, configurable and reactive drag-to-select component for Angular 5 and beyond
