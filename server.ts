@@ -8,7 +8,6 @@ import { provideModuleMap } from '@nguniversal/module-map-ngfactory-loader';
 import * as express from 'express';
 
 import { join } from 'path';
-import { readFileSync } from 'fs';
 
 enableProdMode();
 

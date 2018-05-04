@@ -28,8 +28,7 @@ import {
   mapTo,
   share,
   withLatestFrom,
-  distinctUntilChanged,
-  startWith
+  distinctUntilChanged
 } from 'rxjs/operators';
 
 import { SelectItemDirective } from './select-item.directive';

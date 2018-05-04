@@ -18,7 +18,7 @@ const { AppServerModuleNgFactory, LAZY_MODULE_MAP } = require('./dist/server/mai
 const DIST_FOLDER = join(process.cwd(), 'dist');
 const BROWSER_FOLDER = join(DIST_FOLDER, 'browser');
 
-// Load the index.html file containing referances to your application bundle.
+// Load the index.html file containing references to your application bundle.
 const index = readFileSync(join(BROWSER_FOLDER, 'index.html'), 'utf8');
 
 let previousRender = Promise.resolve();
