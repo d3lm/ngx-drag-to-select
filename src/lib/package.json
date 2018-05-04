@@ -5,10 +5,10 @@
   "description": "A lightweight, fast, configurable and reactive drag-to-select component for Angular 5 and beyond",
   "sideEffects": false,
   "peerDependencies": {
-    "@angular/core": ">=6.0.0-rc.3",
-    "@angular/common": ">=6.0.0-rc.3",
-    "@angular/cdk": ">=6.0.0-rc.1",
-    "rxjs": ">=6.0.0-tactical-rc.1"
+    "@angular/core": ">=6.0.0",
+    "@angular/common": ">=6.0.0",
+    "@angular/cdk": ">=6.0.0",
+    "rxjs": ">=6.1.0"
   },
   "ngPackage": {
     "lib": {
