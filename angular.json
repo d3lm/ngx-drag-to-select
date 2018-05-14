@@ -106,11 +106,11 @@
   },
   "schematics": {
     "@schematics/angular:component": {
-      "prefix": "app",
+      "prefix": "ngx",
       "styleext": "scss"
     },
     "@schematics/angular:directive": {
-      "prefix": "app"
+      "prefix": "ngx"
     }
   },
   "cli": {
