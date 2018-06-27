@@ -37,13 +37,13 @@ You can also fiddle with the library using [StackBlitz](https://stackblitz.com/e
 ## Installation
 
 ```
-npm install ngx-drag-to-select @angular/cdk
+npm install ngx-drag-to-select
 ```
 
 or
 
 ```
-yarn add ngx-drag-to-select @angular/cdk
+yarn add ngx-drag-to-select
 ```
 
 ## Setup

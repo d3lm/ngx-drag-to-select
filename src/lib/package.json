@@ -7,7 +7,6 @@
   "peerDependencies": {
     "@angular/core": ">=5.0.0",
     "@angular/common": ">=5.0.0",
-    "@angular/cdk": ">=5.0.0",
     "rxjs": ">=5.5.0"
   },
   "ngPackage": {
