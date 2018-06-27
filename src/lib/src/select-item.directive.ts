@@ -1,5 +1,5 @@
-import { Platform } from '@angular/cdk/platform';
-import { Directive, DoCheck, ElementRef, Inject, Input, OnInit, Renderer2 } from '@angular/core';
+import { Directive, DoCheck, ElementRef, Inject, Input, OnInit, Renderer2, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { DragToSelectConfig } from './models';
 import { CONFIG } from './tokens';
 import { calculateBoundingClientRect } from './utils';
@@ -24,13 +24,13 @@ export class SelectItemDirective implements OnInit, DoCheck {
 
   constructor(
     @Inject(CONFIG) private config: DragToSelectConfig,
-    private platform: Platform,
+    @Inject(PLATFORM_ID) private platformId,
     private host: ElementRef,
     private renderer: Renderer2
   ) {}
 
   ngOnInit() {
-    if (this.platform.isBrowser) {
+    if (isPlatformBrowser(this.platformId)) {
       setTimeout(() => this.calculateBoundingClientRect());
     }
   }

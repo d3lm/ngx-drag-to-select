@@ -1,6 +1,5 @@
 import { NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { PlatformModule } from '@angular/cdk/platform';
 
 import { SelectContainerComponent } from './select-container.component';
 import { SelectItemDirective } from './select-item.directive';
@@ -17,7 +16,7 @@ export function CONFIG_FACTORY(config: Partial<DragToSelectConfig>) {
 }
 
 @NgModule({
-  imports: [CommonModule, PlatformModule],
+  imports: [CommonModule],
   declarations: [...COMPONENTS],
   exports: [...COMPONENTS]
 })
