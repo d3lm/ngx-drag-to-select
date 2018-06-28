@@ -1,6 +1,5 @@
-import { Observable } from 'rxjs/Observable';
+import { Observable, Subject } from 'rxjs';
 import { map, finalize } from 'rxjs/operators';
-import { Subject } from 'rxjs/Subject';
 import { SelectBox, SelectBoxInput, ObservableProxy, MousePosition, SelectContainerHost } from './models';
 import { getRelativeMousePosition } from './utils';
 
