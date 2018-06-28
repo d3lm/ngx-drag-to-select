@@ -21,7 +21,7 @@
     "copy:readme": "copyfiles README.md dist/lib",
     "generate:prerender": "node dist/prerender.js",
     "webpack:server": "webpack --config webpack.server.config.js --progress --colors",
-    "format:base": "prettier '{src,cypress}/**/*{.ts,.js,.json}'",
+    "format:base": "prettier \"{src,cypress}/**/*{.ts,.js,.json}\"",
     "format:check": "npm run format:base -- --list-different",
     "format:fix": "npm run format:base -- --write",
     "style": "npm run lint:check && npm run format:check",

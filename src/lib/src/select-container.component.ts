@@ -11,10 +11,11 @@ import {
   ContentChildren,
   QueryList,
   HostBinding,
-  AfterViewInit
+  AfterViewInit,
+  PLATFORM_ID,
+  Inject
 } from '@angular/core';
-
-import { Platform } from '@angular/cdk/platform';
+import { isPlatformBrowser } from '@angular/common';
 
 import { Observable, Subject, combineLatest, merge, fromEvent } from 'rxjs';
 
@@ -87,15 +88,15 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy {
   private destroy$ = new Subject<void>();
 
   constructor(
+    @Inject(PLATFORM_ID) private platformId,
     private shortcuts: ShortcutService,
-    private platform: Platform,
     private hostElementRef: ElementRef,
     private renderer: Renderer2,
     private ngZone: NgZone
   ) {}
 
   ngAfterViewInit() {
-    if (this.platform.isBrowser) {
+    if (isPlatformBrowser(this.platformId)) {
       this.host = this.hostElementRef.nativeElement;
 
       this.initProxy();
