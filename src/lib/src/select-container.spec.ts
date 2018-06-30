@@ -1,8 +1,9 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { DragToSelectModule } from './drag-to-select.module';
 import { SelectContainerComponent } from './select-container.component';
 import { By } from '@angular/platform-browser';
+import { SelectItemDirective } from './select-item.directive';
 
 function triggerDomEvent(eventType: string, target: HTMLElement | Element, eventData: object = {}): void {
   const event: Event = document.createEvent('Event');
@@ -14,11 +15,13 @@ function triggerDomEvent(eventType: string, target: HTMLElement | Element, event
 @Component({
   template: `
     <ngx-select-container>
-      <span selectItem>Select me!</span>
+      <span selectItem #selectItem="selectItem">Select me!</span>
     </ngx-select-container>
   `
 })
-class TestComponent {}
+class TestComponent {
+  @ViewChild('selectItem') selectItem: SelectItemDirective;
+}
 
 describe('SelectContainerComponent', () => {
   let component: TestComponent;
@@ -39,7 +42,16 @@ describe('SelectContainerComponent', () => {
   });
 
   it('should not throw when clicking the element immediately on creation', () => {
-    const selectContainer = fixture.debugElement.query(By.directive(SelectContainerComponent)).nativeElement;
-    expect(() => triggerDomEvent('mousedown', selectContainer)).not.toThrowError();
+    const selectContainer = fixture.debugElement.query(By.directive(SelectContainerComponent));
+    expect(() => triggerDomEvent('mousedown', selectContainer.nativeElement)).not.toThrowError();
+  });
+
+  it('should expose update as part of the public api', () => {
+    const selectContainer = fixture.debugElement.query(By.directive(SelectContainerComponent));
+    jest.spyOn(selectContainer.componentInstance as SelectContainerComponent, 'calculateBoundingClientRect');
+    jest.spyOn(fixture.componentInstance.selectItem, 'calculateBoundingClientRect');
+    selectContainer.componentInstance.update();
+    expect(selectContainer.componentInstance.calculateBoundingClientRect).toHaveBeenCalled();
+    expect(fixture.componentInstance.selectItem.calculateBoundingClientRect).toHaveBeenCalled();
   });
 });
