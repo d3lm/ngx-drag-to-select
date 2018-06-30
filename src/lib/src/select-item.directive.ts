@@ -31,7 +31,7 @@ export class SelectItemDirective implements OnInit, DoCheck {
 
   ngOnInit() {
     if (isPlatformBrowser(this.platformId)) {
-      setTimeout(() => this.calculateBoundingClientRect());
+      this.calculateBoundingClientRect();
     }
   }
 
