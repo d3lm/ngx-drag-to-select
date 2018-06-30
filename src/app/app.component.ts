@@ -17,6 +17,7 @@ export class AppComponent implements OnInit {
   selectMode = false;
   disable = false;
   isDesktop = false;
+  selectWithShortcut = false;
 
   constructor(
     private titleService: Title,

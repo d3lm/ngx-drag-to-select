@@ -60,6 +60,10 @@ export const disableSelection = () => {
   return cy.get('[cy-data="disable"]').click();
 };
 
+export const enableSelectWithShortcut = () => {
+  return cy.get('[cy-data="selectWithShortcut"]').click();
+};
+
 export const selectAll = () => {
   return getSelectAllButton().click();
 };
