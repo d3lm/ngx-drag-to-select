@@ -40,7 +40,7 @@ import {
 import { SelectItemDirective } from './select-item.directive';
 import { ShortcutService } from './shortcut.service';
 
-import { createSelectBox, observableProxy } from './operators';
+import { createSelectBox } from './operators';
 import { Action, SelectBox, MousePosition, SelectContainerHost } from './models';
 import { AUDIT_TIME, NO_SELECT_CLASS, MIN_WIDTH, MIN_HEIGHT } from './constants';
 
@@ -53,6 +53,7 @@ import {
   getRelativeMousePosition,
   getMousePosition
 } from './utils';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 @Component({
   selector: 'ngx-select-container',
@@ -89,7 +90,7 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy {
   @Output() select = new EventEmitter<any>();
 
   private _tmpItems = new Map<SelectItemDirective, Action>();
-  private _selectedItems: Array<any>;
+  private _selectedItems$ = new BehaviorSubject<Array<any>>([]);
   private destroy$ = new Subject<void>();
 
   constructor(
@@ -104,7 +105,7 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy {
     if (isPlatformBrowser(this.platformId)) {
       this.host = this.hostElementRef.nativeElement;
 
-      this.initProxy();
+      this.initSelectedItemsChange();
 
       this.observeBoundingRectChanges();
       this.observeSelectableItems();
@@ -205,12 +206,8 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  private initProxy() {
-    const { proxy, proxy$ } = observableProxy([]);
-
-    this._selectedItems = proxy;
-
-    proxy$.pipe(auditTime(AUDIT_TIME), map(_ => this._selectedItems), takeUntil(this.destroy$)).subscribe({
+  private initSelectedItemsChange() {
+    this._selectedItems$.pipe(auditTime(AUDIT_TIME), takeUntil(this.destroy$)).subscribe({
       next: selectedItems => {
         this.selectedItemsChange.emit(selectedItems);
         this.select.emit(selectedItems);
@@ -225,7 +222,7 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy {
     // Update the container as well as all selectable items if the list has changed
     this.$selectableItems.changes.pipe(takeUntil(this.destroy$)).subscribe((items: QueryList<SelectItemDirective>) => {
       const newList = items.toArray();
-      const removedItems = this._selectedItems.filter(item => !newList.includes(item.value));
+      const removedItems = this._selectedItems$.value.filter(item => !newList.includes(item.value));
 
       setTimeout(() => {
         if (removedItems.length) {
@@ -388,7 +385,7 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy {
 
     if (!this.hasItem(item)) {
       success = true;
-      this._selectedItems.push(item.value);
+      this._selectedItems$.next([...this._selectedItems$.value, item.value]);
     }
 
     return success;
@@ -397,11 +394,11 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy {
   private removeItem(item: SelectItemDirective | any) {
     let success = false;
     const value = item instanceof SelectItemDirective ? item.value : item;
-    const index = this._selectedItems.indexOf(value);
+    const index = this._selectedItems$.value.indexOf(value);
 
     if (index > -1) {
       success = true;
-      this._selectedItems.splice(index, 1);
+      this._selectedItems$.next(this._selectedItems$.value.filter(selectedItem => selectedItem !== value));
     }
 
     return success;
@@ -420,6 +417,6 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy {
   }
 
   private hasItem(item: SelectItemDirective) {
-    return this._selectedItems.includes(item.value);
+    return this._selectedItems$.value.includes(item.value);
   }
 }
