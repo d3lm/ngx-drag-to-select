@@ -34,7 +34,8 @@ import {
   mapTo,
   share,
   withLatestFrom,
-  distinctUntilChanged
+  distinctUntilChanged,
+  startWith
 } from 'rxjs/operators';
 
 import { SelectItemDirective } from './select-item.directive';
@@ -106,6 +107,7 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy {
 
       this.initProxy();
 
+      this.calculateBoundingClientRect();
       this.observeBoundingRectChanges();
       this.observeSelectableItems();
 
@@ -237,16 +239,13 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy {
   }
 
   private observeBoundingRectChanges() {
-    // Initialize client bounding rect
-    setTimeout(() => this.calculateBoundingClientRect());
-
     this.ngZone.runOutsideAngular(() => {
       const resize$ = fromEvent(window, 'resize');
       const windowScroll$ = fromEvent(window, 'scroll');
       const containerScroll$ = fromEvent(this.host, 'scroll');
 
       merge(resize$, windowScroll$, containerScroll$)
-        .pipe(auditTime(AUDIT_TIME), takeUntil(this.destroy$))
+        .pipe(startWith('INITIAL_UPDATE'), auditTime(AUDIT_TIME), takeUntil(this.destroy$))
         .subscribe(() => {
           this.update();
         });
