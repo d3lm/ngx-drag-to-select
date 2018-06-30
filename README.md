@@ -204,14 +204,15 @@ When using `meta`, it will be substituted with `ctrl` (for Windows) **and** `cmd
 
 **Inputs**
 
-| Input         | Type       | Default | Description                                                                                                   |
-| ------------- | ---------- | ------- | ------------------------------------------------------------------------------------------------------------- |
-| selectedItems | Array<any> | /       | Collection of items that are currently selected                                                               |
-| selectOnDrag  | Boolean    | `true`  | Whether items should be selected while dragging                                                               |
-| disabled      | Boolean    | `false` | Disable selection                                                                                             |
-| disableDrag   | Boolean    | `false` | Disable selection by dragging with the mouse. May be useful for mobile.                                       |
-| selectMode    | Boolean    | `false` | If set to `true`, a _toggle_ mode is activated similar to the `toggleSingleItem` shortcut. Useful for mobile. |
-| custom        | Boolean    | `false` | If set to `true`, all default styles for selected items will not be applied.                                  |
+| Input                 | Type       | Default | Description                                                                                                   |
+| --------------------- | ---------- | ------- | ------------------------------------------------------------------------------------------------------------- |
+| selectedItems         | Array<any> | /       | Collection of items that are currently selected                                                               |
+| selectOnDrag          | Boolean    | `true`  | Whether items should be selected while dragging                                                               |
+| disabled              | Boolean    | `false` | Disable selection                                                                                             |
+| disableDrag           | Boolean    | `false` | Disable selection by dragging with the mouse. May be useful for mobile.                                       |
+| selectMode            | Boolean    | `false` | If set to `true`, a _toggle_ mode is activated similar to the `toggleSingleItem` shortcut. Useful for mobile. |
+| custom                | Boolean    | `false` | If set to `true`, all default styles for selected items will not be applied.                                  |
+| selectWithShortcut    | Boolean    | `false` | If set to `true`, items can only be selected when single clicking and applying a keyboard shortcut
 
 Here's an example of all inputs in action:
 

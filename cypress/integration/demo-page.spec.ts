@@ -16,7 +16,8 @@ import {
   getDeleteButton,
   getSelectAllButton,
   shouldBeInSelectMode,
-  getSelectCount
+  getSelectCount,
+  enableSelectWithShortcut
 } from '../support/utils';
 
 import { NO_SELECT_CLASS } from '../../src/lib/src/constants';
@@ -130,6 +131,19 @@ describe('Desktop', () => {
           .shouldSelect([2])
           .get(`.${SELECTED_CLASS}`)
           .should('have.length', 1);
+      });
+    });
+
+    it('should not select a single item when selectWithShortcut is true', () => {
+      getDesktopExample().within(() => {
+        enableSelectWithShortcut();
+        cy
+          .getSelectItem(0)
+          .dispatch('mousedown')
+          .dispatch('mouseup')
+          .shouldSelect([])
+          .get(`.${SELECTED_CLASS}`)
+          .should('have.length', 0);
       });
     });
 

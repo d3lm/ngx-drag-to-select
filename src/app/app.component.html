@@ -27,13 +27,14 @@
     <mat-checkbox cy-data="selectOnDrag" [(ngModel)]="selectOnDrag">Select on Drag</mat-checkbox>
     <mat-checkbox cy-data="disable" [(ngModel)]="disable">Disable</mat-checkbox>
     <mat-checkbox cy-data="selectMode" [(ngModel)]="selectMode">Select Mode</mat-checkbox>
+    <mat-checkbox cy-data="selectWithShortcut" [(ngModel)]="selectWithShortcut">Select with Shortcut</mat-checkbox>
 
     <button cy-data="selectAll" mat-raised-button (click)="selectContainer.selectAll()">Select All</button>
     <button cy-data="clearSelection" mat-raised-button (click)="selectContainer.clearSelection()">Clear Selection</button>
 
     <div class="drag-area">
       <ngx-select-container #selectContainer="ngx-select-container" [selectMode]="selectMode" [(selectedItems)]="selectedDocuments"
-        [disabled]="disable" [selectOnDrag]="selectOnDrag" (select)="onSelect($event)">
+        [disabled]="disable" [selectOnDrag]="selectOnDrag" [selectWithShortcut]="selectWithShortcut" (select)="onSelect($event)">
         <mat-grid-list cols="4" rowHeight="200px" gutterSize="20px">
           <mat-grid-tile [selectItem]="document" *ngFor="let document of documents">
             {{ document.name }}
