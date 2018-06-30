@@ -206,6 +206,11 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy {
     });
   }
 
+  update() {
+    this.calculateBoundingClientRect();
+    this.$selectableItems.forEach(item => item.calculateBoundingClientRect());
+  }
+
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
@@ -264,11 +269,6 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy {
           this.update();
         });
     });
-  }
-
-  private update() {
-    this.calculateBoundingClientRect();
-    this.$selectableItems.forEach(item => item.calculateBoundingClientRect());
   }
 
   private calculateBoundingClientRect() {
