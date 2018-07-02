@@ -34,7 +34,8 @@ import {
   mapTo,
   share,
   withLatestFrom,
-  distinctUntilChanged
+  distinctUntilChanged,
+  take
 } from 'rxjs/operators';
 
 import { SelectItemDirective } from './select-item.directive';
@@ -220,17 +221,19 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy {
 
   private observeSelectableItems() {
     // Update the container as well as all selectable items if the list has changed
-    this.$selectableItems.changes.pipe(takeUntil(this.destroy$)).subscribe((items: QueryList<SelectItemDirective>) => {
-      const newList = items.toArray();
-      const removedItems = this._selectedItems$.value.filter(item => !newList.includes(item.value));
+    this.$selectableItems.changes
+      .pipe(withLatestFrom(this._selectedItems$), takeUntil(this.destroy$))
+      .subscribe(([items, selectedItems]: [QueryList<SelectItemDirective>, any[]]) => {
+        const newList = items.toArray();
+        const removedItems = selectedItems.filter(item => !newList.includes(item.value));
 
-      setTimeout(() => {
-        if (removedItems.length) {
-          removedItems.forEach(item => this.removeItem(item));
-        }
-        this.update();
+        setTimeout(() => {
+          if (removedItems.length) {
+            removedItems.forEach(item => this.removeItem(item));
+          }
+          this.update();
+        });
       });
-    });
   }
 
   private observeBoundingRectChanges() {
@@ -380,43 +383,54 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy {
     this._tmpItems.clear();
   }
 
-  private addItem(item: SelectItemDirective) {
-    let success = false;
-
-    if (!this.hasItem(item)) {
-      success = true;
-      this._selectedItems$.next([...this._selectedItems$.value, item.value]);
-    }
-
-    return success;
+  private addItem(item: SelectItemDirective): Observable<boolean> {
+    const hasItem$ = this.hasItem(item);
+    const selectedItems$ = this._selectedItems$.pipe(take(1));
+    return combineLatest(hasItem$, selectedItems$).pipe(
+      map(([hasItem, selectedItems]) => {
+        if (!hasItem) {
+          this._selectedItems$.next([...selectedItems, item.value]);
+        }
+        return !hasItem;
+      })
+    );
   }
 
-  private removeItem(item: SelectItemDirective | any) {
-    let success = false;
-    const value = item instanceof SelectItemDirective ? item.value : item;
-    const index = this._selectedItems$.value.indexOf(value);
+  private removeItem(item: SelectItemDirective | any): Observable<boolean> {
+    return this._selectedItems$.pipe(
+      take(1),
+      map(selectedItems => {
+        let success = false;
+        const value = item instanceof SelectItemDirective ? item.value : item;
+        const index = selectedItems.indexOf(value);
 
-    if (index > -1) {
-      success = true;
-      this._selectedItems$.next(this._selectedItems$.value.filter(selectedItem => selectedItem !== value));
-    }
+        if (index > -1) {
+          success = true;
+          this._selectedItems$.next(selectedItems.filter(selectedItem => selectedItem !== value));
+        }
 
-    return success;
+        return success;
+      })
+    );
   }
 
   private selectItem(item: SelectItemDirective) {
-    if (this.addItem(item)) {
-      item.select();
-    }
+    this.addItem(item).subscribe(itemAdded => {
+      if (itemAdded) {
+        item.select();
+      }
+    });
   }
 
   private deselectItem(item: SelectItemDirective) {
-    if (this.removeItem(item)) {
-      item.deselect();
-    }
+    this.removeItem(item).subscribe(itemRemoved => {
+      if (itemRemoved) {
+        item.deselect();
+      }
+    });
   }
 
-  private hasItem(item: SelectItemDirective) {
-    return this._selectedItems$.value.includes(item.value);
+  private hasItem(item: SelectItemDirective): Observable<boolean> {
+    return this._selectedItems$.pipe(take(1), map(selectedItems => selectedItems.includes(item.value)));
   }
 }
