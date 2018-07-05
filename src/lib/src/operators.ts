@@ -1,7 +1,6 @@
 import { Observable } from 'rxjs/Observable';
-import { map, finalize } from 'rxjs/operators';
-import { Subject } from 'rxjs/Subject';
-import { SelectBox, SelectBoxInput, ObservableProxy, MousePosition, SelectContainerHost } from './models';
+import { map } from 'rxjs/operators';
+import { SelectBox, SelectBoxInput, SelectContainerHost } from './models';
 import { getRelativeMousePosition } from './utils';
 
 export const createSelectBox = (container: SelectContainerHost) => (
@@ -23,30 +22,3 @@ export const createSelectBox = (container: SelectContainerHost) => (
       };
     })
   );
-
-export const observableProxy = <T extends Object>(proxyTarget: T): ObservableProxy<T> => {
-  const subject = new Subject<any>();
-
-  const { proxy, revoke } = Proxy.revocable(proxyTarget, {
-    set: (target, prop, value) => {
-      const success = Reflect.set(target, prop, value);
-      subject.next();
-      return success;
-    },
-    deleteProperty: (target, prop) => {
-      const success = Reflect.deleteProperty(target, prop);
-      subject.next();
-      return success;
-    }
-  });
-
-  return {
-    proxy,
-    proxy$: subject.pipe(
-      finalize(() => {
-        subject.complete();
-        revoke();
-      })
-    )
-  };
-};
