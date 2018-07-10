@@ -33,8 +33,7 @@ describe('Desktop', () => {
   describe('Styling and Classes', () => {
     it(`should add class '${NO_SELECT_CLASS}' to body on mousedown`, () => {
       getDesktopExample().within(() => {
-        cy
-          .getSelectItem(0)
+        cy.getSelectItem(0)
           .dispatch('mousedown')
           .get('@body')
           .should('have.class', NO_SELECT_CLASS);
@@ -43,8 +42,7 @@ describe('Desktop', () => {
 
     it(`should remove class '${NO_SELECT_CLASS}' from body on mouseup`, () => {
       getDesktopExample().within(() => {
-        cy
-          .getSelectItem(0)
+        cy.getSelectItem(0)
           .as('start')
           .dispatch('mousedown')
           .get('@body')
@@ -58,14 +56,12 @@ describe('Desktop', () => {
 
     it(`should add '${SELECTED_CLASS}' class to selected elements`, () => {
       getDesktopExample().within(() => {
-        cy
-          .getSelectItem(0)
+        cy.getSelectItem(0)
           .dispatch('mousedown')
           .dispatch('mouseup')
           .should('have.class', SELECTED_CLASS);
 
-        cy
-          .getSelectItem(0)
+        cy.getSelectItem(0)
           .dispatch('mousedown')
           .getSelectItem(2)
           .dispatch('mousemove', 'bottomRight', { force: true })
@@ -77,8 +73,7 @@ describe('Desktop', () => {
 
     it('should apply default styles', () => {
       getDesktopExample().within(() => {
-        cy
-          .getSelectItem(0)
+        cy.getSelectItem(0)
           .dispatch('mousedown')
           .dispatch('mouseup')
           .then($element => {
@@ -94,8 +89,7 @@ describe('Desktop', () => {
       getDesktopExample().within(() => {
         selectAll();
 
-        cy
-          .shouldSelect([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12])
+        cy.shouldSelect([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12])
           .get(`.${SELECTED_CLASS}`)
           .should('have.length', 12);
       });
@@ -106,8 +100,7 @@ describe('Desktop', () => {
         selectAll();
         clearSelection();
 
-        cy
-          .shouldSelect([])
+        cy.shouldSelect([])
           .get(`.${SELECTED_CLASS}`)
           .should('have.length', 0);
       });
@@ -117,8 +110,7 @@ describe('Desktop', () => {
   describe('Clicking', () => {
     it('should select single item on mousedown', () => {
       getDesktopExample().within(() => {
-        cy
-          .getSelectItem(0)
+        cy.getSelectItem(0)
           .dispatch('mousedown')
           .dispatch('mouseup')
           .shouldSelect([1])
@@ -137,8 +129,7 @@ describe('Desktop', () => {
       const mousePosition = { pageX: 0, pageY: 0 };
 
       getDesktopExample().within(() => {
-        cy
-          .getSelectItem(0)
+        cy.getSelectItem(0)
           .as('end')
           .dispatch('mousedown')
           .dispatch('mouseup')
@@ -156,8 +147,7 @@ describe('Desktop', () => {
 
     it('should clear selected item when clicked inside draggable area', () => {
       getDesktopExample().within(() => {
-        cy
-          .getSelectItem(0)
+        cy.getSelectItem(0)
           .dispatch('mousedown')
           .dispatch('mouseup')
           .shouldSelect([1])
@@ -176,13 +166,11 @@ describe('Desktop', () => {
   describe('Dragging', () => {
     describe('Select on Drag', () => {
       it('should not start dragging if mouse is outside of draggable area', () => {
-        cy
-          .get('body')
+        cy.get('body')
           .dispatch('mousedown', 'topLeft')
           .then(getDesktopExample)
           .within(() => {
-            cy
-              .getSelectItem(6, 'end')
+            cy.getSelectItem(6, 'end')
               .dispatch('mousemove')
               .shouldSelect([])
               .getSelectBox()
@@ -194,8 +182,7 @@ describe('Desktop', () => {
 
       it('should start new selection', () => {
         getDesktopExample().within(() => {
-          cy
-            .getSelectItem(2)
+          cy.getSelectItem(2)
             .dispatch('mousedown')
             .getSelectItem(7)
             .dispatch('mousemove')
@@ -212,8 +199,7 @@ describe('Desktop', () => {
 
       it('should select items when select box is positive', () => {
         getDesktopExample().within(() => {
-          cy
-            .getSelectItem(0)
+          cy.getSelectItem(0)
             .dispatch('mousedown')
             .getSelectItem(6, 'end')
             .dispatch('mousemove')
@@ -227,8 +213,7 @@ describe('Desktop', () => {
 
       it('should select items when select box is negative', () => {
         getDesktopExample().within(() => {
-          cy
-            .getSelectItem(7)
+          cy.getSelectItem(7)
             .dispatch('mousedown')
             .getSelectItem(1, 'end')
             .dispatch('mousemove')
@@ -242,8 +227,7 @@ describe('Desktop', () => {
 
       it('should select items if cursor goes outside of select container', () => {
         getDesktopExample().within(() => {
-          cy
-            .getSelectItem(0)
+          cy.getSelectItem(0)
             .as('end')
             .dispatch('mousedown')
             .dispatch('mousemove', { clientX: 900, clientY: -100 })
@@ -263,8 +247,7 @@ describe('Desktop', () => {
 
       it('should not select items while dragging', () => {
         getDesktopExample().within(() => {
-          cy
-            .getSelectItem(0)
+          cy.getSelectItem(0)
             .dispatch('mousedown')
             .getSelectItem(6, 'end')
             .dispatch('mousemove')
@@ -276,8 +259,7 @@ describe('Desktop', () => {
 
       it('should select items only after mouseup', () => {
         getDesktopExample().within(() => {
-          cy
-            .getSelectItem(0)
+          cy.getSelectItem(0)
             .dispatch('mousedown')
             .getSelectItem(6, 'end')
             .dispatch('mousemove')
@@ -294,8 +276,7 @@ describe('Desktop', () => {
         const mousePosition = { clientX: 850, clientY: -310 };
 
         getDesktopExample().within(() => {
-          cy
-            .getSelectItem(5)
+          cy.getSelectItem(5)
             .as('end')
             .dispatch('mousedown')
             .dispatch('mousemove', mousePosition)
@@ -316,8 +297,7 @@ describe('Desktop', () => {
 
       it('should not select item on mousedown', () => {
         getDesktopExample().within(() => {
-          cy
-            .getSelectItem(0)
+          cy.getSelectItem(0)
             .as('end')
             .dispatch('mousedown')
             .shouldSelect([])
@@ -332,8 +312,7 @@ describe('Desktop', () => {
 
       it('should not select item while dragging', () => {
         getDesktopExample().within(() => {
-          cy
-            .getSelectItem(0)
+          cy.getSelectItem(0)
             .dispatch('mousedown')
             .getSelectItem(2)
             .as('end')
@@ -350,8 +329,7 @@ describe('Desktop', () => {
 
       it('should not select item on mouseup', () => {
         getDesktopExample().within(() => {
-          cy
-            .getSelectItem(0)
+          cy.getSelectItem(0)
             .dispatch('mousedown')
             .getSelectItem(2)
             .as('end')
@@ -374,8 +352,7 @@ describe('Desktop', () => {
 
       it('should toggle single items', () => {
         getDesktopExample().within(() => {
-          cy
-            .getSelectItem(0)
+          cy.getSelectItem(0)
             .dispatch('mousedown')
             .dispatch('mouseup')
             .getSelectItem(1)
@@ -398,8 +375,7 @@ describe('Desktop', () => {
 
       it('should now allow dragging', () => {
         getDesktopExample().within(() => {
-          cy
-            .getSelectItem(0)
+          cy.getSelectItem(0)
             .dispatch('mousedown')
             .getSelectItem(6)
             .as('end')
@@ -418,8 +394,7 @@ describe('Desktop', () => {
     describe('Shortcuts', () => {
       it('should toggle single items', () => {
         getDesktopExample().within(() => {
-          cy
-            .getSelectItem(0)
+          cy.getSelectItem(0)
             .then(toggleItem)
             .shouldSelect([1])
             .getSelectItem(1)
@@ -436,8 +411,7 @@ describe('Desktop', () => {
 
       it('should extend selection after mouseup', () => {
         getDesktopExample().within(() => {
-          cy
-            .getSelectItem(0)
+          cy.getSelectItem(0)
             .dispatch('mousedown')
             .getSelectItem(5)
             .dispatch('mousemove')
@@ -461,8 +435,7 @@ describe('Desktop', () => {
 
       it('should remove items from selection after mouseup', () => {
         getDesktopExample().within(() => {
-          cy
-            .getSelectItem(0)
+          cy.getSelectItem(0)
             .dispatch('mousedown')
             .getSelectItem(5)
             .as('removeStart')
@@ -488,8 +461,7 @@ describe('Desktop', () => {
 
       it('should disable selection', () => {
         getDesktopExample().within(() => {
-          cy
-            .getSelectItem(0)
+          cy.getSelectItem(0)
             .dispatch('mousedown', { altKey: true })
             .getSelectItem(11)
             .as('end')
@@ -514,8 +486,7 @@ describe('Mobile', () => {
 
   it('should apply custom class and not apply default styles', () => {
     getMobileExample().within(() => {
-      cy
-        .get('.ngx-custom')
+      cy.get('.ngx-custom')
         .should('have.length', 1)
         .getSelectItem(0)
         .as('end')
@@ -531,8 +502,7 @@ describe('Mobile', () => {
 
   it('should not select items while dragging', () => {
     getMobileExample().within(() => {
-      cy
-        .getSelectItem(0)
+      cy.getSelectItem(0)
         .dispatch('mousedown')
         .getSelectItem(4)
         .dispatch('mousemove', 'bottomRight', { force: true })
@@ -547,8 +517,7 @@ describe('Mobile', () => {
 
   it('should select multiple items on click', () => {
     getMobileExample().within(() => {
-      cy
-        .getSelectItem(0)
+      cy.getSelectItem(0)
         .dispatch('mousedown')
         .dispatch('mouseup')
         .getSelectItem(1)
@@ -566,8 +535,7 @@ describe('Mobile', () => {
 
   it('should enter select mode when first item is selected', () => {
     getMobileExample().within(() => {
-      cy
-        .then(shouldBeInSelectMode(false))
+      cy.then(shouldBeInSelectMode(false))
         .getSelectItem(0)
         .dispatch('mousedown')
         .dispatch('mouseup')
@@ -577,8 +545,7 @@ describe('Mobile', () => {
 
   it('should leave select mode no item is selected', () => {
     getMobileExample().within(() => {
-      cy
-        .getSelectItem(0)
+      cy.getSelectItem(0)
         .as('item')
         .dispatch('mousedown')
         .dispatch('mouseup')
@@ -592,8 +559,7 @@ describe('Mobile', () => {
 
   it('should select all', () => {
     getMobileExample().within(() => {
-      cy
-        .getSelectItem(0)
+      cy.getSelectItem(0)
         .dispatch('mousedown')
         .dispatch('mouseup')
         .then(selectAll)
@@ -606,8 +572,7 @@ describe('Mobile', () => {
 
   it('should delete all items', () => {
     getMobileExample().within(() => {
-      cy
-        .getSelectItem(0)
+      cy.getSelectItem(0)
         .dispatch('mousedown')
         .dispatch('mouseup')
         .then(selectAll)
@@ -621,8 +586,7 @@ describe('Mobile', () => {
 
   it('should add one item', () => {
     getMobileExample().within(() => {
-      cy
-        .then(addItem)
+      cy.then(addItem)
         .get('.ngx-select-item')
         .should('have.length', 13)
         .getSelectItem(12)
