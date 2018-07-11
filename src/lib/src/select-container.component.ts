@@ -118,7 +118,10 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy {
         share()
       );
 
-      const mousemove$ = fromEvent(window, 'mousemove').pipe(filter(() => !this.disabled), share());
+      const mousemove$ = fromEvent(window, 'mousemove').pipe(
+        filter(() => !this.disabled),
+        share()
+      );
 
       const mousedown$ = fromEvent(this.host, 'mousedown').pipe(
         filter(() => !this.disabled),
@@ -213,15 +216,21 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy {
 
     this._selectedItems = proxy;
 
-    proxy$.pipe(auditTime(AUDIT_TIME), map(_ => this._selectedItems), takeUntil(this.destroy$)).subscribe({
-      next: selectedItems => {
-        this.selectedItemsChange.emit(selectedItems);
-        this.select.emit(selectedItems);
-      },
-      complete: () => {
-        this.selectedItemsChange.emit([]);
-      }
-    });
+    proxy$
+      .pipe(
+        auditTime(AUDIT_TIME),
+        map(_ => this._selectedItems),
+        takeUntil(this.destroy$)
+      )
+      .subscribe({
+        next: selectedItems => {
+          this.selectedItemsChange.emit(selectedItems);
+          this.select.emit(selectedItems);
+        },
+        complete: () => {
+          this.selectedItemsChange.emit([]);
+        }
+      });
   }
 
   private observeSelectableItems() {
@@ -246,7 +255,11 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy {
       const containerScroll$ = fromEvent(this.host, 'scroll');
 
       merge(resize$, windowScroll$, containerScroll$)
-        .pipe(startWith('INITIAL_UPDATE'), auditTime(AUDIT_TIME), takeUntil(this.destroy$))
+        .pipe(
+          startWith('INITIAL_UPDATE'),
+          auditTime(AUDIT_TIME),
+          takeUntil(this.destroy$)
+        )
         .subscribe(() => {
           this.update();
         });
