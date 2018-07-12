@@ -48,9 +48,12 @@ describe('SelectContainerComponent', () => {
 
   it('should expose update as part of the public api', () => {
     const selectContainer = fixture.debugElement.query(By.directive(SelectContainerComponent));
-    jest.spyOn(selectContainer.componentInstance as SelectContainerComponent, 'calculateBoundingClientRect');
+
+    jest.spyOn(selectContainer.componentInstance, 'calculateBoundingClientRect');
     jest.spyOn(fixture.componentInstance.selectItem, 'calculateBoundingClientRect');
+
     selectContainer.componentInstance.update();
+
     expect(selectContainer.componentInstance.calculateBoundingClientRect).toHaveBeenCalled();
     expect(fixture.componentInstance.selectItem.calculateBoundingClientRect).toHaveBeenCalled();
   });
