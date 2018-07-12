@@ -11,10 +11,6 @@ import {
   getMobileExample,
   deleteItems,
   addItem,
-  getAddButton,
-  getClearButton,
-  getDeleteButton,
-  getSelectAllButton,
   shouldBeInSelectMode,
   getSelectCount,
   enableSelectWithShortcut
@@ -521,7 +517,7 @@ describe('Mobile', () => {
         .dispatch('mousemove', 'bottomRight', { force: true })
         .getSelectBox()
         .then(shouldBeInvisible)
-        .get('.select-count')
+        .then(getSelectCount)
         .should('contain', 1)
         .get(`.${SELECTED_CLASS}`)
         .should('have.length', 1);
@@ -576,7 +572,7 @@ describe('Mobile', () => {
         .dispatch('mousedown')
         .dispatch('mouseup')
         .then(selectAll)
-        .get('.select-count')
+        .then(getSelectCount)
         .should('contain', 12)
         .get(`.${SELECTED_CLASS}`)
         .should('have.length', 12);
@@ -605,10 +601,27 @@ describe('Mobile', () => {
         .getSelectItem(12)
         .dispatch('mousedown')
         .dispatch('mouseup')
-        .get('.select-count')
+        .then(getSelectCount)
         .should('contain', 1)
         .get(`.${SELECTED_CLASS}`)
         .should('have.length', 1);
+    });
+  });
+
+  it('should cancel selection', () => {
+    getMobileExample().within(() => {
+      cy.getSelectItem(0)
+        .dispatch('mousedown')
+        .dispatch('mouseup')
+        .getSelectItem(2)
+        .dispatch('mousedown')
+        .dispatch('mouseup')
+        .then(getSelectCount)
+        .as('selectCount')
+        .should('contain', 2)
+        .then(clearSelection)
+        .get('@selectCount')
+        .should('not.be.visible');
     });
   });
 });
