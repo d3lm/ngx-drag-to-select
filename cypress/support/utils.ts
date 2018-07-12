@@ -77,7 +77,9 @@ export const deleteItems = () => {
 };
 
 export const clearSelection = () => {
-  return getClearButton().click();
+  return getClearButton()
+    .click()
+    .wait(150);
 };
 
 export const toggleItem = (subject: Cypress.ObjectLike) => {
