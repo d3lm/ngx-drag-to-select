@@ -3,7 +3,10 @@
     "strict": true,
     "baseUrl": "../node_modules",
     "target": "es5",
-    "lib": ["es5", "dom"],
+    "experimentalDecorators": true,
+    "skipLibCheck": true,
+    "noImplicitAny": false,
+    "lib": ["es6", "dom"],
     "types": ["cypress"]
   },
   "include": ["**/*.ts"]
