@@ -1,4 +1,15 @@
 import { Observable } from 'rxjs/Observable';
+import { SelectItemDirective } from './select-item.directive';
+
+export enum UpdateActions {
+  Add,
+  Remove
+}
+
+export interface UpdateAction {
+  type: UpdateActions;
+  item: SelectItemDirective;
+}
 
 export interface ObservableProxy<T> {
   proxy$: Observable<any>;
