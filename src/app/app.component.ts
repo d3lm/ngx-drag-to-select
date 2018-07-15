@@ -3,7 +3,7 @@ import { Title, DomSanitizer } from '@angular/platform-browser';
 import { MatIconRegistry } from '@angular/material';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 
-const json = require('../lib/package.json');
+const json = require('../../projects/ngx-drag-to-select/package.json');
 
 @Component({
   selector: 'ngx-root',

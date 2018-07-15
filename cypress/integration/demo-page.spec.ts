@@ -16,8 +16,8 @@ import {
   enableSelectWithShortcut
 } from '../support/utils';
 
-import { NO_SELECT_CLASS } from '../../src/lib/src/constants';
-import { DEFAULT_CONFIG } from '../../src/lib/src/config';
+import { DEFAULT_CONFIG } from '../../projects/ngx-drag-to-select/src/lib/config';
+import { NO_SELECT_CLASS } from '../../projects/ngx-drag-to-select/src/lib/constants';
 
 const SELECTED_CLASS = DEFAULT_CONFIG.selectedClass;
 
