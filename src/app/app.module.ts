@@ -13,9 +13,10 @@ import {
   MatIconModule,
   MatButtonModule
 } from '@angular/material';
+import { LayoutModule } from '@angular/cdk/layout';
 
+import { DragToSelectModule } from '../../projects/ngx-drag-to-select/src/lib/drag-to-select.module';
 import { AppComponent } from './app.component';
-import { DragToSelectModule } from '../lib/public_api';
 
 import {
   ShortcutComponent,
@@ -28,7 +29,6 @@ import { ShortcutsComponent } from './shortcuts/shortcuts.component';
 import { FooterComponent } from './footer/footer.component';
 import { HeaderComponent } from './header/header.component';
 import { PhoneComponent } from './phone/phone.component';
-import { LayoutModule } from '@angular/cdk/layout';
 
 const MATERIAL_MODULES = [
   MatCheckboxModule,
