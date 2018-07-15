@@ -24,7 +24,6 @@ class TestComponent {
 }
 
 describe('SelectContainerComponent', () => {
-  let component: TestComponent;
   let fixture: ComponentFixture<TestComponent>;
 
   beforeEach(async(() => {
@@ -37,7 +36,6 @@ describe('SelectContainerComponent', () => {
   beforeEach(() => {
     window.getSelection = jest.fn().mockReturnValue({});
     fixture = TestBed.createComponent(TestComponent);
-    component = fixture.componentInstance;
     fixture.detectChanges();
   });
 

@@ -1,7 +1,7 @@
 @import url(https://fonts.googleapis.com/css?family=Raleway);
 
 @import '~@angular/material/prebuilt-themes/indigo-pink.css';
-@import './lib/scss/ngx-drag-to-select.scss';
+@import '../projects/ngx-drag-to-select/src/scss/ngx-drag-to-select.scss';
 
 html {
   box-sizing: border-box;

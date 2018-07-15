@@ -73,7 +73,7 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": ["src/tsconfig.app.json", "src/tsconfig.lib.json", "src/tsconfig.spec.json"],
+            "tsConfig": ["src/tsconfig.app.json"],
             "exclude": ["**/node_modules/**"]
           }
         }
@@ -99,6 +99,44 @@
               "extractLicenses": true,
               "vendorChunk": false
             }
+          }
+        }
+      }
+    },
+    "ngx-drag-to-select": {
+      "root": "projects/ngx-drag-to-select",
+      "sourceRoot": "projects/ngx-drag-to-select/src",
+      "projectType": "library",
+      "prefix": "ngx",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/ngx-drag-to-select/tsconfig.lib.json",
+            "project": "projects/ngx-drag-to-select/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "project": "projects/ngx-drag-to-select/ng-package.prod.json"
+            }
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/ngx-drag-to-select/src/test.ts",
+            "tsConfig": "projects/ngx-drag-to-select/tsconfig.spec.json",
+            "karmaConfig": "projects/ngx-drag-to-select/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/ngx-drag-to-select/tsconfig.lib.json",
+              "projects/ngx-drag-to-select/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**"]
           }
         }
       }
