@@ -71,7 +71,7 @@ Cypress.Commands.add(
       options.alias = args[0];
     }
 
-    let selectItems = cy.get('.ngx-select-item', options).eq(index);
+    let selectItems = cy.get('.dts-select-item', options).eq(index);
 
     if (options.alias) {
       selectItems = selectItems.as(options.alias);
@@ -91,14 +91,14 @@ Cypress.Commands.add(
 Cypress.Commands.add(
   'getSelectBox',
   (options): any => {
-    return cy.get('.ngx-select-box', options);
+    return cy.get('.dts-select-box', options);
   }
 );
 
 Cypress.Commands.add(
   'getSelectContainer',
   (options): any => {
-    return cy.get('.ngx-select-container', options);
+    return cy.get('.dts-select-container', options);
   }
 );
 

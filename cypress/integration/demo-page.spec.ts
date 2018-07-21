@@ -495,7 +495,7 @@ describe('Mobile', () => {
 
   it('should apply custom class and not apply default styles', () => {
     getMobileExample().within(() => {
-      cy.get('.ngx-custom')
+      cy.get('.dts-custom')
         .should('have.length', 1)
         .getSelectItem(0)
         .as('end')
@@ -588,7 +588,7 @@ describe('Mobile', () => {
         .then(deleteItems)
         .get('.no-contacts')
         .should('be.visible')
-        .get('.ngx-select-item')
+        .get('.dts-select-item')
         .should('have.length', 0);
     });
   });
@@ -596,7 +596,7 @@ describe('Mobile', () => {
   it('should add one item', () => {
     getMobileExample().within(() => {
       cy.then(addItem)
-        .get('.ngx-select-item')
+        .get('.dts-select-item')
         .should('have.length', 13)
         .getSelectItem(12)
         .dispatch('mousedown')

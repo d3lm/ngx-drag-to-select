@@ -1,20 +1,20 @@
 import { Component, ViewEncapsulation, Input } from '@angular/core';
 
 @Component({
-  selector: 'ngx-shortcut',
+  selector: 'app-shortcut',
   encapsulation: ViewEncapsulation.None,
   template: `
     <div class="shortcut-container">
       <ng-content></ng-content>
     </div>
-    <ng-content select="ngx-shortcut-description"></ng-content>
+    <ng-content select="app-shortcut-description"></ng-content>
   `,
   styleUrls: ['./shortcut.component.scss']
 })
 export class ShortcutComponent {}
 
 @Component({
-  selector: 'ngx-key',
+  selector: 'app-key',
   template: `
     <ng-content></ng-content>
   `
@@ -22,11 +22,11 @@ export class ShortcutComponent {}
 export class KeyComponent {}
 
 @Component({
-  selector: 'ngx-modifier-key',
+  selector: 'app-modifier-key',
   template: `
     <ng-container [ngSwitch]="os">
-      <ngx-key *ngSwitchCase="'mac'">⌘</ngx-key>
-      <ngx-key *ngSwitchCase="'windows'">⌃</ngx-key>
+      <app-key *ngSwitchCase="'mac'">⌘</app-key>
+      <app-key *ngSwitchCase="'windows'">⌃</app-key>
     </ng-container>
   `
 })
@@ -35,7 +35,7 @@ export class ModifierKeyComponent {
 }
 
 @Component({
-  selector: 'ngx-shortcut-description',
+  selector: 'app-shortcut-description',
   template: `
     <ng-content></ng-content>
   `

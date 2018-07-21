@@ -1,4 +1,4 @@
-<ngx-header></ngx-header>
+<app-header></app-header>
 <main>
   <section *ngIf="isDesktop">
     <h3>Keyboard Shortcuts</h3>
@@ -7,13 +7,13 @@
         <ng-template mat-tab-label>
           <mat-icon svgIcon="apple"></mat-icon>
         </ng-template>
-        <ngx-shortcuts os="mac"></ngx-shortcuts>
+        <app-shortcuts os="mac"></app-shortcuts>
       </mat-tab>
       <mat-tab>
         <ng-template mat-tab-label>
           <mat-icon svgIcon="windows"></mat-icon>
         </ng-template>
-        <ngx-shortcuts os="windows"></ngx-shortcuts>
+        <app-shortcuts os="windows"></app-shortcuts>
       </mat-tab>
     </mat-tab-group>
   </section>
@@ -33,14 +33,14 @@
     <button cy-data="clearSelection" mat-raised-button (click)="selectContainer.clearSelection()">Clear Selection</button>
 
     <div class="drag-area">
-      <ngx-select-container #selectContainer="ngx-select-container" [selectMode]="selectMode" [(selectedItems)]="selectedDocuments"
+      <dts-select-container #selectContainer="dts-select-container" [selectMode]="selectMode" [(selectedItems)]="selectedDocuments"
         [disabled]="disable" [selectOnDrag]="selectOnDrag" [selectWithShortcut]="selectWithShortcut" (select)="onSelect($event)">
         <mat-grid-list cols="4" rowHeight="200px" gutterSize="20px">
-          <mat-grid-tile [selectItem]="document" *ngFor="let document of documents">
+          <mat-grid-tile [dtsSelectItem]="document" *ngFor="let document of documents">
             {{ document.name }}
           </mat-grid-tile>
         </mat-grid-list>
-      </ngx-select-container>
+      </dts-select-container>
     </div>
 
     <div class="meta">
@@ -62,8 +62,8 @@
     </h3>
 
     <div class="mobile-wrapper">
-      <ngx-phone></ngx-phone>
+      <app-phone></app-phone>
     </div>
   </section>
 </main>
-<ngx-footer></ngx-footer>
+<app-footer></app-footer>

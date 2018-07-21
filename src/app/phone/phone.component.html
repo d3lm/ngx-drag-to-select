@@ -17,11 +17,11 @@
         <mat-icon>add</mat-icon>
       </button>
     </div>
-    <ngx-select-container #selectContainer="ngx-select-container" [(selectedItems)]="selectedContacts" [disableDrag]="true" [custom]="true"
+    <dts-select-container #selectContainer="dts-select-container" [(selectedItems)]="selectedContacts" [disableDrag]="true" [custom]="true"
       [class.select-mode]="selectMode" (select)="toggleSelectMode()" class="content" [selectMode]="selectMode">
       <ul *ngIf="contacts.length; else noContacts">
         <li class="email" *ngFor="let contact of contacts">
-          <div class="contact-avatar" #selectItem="selectItem" [selectItem]="contact" [style.background]="contact.color">
+          <div class="contact-avatar" #selectItem="dtsSelectItem" [dtsSelectItem]="contact" [style.background]="contact.color">
             <mat-icon *ngIf="selectItem.selected && selectMode">check</mat-icon>
             <span *ngIf="!selectMode">{{ contact.initials }}</span>
           </div>
@@ -37,7 +37,7 @@
           </div>
         </div>
       </ng-template>
-    </ngx-select-container>
+    </dts-select-container>
     <div class="home-button"></div>
   </div>
 </div>

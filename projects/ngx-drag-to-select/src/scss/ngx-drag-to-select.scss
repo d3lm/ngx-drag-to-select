@@ -1,10 +1,10 @@
 @import 'variables';
 
-.ngx-no-select {
+.dts-no-select {
   user-select: none;
 }
 
-.ngx-select-box {
+.dts-select-box {
   contain: layout;
   transform: translateZ(0);
   box-sizing: border-box;
@@ -21,8 +21,8 @@
   z-index: 1;
 }
 
-.ngx-select-container:not(.ngx-custom) {
-  .ngx-select-item.selected {
+.dts-select-container:not(.dts-custom) {
+  .dts-select-item.selected {
     @if $selected-item-border {
       border: $selected-item-border-size solid $selected-item-border-color;
     }

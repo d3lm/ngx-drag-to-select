@@ -46,7 +46,7 @@
     "variable-name": false,
     "whitespace": [true, "check-branch", "check-decl", "check-operator", "check-separator", "check-type"],
     "directive-selector": [true, "attribute", "", "camelCase"],
-    "component-selector": [true, "element", "ngx", "kebab-case"],
+    "component-selector": [true, "element", "app", "kebab-case"],
     "no-output-on-prefix": true,
     "use-input-property-decorator": true,
     "use-output-property-decorator": true,
