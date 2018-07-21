@@ -354,48 +354,84 @@ describe('Desktop', () => {
     });
 
     describe('Select Mode', () => {
-      beforeEach(() => {
-        enableSelectMode();
-        disableSelectOnDrag();
-      });
+      describe('Select Mode in Isolation', () => {
+        beforeEach(() => {
+          enableSelectMode();
+          disableSelectOnDrag();
+        });
 
-      it('should toggle single items', () => {
-        getDesktopExample().within(() => {
-          cy.getSelectItem(0)
-            .dispatch('mousedown')
-            .dispatch('mouseup')
-            .getSelectItem(1)
-            .dispatch('mousedown')
-            .dispatch('mouseup')
-            .getSelectItem(2)
-            .dispatch('mousedown')
-            .dispatch('mouseup')
-            .shouldSelect([1, 2, 3])
-            .get(`.${SELECTED_CLASS}`)
-            .should('have.length', 3)
-            .getSelectItem(1)
-            .dispatch('mousedown')
-            .dispatch('mouseup')
-            .shouldSelect([1, 3])
-            .get(`.${SELECTED_CLASS}`)
-            .should('have.length', 2);
+        it('should toggle single items', () => {
+          getDesktopExample().within(() => {
+            cy.getSelectItem(0)
+              .dispatch('mousedown')
+              .dispatch('mouseup')
+              .getSelectItem(1)
+              .dispatch('mousedown')
+              .dispatch('mouseup')
+              .getSelectItem(2)
+              .dispatch('mousedown')
+              .dispatch('mouseup')
+              .shouldSelect([1, 2, 3])
+              .get(`.${SELECTED_CLASS}`)
+              .should('have.length', 3)
+              .getSelectItem(1)
+              .dispatch('mousedown')
+              .dispatch('mouseup')
+              .shouldSelect([1, 3])
+              .get(`.${SELECTED_CLASS}`)
+              .should('have.length', 2);
+          });
+        });
+
+        it('should now allow dragging', () => {
+          getDesktopExample().within(() => {
+            cy.getSelectItem(0)
+              .dispatch('mousedown')
+              .getSelectItem(6)
+              .as('end')
+              .dispatch('mousemove')
+              .getSelectBox()
+              .then(shouldBeInvisible)
+              .get('@end')
+              .dispatch('mouseup')
+              .shouldSelect([1])
+              .get(`.${SELECTED_CLASS}`)
+              .should('have.length', 1);
+          });
         });
       });
 
-      it('should now allow dragging', () => {
-        getDesktopExample().within(() => {
-          cy.getSelectItem(0)
-            .dispatch('mousedown')
-            .getSelectItem(6)
-            .as('end')
-            .dispatch('mousemove')
-            .getSelectBox()
-            .then(shouldBeInvisible)
-            .get('@end')
-            .dispatch('mouseup')
-            .shouldSelect([1])
-            .get(`.${SELECTED_CLASS}`)
-            .should('have.length', 1);
+      describe('Select Mode with other Settings', () => {
+        it('should toggle items when selectOnDrag is false', () => {
+          getDesktopExample().within(() => {
+            cy.getSelectItem(0)
+              .dispatch('mousedown')
+              .getSelectItem(5)
+              .as('end')
+              .dispatch('mousemove')
+              .get('@end')
+              .dispatch('mouseup')
+              .shouldSelect([1, 2, 5, 6])
+              .get(`.${SELECTED_CLASS}`)
+              .should('have.length', 4);
+
+            cy.getSelectItem(0)
+              .dispatch('mousedown')
+              .dispatch('mouseup')
+              .shouldSelect([1])
+              .get(`.${SELECTED_CLASS}`)
+              .should('have.length', 1);
+
+            enableSelectMode();
+            disableSelectOnDrag();
+
+            cy.getSelectItem(1)
+              .dispatch('mousedown')
+              .dispatch('mouseup')
+              .shouldSelect([1, 2])
+              .get(`.${SELECTED_CLASS}`)
+              .should('have.length', 2);
+          });
         });
       });
     });
@@ -435,7 +471,7 @@ describe('Desktop', () => {
             .get(`.${SELECTED_CLASS}`)
             .should('have.length', 8)
             .get('@end')
-            .dispatch('mouseup')
+            .dispatch('mouseup', { shiftKey: true })
             .shouldSelect([1, 2, 3, 4, 5, 6, 7, 8])
             .get(`.${SELECTED_CLASS}`)
             .should('have.length', 8);
