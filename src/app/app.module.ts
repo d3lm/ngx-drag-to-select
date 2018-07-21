@@ -1,34 +1,36 @@
-import { NgModule } from '@angular/core';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule } from '@angular/forms';
+import { LayoutModule } from '@angular/cdk/layout';
 import { HttpClientModule } from '@angular/common/http';
+import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+
+import {
+  MatButtonModule,
+  MatCheckboxModule,
+  MatChipsModule,
+  MatGridListModule,
+  MatIconModule,
+  MatTabsModule
+} from '@angular/material';
+
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ModuleMapLoaderModule } from '@nguniversal/module-map-ngfactory-loader';
 
-import {
-  MatCheckboxModule,
-  MatGridListModule,
-  MatChipsModule,
-  MatTabsModule,
-  MatIconModule,
-  MatButtonModule
-} from '@angular/material';
-import { LayoutModule } from '@angular/cdk/layout';
+import { DragToSelectModule } from '../../projects/ngx-drag-to-select/src/public_api';
 
-import { DragToSelectModule } from '../../projects/ngx-drag-to-select/src/lib/drag-to-select.module';
 import { AppComponent } from './app.component';
-
-import {
-  ShortcutComponent,
-  KeyComponent,
-  ShortcutDescriptionComponent,
-  ModifierKeyComponent
-} from './shortcut/shortcut.component';
-
-import { ShortcutsComponent } from './shortcuts/shortcuts.component';
 import { FooterComponent } from './footer/footer.component';
 import { HeaderComponent } from './header/header.component';
 import { PhoneComponent } from './phone/phone.component';
+
+import {
+  KeyComponent,
+  ModifierKeyComponent,
+  ShortcutComponent,
+  ShortcutDescriptionComponent
+} from './shortcut/shortcut.component';
+
+import { ShortcutsComponent } from './shortcuts/shortcuts.component';
 
 const MATERIAL_MODULES = [
   MatCheckboxModule,

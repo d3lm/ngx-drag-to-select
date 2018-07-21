@@ -1,4 +1,4 @@
-import { MousePosition, SelectBox, BoundingBox, SelectContainerHost } from './models';
+import { BoundingBox, MousePosition, SelectContainerHost } from './models';
 
 export const isObject = (item: any) => {
   return item && typeof item === 'object' && !Array.isArray(item) && item !== null;
