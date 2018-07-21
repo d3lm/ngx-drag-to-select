@@ -6,7 +6,7 @@ import { DomSanitizer, Title } from '@angular/platform-browser';
 const json = require('../../projects/ngx-drag-to-select/package.json');
 
 @Component({
-  selector: 'ngx-root',
+  selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })

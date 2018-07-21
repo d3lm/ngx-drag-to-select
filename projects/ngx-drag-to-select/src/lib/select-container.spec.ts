@@ -14,9 +14,9 @@ function triggerDomEvent(eventType: string, target: HTMLElement | Element, event
 
 @Component({
   template: `
-    <ngx-select-container>
-      <span selectItem #selectItem="selectItem">Select me!</span>
-    </ngx-select-container>
+    <dts-select-container>
+      <span dtsSelectItem #selectItem="dtsSelectItem">Select me!</span>
+    </dts-select-container>
   `
 })
 class TestComponent {

@@ -102,18 +102,18 @@ That's it. You are now ready to use this library in your project. Make sure to c
 
 Once you have installed the library and added the `DragToSelectModule` to your application you are ready to go.
 
-Anywhere in your template add the `ngx-select-container` component and wrap all items that you want to be selectable in this component.
+Anywhere in your template add the `dts-select-container` component and wrap all items that you want to be selectable in this component.
 
-Next, mark all selectable items with the `selectItem` directive. This connects each item with the container component.
+Next, mark all selectable items with the `dtsSelectItem` directive. This connects each item with the container component.
 
 Here's a complete example:
 
 ```
-<ngx-select-container #container="ngx-select-container" [(selectedItems)]="selectedDocuments" (select)="someMethod($event)">
+<dts-select-container #container="dts-select-container" [(selectedItems)]="selectedDocuments" (select)="someMethod($event)">
   <ul>
-    <li [selectItem]="document" *ngFor="let document of documents">{{ document.name }}</li>
+    <li [dtsSelectItem]="document" *ngFor="let document of documents">{{ document.name }}</li>
   </ul>
-</ngx-select-container>
+</dts-select-container>
 ```
 
 ## Configuration Options
@@ -198,9 +198,9 @@ When using `meta`, it will be substituted with `ctrl` (for Windows) **and** `cmd
 
 ## API
 
-`ngx-drag-to-select` comes with two main building blocks, a `ngx-select-container` component and a `selectItem` directive.
+`ngx-drag-to-select` comes with two main building blocks, a `dts-select-container` component and a `dtsSelectItem` directive.
 
-### `ngx-select-container`
+### `dts-select-container`
 
 **Inputs**
 
@@ -217,7 +217,7 @@ When using `meta`, it will be substituted with `ctrl` (for Windows) **and** `cmd
 Here's an example of all inputs in action:
 
 ```
-<ngx-select-container
+<dts-select-container
   [(selectedItems)]="selectedDocuments"
   [selectOnDrag]="true"
   [disabled]="false"
@@ -226,7 +226,7 @@ Here's an example of all inputs in action:
   [custom]="true"
   [selectWithShortcut]="false">
   ...
-</ngx-select-container>
+</dts-select-container>
 ```
 
 - To get ahold of the selected items you can use a two-way data binding (`[()]`) aka _banana-in-the-box_ syntax. This means that whenever the selection changes, your property is updated accordingly. It will always reflect the current selection.
@@ -242,9 +242,9 @@ Here's an example of all inputs in action:
 Example:
 
 ```
-<ngx-select-container (select)="someMethod($event)">
+<dts-select-container (select)="someMethod($event)">
   ...
-</ngx-select-container>
+</dts-select-container>
 ```
 
 **Public Methods**
@@ -279,27 +279,27 @@ or use it within the template with a template reference variable
 <button (click)="selectContainer.selectAll()">Select All</button>
 <button (click)="selectContainer.clearSelection()">Clear Selection</button>
 
-<ngx-select-container #selectContainer="ngx-select-container" [(selectedItems)]="selectedDocuments">
+<dts-select-container #selectContainer="dts-select-container" [(selectedItems)]="selectedDocuments">
   ...
-</ngx-select-container>
+</dts-select-container>
 ```
 
-> What if I want to use the `@ViewChild()` decorator but have multiple instances of the `ngx-select-container` in my template?
+> What if I want to use the `@ViewChild()` decorator but have multiple instances of the `dts-select-container` in my template?
 
 In that case I would recommend to add template reference variables to your select containers and query them one by one using the variable name.
 
 Here's an example:
 
 ```
-<ngx-select-container #documents>
+<dts-select-container #documents>
   ...
-</ngx-select-container>
+</dts-select-container>
 
 ...
 
-<ngx-select-container #images>
+<dts-select-container #images>
   ...
-</ngx-select-container>
+</dts-select-container>
 ```
 
 In the component you can then query them one by one:
@@ -325,24 +325,24 @@ export class AppComponent {
 }
 ```
 
-### `selectItem`
+### `dtsSelectItem`
 
-The `selectItem` directive is used to mark DOM elements as selectable items. It takes an input to control the value that is used when the item was selected. If the input is not specified, it will use the directive instance as a default value.
+The `dtsSelectItem` directive is used to mark DOM elements as selectable items. It takes an input to control the value that is used when the item was selected. If the input is not specified, it will use the directive instance as a default value.
 
 **Inputs**
 
 | Input      | Type | Default            | Description                                  |
 | ---------- | ---- | ------------------ | -------------------------------------------- |
-| selectItem | any  | Directive Instance | Value that is used when the item is selected |
+| dtsSelectItem | any  | Directive Instance | Value that is used when the item is selected |
 
 Example:
 
 ```
-<ngx-select-container>
+<dts-select-container>
   <ul>
-    <li [selectItem]="document" *ngFor="let document of documents">{{ document.name }}</li>
+    <li [dtsSelectItem]="document" *ngFor="let document of documents">{{ document.name }}</li>
   </ul>
-</ngx-select-container>
+</dts-select-container>
 ```
 
 **Public Properties**
@@ -351,19 +351,19 @@ Example:
 | -------- | ------- | ----------------------------------- |
 | selected | Boolean | Whether the item is selected or not |
 
-You can access this property in a similar why you access methods on the `select-container` component using either a template reference variable or programmatically with the `@ViewChild()` decorator.
+You can access this property in a similar why you access methods on the `dts-select-container` component using either a template reference variable or programmatically with the `@ViewChild()` decorator.
 
 Example:
 
 ```
-<ngx-select-container>
+<dts-select-container>
   <ul>
-    <li [selectItem]="document" #item *ngFor="let document of documents">
+    <li [dtsSelectItem]="document" #item *ngFor="let document of documents">
       {{ document.name }}
       <i class="fa fa-check" *ngIf="item.selected"></i>
     </li>
   </ul>
-</ngx-select-container>
+</dts-select-container>
 ```
 
 ## Want to contribute?

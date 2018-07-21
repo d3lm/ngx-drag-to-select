@@ -53,14 +53,14 @@ import {
 } from './utils';
 
 @Component({
-  selector: 'ngx-select-container',
-  exportAs: 'ngx-select-container',
+  selector: 'dts-select-container',
+  exportAs: 'dts-select-container',
   host: {
-    class: 'ngx-select-container'
+    class: 'dts-select-container'
   },
   template: `
     <ng-content></ng-content>
-    <div #selectBox [ngStyle]="selectBoxStyles$ | async" class="ngx-select-box"></div>
+    <div #selectBox [ngStyle]="selectBoxStyles$ | async" class="dts-select-box"></div>
   `,
   styleUrls: ['./select-container.component.scss']
 })
@@ -81,7 +81,7 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy {
   @Input() selectWithShortcut = false;
 
   @Input()
-  @HostBinding('class.ngx-custom')
+  @HostBinding('class.dts-custom')
   custom = false;
 
   @Output() selectedItemsChange = new EventEmitter<any>();

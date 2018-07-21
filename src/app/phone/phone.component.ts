@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { trigger, transition, stagger, animate, style, query } from '@angular/animations';
 
 @Component({
-  selector: 'ngx-phone',
+  selector: 'app-phone',
   templateUrl: './phone.component.html',
   styleUrls: ['./phone.component.scss'],
   animations: [

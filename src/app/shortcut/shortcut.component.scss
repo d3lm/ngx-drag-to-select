@@ -1,4 +1,4 @@
-ngx-shortcut {
+app-shortcut {
   display: block;
 
   & > .shortcut-container {
@@ -6,8 +6,8 @@ ngx-shortcut {
   }
 }
 
-ngx-shortcut {
-  & + ngx-shortcut,
+app-shortcut {
+  & + app-shortcut,
   &:first-of-type {
     margin-top: 1rem;
   }
@@ -17,13 +17,13 @@ ngx-shortcut {
   }
 }
 
-ngx-modifier-key {
-  & ngx-key {
+app-modifier-key {
+  & app-key {
     min-width: 34px;
   }
 }
 
-ngx-key {
+app-key {
   font-family: Raleway;
   font-size: 1rem;
   text-align: center;
@@ -36,7 +36,7 @@ ngx-key {
   background-color: #f7f7f7;
 }
 
-ngx-shortcut-description {
+app-shortcut-description {
   color: #424242;
   margin-left: 1rem;
 }

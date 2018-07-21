@@ -5,10 +5,10 @@ import { CONFIG } from './tokens';
 import { calculateBoundingClientRect } from './utils';
 
 @Directive({
-  selector: '[selectItem]',
-  exportAs: 'selectItem',
+  selector: '[dtsSelectItem]',
+  exportAs: 'dtsSelectItem',
   host: {
-    class: 'ngx-select-item'
+    class: 'dts-select-item'
   }
 })
 export class SelectItemDirective implements OnInit, DoCheck {
@@ -16,10 +16,10 @@ export class SelectItemDirective implements OnInit, DoCheck {
 
   selected = false;
 
-  @Input() selectItem;
+  @Input() dtsSelectItem;
 
   get value() {
-    return this.selectItem ? this.selectItem : this;
+    return this.dtsSelectItem ? this.dtsSelectItem : this;
   }
 
   constructor(
