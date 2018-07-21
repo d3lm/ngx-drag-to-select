@@ -80,7 +80,7 @@
     "codelyzer": "^4.4.2",
     "copyfiles": "^2.0.0",
     "cpr": "^3.0.1",
-    "cypress": "^2.1.0",
+    "cypress": "^3.0.2",
     "del-cli": "^1.1.0",
     "husky": "^0.14.3",
     "jest": "^22.4.4",

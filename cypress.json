@@ -1,6 +1,5 @@
 {
   "baseUrl": "http://localhost:4200",
   "fixturesFolder": false,
-  "videoRecording": false,
-  "screenshotOnHeadlessFailure": false
+  "video": false
 }
