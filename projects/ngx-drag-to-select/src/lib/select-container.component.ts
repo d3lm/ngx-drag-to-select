@@ -152,6 +152,7 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy {
       mouseup$
         .pipe(
           filter(() => !this.selectOnDrag),
+          filter(() => !this.selectMode),
           filter((event: MouseEvent) => this.cursorWithinHost(event)),
           filter(
             (event: MouseEvent) =>
