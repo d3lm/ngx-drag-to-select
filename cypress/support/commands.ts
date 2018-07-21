@@ -45,8 +45,10 @@ Cypress.Commands.add(
       .then(result => {
         if (!result.success) {
           Cypress.log({
-            message: `Selected items do not match`,
-            consoleProps: () => [`Expected: ${expected}`, `Actual: ${result.actual}`]
+            message: ['Selected items do not match'],
+            consoleProps: () => ({
+              [`Expected: ${expected}`]: `Actual: ${result.actual}`
+            })
           });
         }
 
