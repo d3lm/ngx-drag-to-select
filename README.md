@@ -219,11 +219,12 @@ Here's an example of all inputs in action:
 ```
 <ngx-select-container
   [(selectedItems)]="selectedDocuments"
-  [selectOnDrag]="selectOnDrag"
+  [selectOnDrag]="true"
   [disabled]="false"
   [disableDrag]="true"
   [selectMode]="true"
-  [custom]="true">
+  [custom]="true"
+  [selectWithShortcut]="false">
   ...
 </ngx-select-container>
 ```
@@ -248,10 +249,11 @@ Example:
 
 **Public Methods**
 
-| Methods        | Description                           |
-| -------------- | ------------------------------------- |
-| selectAll      | Select all items within the drag area |
-| clearSelection | Clear current selection               |
+| Methods        | Description                                                 |
+| -------------- | ----------------------------------------------------------- |
+| selectAll      | Select all items within the drag area                       |
+| clearSelection | Clear current selection                                     |
+| update         | Recalculate bounding box for the container and its children |
 
 To access these methods on the container component you can either use the `@ViewChild()` decorator
 
