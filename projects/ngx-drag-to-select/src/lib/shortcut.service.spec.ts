@@ -1,5 +1,4 @@
 import { TestBed } from '@angular/core/testing';
-import { DEFAULT_CONFIG } from './config';
 import { ShortcutService } from './shortcut.service';
 import { CONFIG } from './tokens';
 
