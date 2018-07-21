@@ -28,3 +28,11 @@ p {
 .github {
   padding-top: 0.5rem;
 }
+
+.github-button {
+  display: inline-block;
+
+  & + & {
+    margin-left: 10px;
+  }
+}
