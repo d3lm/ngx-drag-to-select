@@ -163,10 +163,9 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy {
             selectBox,
             event
           })),
-          tap(({ selectBox, event }) => this.selectItems(selectBox, event)),
           takeUntil(this.destroy$)
         )
-        .subscribe();
+        .subscribe(({ selectBox, event }) => this.selectItems(selectBox, event));
 
       selectBox$
         .pipe(
@@ -177,10 +176,9 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy {
           })),
           filter(() => this.selectOnDrag),
           filter(({ selectBox }) => selectBox.width > MIN_WIDTH || selectBox.height > MIN_HEIGHT),
-          tap(({ selectBox, event }) => this.selectItems(selectBox, event)),
           takeUntil(this.destroy$)
         )
-        .subscribe();
+        .subscribe(({ selectBox, event }) => this.selectItems(selectBox, event));
 
       this.selectBoxStyles$ = selectBox$.pipe(
         map(selectBox => ({
@@ -238,44 +236,42 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy {
     this.updateItems$
       .pipe(
         withLatestFrom(this._selectedItems$),
-        tap(([update, selectedItems]: [UpdateAction, any[]]) => {
-          const item = update.item;
-
-          switch (update.type) {
-            case UpdateActions.Add:
-              if (this.addItem(item, selectedItems)) {
-                item.select();
-              }
-              break;
-            case UpdateActions.Remove:
-              if (this.removeItem(item, selectedItems)) {
-                item.deselect();
-              }
-              break;
-          }
-        }),
         takeUntil(this.destroy$)
       )
-      .subscribe();
+      .subscribe(([update, selectedItems]: [UpdateAction, any[]]) => {
+        const item = update.item;
+
+        switch (update.type) {
+          case UpdateActions.Add:
+            if (this.addItem(item, selectedItems)) {
+              item.select();
+            }
+            break;
+          case UpdateActions.Remove:
+            if (this.removeItem(item, selectedItems)) {
+              item.deselect();
+            }
+            break;
+        }
+      });
 
     // Update the container as well as all selectable items if the list has changed
     this.$selectableItems.changes
       .pipe(
         withLatestFrom(this._selectedItems$),
         observeOn(asyncScheduler),
-        tap(([items, selectedItems]: [QueryList<SelectItemDirective>, any[]]) => {
-          const newList = items.toArray();
-          const removedItems = selectedItems.filter(item => !newList.includes(item.value));
-
-          if (removedItems.length) {
-            removedItems.forEach(item => this.removeItem(item, selectedItems));
-          }
-
-          this.update();
-        }),
         takeUntil(this.destroy$)
       )
-      .subscribe();
+      .subscribe(([items, selectedItems]: [QueryList<SelectItemDirective>, any[]]) => {
+        const newList = items.toArray();
+        const removedItems = selectedItems.filter(item => !newList.includes(item.value));
+
+        if (removedItems.length) {
+          removedItems.forEach(item => this.removeItem(item, selectedItems));
+        }
+
+        this.update();
+      });
   }
 
   private observeBoundingRectChanges() {
