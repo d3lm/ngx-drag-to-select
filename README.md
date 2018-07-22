@@ -64,7 +64,7 @@ If you are using sass you can import the css as follows:
 @import "~ngx-drag-to-select/ngx-drag-to-select.css";
 ```
 
-If you are using the [Angular CLI](https://github.com/angular/angular-cli) you can add it to your `.angular-cli.json`
+If you are using the [Angular CLI](https://github.com/angular/angular-cli) you can add it to your `angular.json`
 
 ```
 "styles": [
