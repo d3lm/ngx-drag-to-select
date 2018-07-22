@@ -177,13 +177,17 @@ import { DragToSelectModule } from 'ngx-drag-to-select';
     DragToSelectModule.forRoot({
       selectedClass: 'my-selected-item',
       shortcuts: {
-        disableSelection: ''
+        disableSelection: 'alt+meta'
       }
     })
   ]
 })
 export class AppModule { }
 ```
+
+**Note**: If you override one of the shortscut you have to make sure they do not interfear with one another to ensure a smooth selecting experience.
+
+#### Modifiers
 
 When overriding the default shortcuts you can use the following modifier keys:
 
@@ -194,7 +198,15 @@ When overriding the default shortcuts you can use the following modifier keys:
 
 When using `meta`, it will be substituted with `ctrl` (for Windows) **and** `cmd` (for Mac). This allows for cross-platform shortcuts.
 
-**Note**: If you override one of the shortscut you have to make sure they do not interfear with one another to ensure a smooth selecting experience.
+#### Shortcut alternatives
+
+You can also define alternative shortcuts. For that, simply chain the shortcuts with a comma. Here's an example:
+
+```
+shortcuts: {
+  disableSelection: 'alt+meta,shift+alt'
+}
+```
 
 ## API
 
