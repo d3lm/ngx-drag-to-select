@@ -39,7 +39,7 @@ You can also fiddle with the library using [StackBlitz](https://stackblitz.com/e
 - [Installation](#installation)
 - [Setup](#setup)
 - [Usage](#usage)
-- [Configuration Options](#Configuration-Options)
+- [Configuration Options](#configuration-options)
 - [API](#api)
 - [FAQ](#faq)
 - [Want to contribute?](#want-to-contribute)
