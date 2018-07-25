@@ -42,7 +42,7 @@ You can also fiddle with the library using [StackBlitz](https://stackblitz.com/e
 - [Configuration Options](#Configuration-Options)
 - [API](#api)
 - [FAQ](#faq)
-- [Want to contribute?](#want-to-contribute-?)
+- [Want to contribute?](#want-to-contribute)
 - [For developers](#for-developers)
 - [Versioning](#versioning)
 - [Licence](#licence)
