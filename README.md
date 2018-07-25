@@ -34,6 +34,19 @@ You can also fiddle with the library using [StackBlitz](https://stackblitz.com/e
 - [Desktop Example](https://github.com/d3lm/ngx-drag-to-select/blob/master/src/app): Check out the `AppComponent`!
 - [Mobile Example](https://github.com/d3lm/ngx-drag-to-select/blob/master/src/app/phone): There's a dedicated `PhoneComponent` component that uses all the tools and features from this library to implement a Google Inbox-like selection experience.
 
+## Table of contents
+
+- [Installation](#installation)
+- [Setup](#setup)
+- [Usage](#usage)
+- [Configuration Options](#Configuration-Options)
+- [API](#api)
+- [FAQ](#faq)
+- [Want to contribute?](#want-to-contribute-?)
+- [For developers](#for-developers)
+- [Versioning](#versioning)
+- [Licence](#licence)
+
 ## Installation
 
 ```
@@ -377,6 +390,56 @@ Example:
   </ul>
 </dts-select-container>
 ```
+
+## FAQ
+
+### Is this library AoT and Universal compatible?
+
+Yes.
+
+### Does this library work with Angular 5.x?
+
+The latest version that supports Angular 5.x is 1.1.1. You can still install it via npm or yarn, e.g. `npm install ngx-drag-to-select@1.1.1`.
+
+Note, that we try to always keep up with Angular's latest version, hence, older versions will not receive bug fixes nor new features.
+
+### Does this library work with mobile?
+
+Yes. This library provides features that you need to implement a mobile version. Check out the [Mobile Example](https://github.com/d3lm/ngx-drag-to-select/blob/master/src/app/phone), specifically the `PhoneComponent` component that uses all the tools and features from this library to implement a Google Inbox-like selection experience.
+
+### How do I deal with nested scrollable containers?
+
+Suppose, we have the following markup:
+
+```html
+<body>
+  ...
+  <div class="scrollable">
+    <dts-select-container #container="dts-select-container">
+      ...
+    </dts-select-container>
+  </div>
+</body>
+```
+
+Here we have another wrapper elements that wraps the `dts-select-container`. This element is **scrollable**. The library does not account for any scrollable elements but the `dts-select-container` itself as well as the body. If you have other nested scrollable containers, and the rendering of the select-box seems to be off, you have to listen for the `scroll` event on your scrollable element and call `update` on the `dts-select-container`. This will make sure that whenever you scroll, the position of the select-container and its items on the screen are re-calculated.
+
+Check out the solution to the problem:
+
+```html
+<body>
+  ...
+  <div class="scrollable" (scroll)="container.update()">
+    <dts-select-container #container="dts-select-container">
+      ...
+    </dts-select-container>
+  </div>
+</body>
+```
+
+Here we listen for `scroll` on the `div` and call `container.update()` in case the event is fired.
+
+In order not to kill the performance, because the `scroll` event is called many many times, you may want to **throttle** it to only call `update` every 16ms or so.
 
 ## Want to contribute?
 
