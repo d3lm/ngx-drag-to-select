@@ -84,7 +84,7 @@ Cypress.Commands.add(
 Cypress.Commands.add(
   'getSelectedItems',
   (options): any => {
-    return cy.get('[cy-data="selected-item"]', options);
+    return cy.get('[data-cy="selected-item"]', options);
   }
 );
 
