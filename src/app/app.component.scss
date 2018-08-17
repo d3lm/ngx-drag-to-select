@@ -105,7 +105,7 @@ button {
     font-weight: bold;
   }
 
-  [cy-data='select-count'] {
+  [data-cy='select-count'] {
     &::before {
       content: '(';
     }
