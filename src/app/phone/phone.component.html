@@ -2,18 +2,18 @@
   <div class="phone-screen">
     <div class="controls">
       <div @editButtons *ngIf="selectMode">
-        <button cy-data="clearSelection" mat-icon-button (click)="selectContainer.clearSelection()">
+        <button data-cy="clearSelection" mat-icon-button (click)="selectContainer.clearSelection()">
           <mat-icon>clear</mat-icon>
         </button>
-        <button cy-data="selectAll" mat-icon-button (click)="selectContainer.selectAll()">
+        <button data-cy="selectAll" mat-icon-button (click)="selectContainer.selectAll()">
           <mat-icon>select_all</mat-icon>
         </button>
-        <button cy-data="delete" mat-icon-button (click)="deleteContacts(selectedContacts)">
+        <button data-cy="delete" mat-icon-button (click)="deleteContacts(selectedContacts)">
           <mat-icon>delete</mat-icon>
         </button>
       </div>
-      <span @selectCount cy-data="select-count" class="select-count" *ngIf="selectedContacts.length">{{ selectedContacts.length }}</span>
-      <button cy-data="add" @fade *ngIf="!selectMode" class="add-button" mat-icon-button (click)="addContact()">
+      <span @selectCount data-cy="select-count" class="select-count" *ngIf="selectedContacts.length">{{ selectedContacts.length }}</span>
+      <button data-cy="add" @fade *ngIf="!selectMode" class="add-button" mat-icon-button (click)="addContact()">
         <mat-icon>add</mat-icon>
       </button>
     </div>

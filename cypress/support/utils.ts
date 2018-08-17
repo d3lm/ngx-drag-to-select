@@ -21,47 +21,47 @@ export const shouldBeVisible = (subject: Cypress.ObjectLike) => {
 };
 
 export const getDesktopExample = () => {
-  return cy.get('[cy-data="desktop"]');
+  return cy.get('[data-cy="desktop"]');
 };
 
 export const getMobileExample = () => {
-  return cy.get('[cy-data="mobile"]');
+  return cy.get('[data-cy="mobile"]');
 };
 
 export const getSelectCount = () => {
-  return cy.get('[cy-data="select-count"]');
+  return cy.get('[data-cy="select-count"]');
 };
 
 export const getAddButton = () => {
-  return cy.get('[cy-data="add"]');
+  return cy.get('[data-cy="add"]');
 };
 
 export const getDeleteButton = () => {
-  return cy.get('[cy-data="delete"]');
+  return cy.get('[data-cy="delete"]');
 };
 
 export const getSelectAllButton = () => {
-  return cy.get('[cy-data="selectAll"]');
+  return cy.get('[data-cy="selectAll"]');
 };
 
 export const getClearButton = () => {
-  return cy.get('[cy-data="clearSelection"]');
+  return cy.get('[data-cy="clearSelection"]');
 };
 
 export const disableSelectOnDrag = () => {
-  return cy.get('[cy-data="selectOnDrag"]').click();
+  return cy.get('[data-cy="selectOnDrag"]').click();
 };
 
 export const enableSelectMode = () => {
-  return cy.get('[cy-data="selectMode"]').click();
+  return cy.get('[data-cy="selectMode"]').click();
 };
 
 export const disableSelection = () => {
-  return cy.get('[cy-data="disable"]').click();
+  return cy.get('[data-cy="disable"]').click();
 };
 
 export const enableSelectWithShortcut = () => {
-  return cy.get('[cy-data="selectWithShortcut"]').click();
+  return cy.get('[data-cy="selectWithShortcut"]').click();
 };
 
 export const selectAll = () => {
