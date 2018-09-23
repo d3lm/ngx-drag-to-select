@@ -9,7 +9,7 @@ branches:
     - master
 notifications:
   email: false
-addons:
+  addons:
   chrome: stable
 before_install:
   - export CHROME_BIN=chromium-browser
