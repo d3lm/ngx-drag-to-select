@@ -33,7 +33,7 @@
     "lint:check": "ng lint",
     "lint:fix": "ng lint app --fix && ng lint ngx-drag-to-select --fix",
     "e2e": "cypress open",
-    "e2e:ci": "cypress run",
+    "e2e:ci": "cypress run --record",
     "ci": "npm run lint:check && npm run format:check && npm run test:ci && npm run build:prerender-ghpages",
     "commitmsg": "commitlint -e $GIT_PARAMS",
     "precommit": "lint-staged"
@@ -80,7 +80,7 @@
     "codelyzer": "^4.4.2",
     "copyfiles": "^2.0.0",
     "cpr": "^3.0.1",
-    "cypress": "^3.0.2",
+    "cypress": "^3.1.0",
     "del-cli": "^1.1.0",
     "husky": "^0.14.3",
     "jest": "^22.4.4",
