@@ -274,11 +274,14 @@ Example:
 
 **Public Methods**
 
-| Methods        | Description                                                 |
-| -------------- | ----------------------------------------------------------- |
-| selectAll      | Select all items within the drag area                       |
-| clearSelection | Clear current selection                                     |
-| update         | Recalculate bounding box for the container and its children |
+| Methods                                               | Description                                                 |
+| ----------------------------------------------------- | ----------------------------------------------------------- |
+| selectAll()                                           | Select all items within the drag area                       |
+| clearSelection()                                      | Clear current selection                                     |
+| update()                                              | Recalculate bounding box for the container and its children |
+| <a href="#selectItems">selectItems(predicate)</a>     | Select all items `predicate` returns truthy for             |
+| <a href="#deselectItems">deselectItems(predicate)</a> | Deselect all items `predicate` returns truthy for           |
+| <a href="#toggleItems">toggleItems(predicate)</a>     | Toggle all items `predicate` returns truthy for             |
 
 To access these methods on the container component you can either use the `@ViewChild()` decorator
 
@@ -350,14 +353,92 @@ export class AppComponent {
 }
 ```
 
+#### <a id="selectItems"></a> `selectItems(predicate)`
+
+Iterates over collection of `SelectItemDirective`'s, selecting all items from that collection that meet the condition specified in the `predicate` function. The `predicate` is invoked with one argument `item`, which is equivalent to the value returned by `SelectItemDirective.value`.
+
+**Arguments**
+
+`predicate ((item: T) => boolean)`: The function invoked per iteration.
+
+**Example**
+
+```
+import { Component, ViewChild } from '@angular/core';
+import { SelectContainerComponent } from 'ngx-drag-to-select';
+
+@Component({
+  ...
+})
+export class AppComponent {
+  @ViewChild(SelectContainerComponent) selectContainer: SelectContainerComponent;
+
+  someMethod() {
+    this.selectContainer.selectItems(item => item.id === 1)
+  }
+}
+```
+
+#### <a id="deselectItems"></a> `deselectItems(predicate)`
+
+Iterates over collection of `SelectItemDirective`'s, deselecting all items from that collection that meet the condition specified in the `predicate` function. The `predicate` is invoked with one argument `item`, which is equivalent to the value returned by `SelectItemDirective.value`.
+
+**Arguments**
+
+`predicate ((item: T) => boolean)`: The function invoked per iteration.
+
+**Example**
+
+```
+import { Component, ViewChild } from '@angular/core';
+import { SelectContainerComponent } from 'ngx-drag-to-select';
+
+@Component({
+  ...
+})
+export class AppComponent {
+  @ViewChild(SelectContainerComponent) selectContainer: SelectContainerComponent;
+
+  someMethod() {
+    this.selectContainer.deselectItems(item => item.id === 1)
+  }
+}
+```
+
+#### <a id="toggleItems"></a> `toggleItems(predicate)`
+
+Iterates over collection of `SelectItemDirective`'s, toggling all items from that collection that meet the condition specified in the `predicate` function. The `predicate` is invoked with one argument `item`, which is equivalent to the value returned by `SelectItemDirective.value`.
+
+**Arguments**
+
+`predicate ((item: T) => boolean)`: The function invoked per iteration.
+
+**Example**
+
+```
+import { Component, ViewChild } from '@angular/core';
+import { SelectContainerComponent } from 'ngx-drag-to-select';
+
+@Component({
+  ...
+})
+export class AppComponent {
+  @ViewChild(SelectContainerComponent) selectContainer: SelectContainerComponent;
+
+  someMethod() {
+    this.selectContainer.toggleItems(item => [1, 2, 3].includes(item.id))
+  }
+}
+```
+
 ### `dtsSelectItem`
 
 The `dtsSelectItem` directive is used to mark DOM elements as selectable items. It takes an input to control the value that is used when the item was selected. If the input is not specified, it will use the directive instance as a default value.
 
 **Inputs**
 
-| Input      | Type | Default            | Description                                  |
-| ---------- | ---- | ------------------ | -------------------------------------------- |
+| Input         | Type | Default            | Description                                  |
+| ------------- | ---- | ------------------ | -------------------------------------------- |
 | dtsSelectItem | any  | Directive Instance | Value that is used when the item is selected |
 
 Example:

@@ -18,7 +18,7 @@ import {
 
 import { isPlatformBrowser } from '@angular/common';
 
-import { Observable, Subject, combineLatest, merge, fromEvent, BehaviorSubject, asyncScheduler } from 'rxjs';
+import { Observable, Subject, combineLatest, merge, from, fromEvent, BehaviorSubject, asyncScheduler } from 'rxjs';
 
 import {
   switchMap,
@@ -39,7 +39,17 @@ import { SelectItemDirective } from './select-item.directive';
 import { ShortcutService } from './shortcut.service';
 
 import { createSelectBox } from './operators';
-import { Action, SelectBox, MousePosition, SelectContainerHost, UpdateAction, UpdateActions } from './models';
+
+import {
+  Action,
+  SelectBox,
+  MousePosition,
+  SelectContainerHost,
+  UpdateAction,
+  UpdateActions,
+  PredicateFn
+} from './models';
+
 import { AUDIT_TIME, NO_SELECT_CLASS, MIN_WIDTH, MIN_HEIGHT } from './constants';
 
 import {
@@ -119,15 +129,15 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy {
     if (isPlatformBrowser(this.platformId)) {
       this.host = this.hostElementRef.nativeElement;
 
-      this.initSelectedItemsChange();
+      this._initSelectedItemsChange();
 
-      this.calculateBoundingClientRect();
-      this.observeBoundingRectChanges();
-      this.observeSelectableItems();
+      this._calculateBoundingClientRect();
+      this._observeBoundingRectChanges();
+      this._observeSelectableItems();
 
       const mouseup$ = fromEvent(window, 'mouseup').pipe(
         filter(() => !this.disabled),
-        tap(() => this.onMouseUp()),
+        tap(() => this._onMouseUp()),
         share()
       );
 
@@ -138,7 +148,7 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy {
 
       const mousedown$ = fromEvent(this.host, 'mousedown').pipe(
         filter(() => !this.disabled),
-        tap((event: MouseEvent) => this.onMouseDown(event)),
+        tap((event: MouseEvent) => this._onMouseDown(event)),
         share()
       );
 
@@ -167,20 +177,15 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy {
         .pipe(
           filter(() => !this.selectOnDrag),
           filter(() => !this.selectMode),
-          filter((event: MouseEvent) => this.cursorWithinHost(event)),
+          filter((event: MouseEvent) => this._cursorWithinHost(event)),
           filter(
             (event: MouseEvent) =>
               (!this.shortcuts.disableSelection(event) && !this.shortcuts.toggleSingleItem(event)) ||
               this.shortcuts.removeFromSelection(event)
           ),
-          withLatestFrom(selectBox$),
-          map(([event, selectBox]) => ({
-            selectBox,
-            event
-          })),
           takeUntil(this.destroy$)
         )
-        .subscribe(({ selectBox, event }) => this.selectItems(selectBox, event));
+        .subscribe(event => this._selectItems(event));
 
       selectBox$
         .pipe(
@@ -193,7 +198,7 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy {
           filter(({ selectBox }) => selectBox.width > MIN_WIDTH || selectBox.height > MIN_HEIGHT),
           takeUntil(this.destroy$)
         )
-        .subscribe(({ selectBox, event }) => this.selectItems(selectBox, event));
+        .subscribe(({ event }) => this._selectItems(event));
 
       this.selectBoxStyles$ = selectBox$.pipe(
         map(selectBox => ({
@@ -209,18 +214,30 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy {
 
   selectAll() {
     this.$selectableItems.forEach(item => {
-      this.selectItem(item);
+      this._selectItem(item);
     });
+  }
+
+  toggleItems<T>(predicate: PredicateFn<T>) {
+    this._filterSelectableItems(predicate).subscribe((item: SelectItemDirective) => this._toggleItem(item));
+  }
+
+  selectItems<T>(predicate: PredicateFn<T>) {
+    this._filterSelectableItems(predicate).subscribe((item: SelectItemDirective) => this._selectItem(item));
+  }
+
+  deselectItems<T>(predicate: PredicateFn<T>) {
+    this._filterSelectableItems(predicate).subscribe((item: SelectItemDirective) => this._deselectItem(item));
   }
 
   clearSelection() {
     this.$selectableItems.forEach(item => {
-      this.deselectItem(item);
+      this._deselectItem(item);
     });
   }
 
   update() {
-    this.calculateBoundingClientRect();
+    this._calculateBoundingClientRect();
     this.$selectableItems.forEach(item => item.calculateBoundingClientRect());
   }
 
@@ -229,7 +246,14 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  private initSelectedItemsChange() {
+  private _filterSelectableItems<T>(predicate: PredicateFn<T>) {
+    // Wrap select items in an observable for better efficiency as
+    // no intermediate arrays are created and we only need to process
+    // every item once.
+    return from(this.$selectableItems.toArray()).pipe(filter(item => predicate(item.value)));
+  }
+
+  private _initSelectedItemsChange() {
     this._selectedItems$
       .pipe(
         auditTime(AUDIT_TIME),
@@ -246,7 +270,7 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy {
       });
   }
 
-  private observeSelectableItems() {
+  private _observeSelectableItems() {
     // Listen for updates and either select or deselect an item
     this.updateItems$
       .pipe(
@@ -258,12 +282,12 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy {
 
         switch (update.type) {
           case UpdateActions.Add:
-            if (this.addItem(item, selectedItems)) {
+            if (this._addItem(item, selectedItems)) {
               item.select();
             }
             break;
           case UpdateActions.Remove:
-            if (this.removeItem(item, selectedItems)) {
+            if (this._removeItem(item, selectedItems)) {
               item.deselect();
             }
             break;
@@ -282,14 +306,14 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy {
         const removedItems = selectedItems.filter(item => !newList.includes(item.value));
 
         if (removedItems.length) {
-          removedItems.forEach(item => this.removeItem(item, selectedItems));
+          removedItems.forEach(item => this._removeItem(item, selectedItems));
         }
 
         this.update();
       });
   }
 
-  private observeBoundingRectChanges() {
+  private _observeBoundingRectChanges() {
     this.ngZone.runOutsideAngular(() => {
       const resize$ = fromEvent(window, 'resize');
       const windowScroll$ = fromEvent(window, 'scroll');
@@ -307,20 +331,20 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy {
     });
   }
 
-  private calculateBoundingClientRect() {
+  private _calculateBoundingClientRect() {
     this.host.boundingClientRect = calculateBoundingClientRect(this.host);
   }
 
-  private cursorWithinHost(event: MouseEvent) {
+  private _cursorWithinHost(event: MouseEvent) {
     return cursorWithinElement(event, this.host);
   }
 
-  private onMouseUp() {
-    this.flushItems();
+  private _onMouseUp() {
+    this._flushItems();
     this.renderer.removeClass(document.body, NO_SELECT_CLASS);
   }
 
-  private onMouseDown(event: MouseEvent) {
+  private _onMouseDown(event: MouseEvent) {
     if (this.shortcuts.disableSelection(event) || this.disabled) {
       return;
     }
@@ -362,26 +386,26 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy {
         (withinBoundingBox && item.selected && this.selectMode);
 
       if (shouldAdd) {
-        this.selectItem(item);
+        this._selectItem(item);
       } else if (shouldRemove) {
-        this.deselectItem(item);
+        this._deselectItem(item);
       }
     });
   }
 
-  private selectItems(selectBox: SelectBox<number>, event: MouseEvent) {
+  private _selectItems(event: MouseEvent) {
     const selectionBox = calculateBoundingClientRect(this.$selectBox.nativeElement);
 
-    this.$selectableItems.forEach((item, index) => {
+    this.$selectableItems.forEach(item => {
       if (this.shortcuts.extendedSelectionShortcut(event) && this.selectOnDrag) {
-        this.extendedSelectionMode(selectionBox, item, event);
+        this._extendedSelectionMode(selectionBox, item, event);
       } else {
-        this.normalSelectionMode(selectionBox, item, event);
+        this._normalSelectionMode(selectionBox, item, event);
       }
     });
   }
 
-  private normalSelectionMode(selectBox, item: SelectItemDirective, event: MouseEvent) {
+  private _normalSelectionMode(selectBox, item: SelectItemDirective, event: MouseEvent) {
     const inSelection = boxIntersects(selectBox, item.getBoundingClientRect());
 
     const shouldAdd = inSelection && !item.selected && !this.shortcuts.removeFromSelection(event);
@@ -391,13 +415,13 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy {
       (inSelection && item.selected && this.shortcuts.removeFromSelection(event));
 
     if (shouldAdd) {
-      this.selectItem(item);
+      this._selectItem(item);
     } else if (shouldRemove) {
-      this.deselectItem(item);
+      this._deselectItem(item);
     }
   }
 
-  private extendedSelectionMode(selectBox, item: SelectItemDirective, event: MouseEvent) {
+  private _extendedSelectionMode(selectBox, item: SelectItemDirective, event: MouseEvent) {
     const inSelection = boxIntersects(selectBox, item.getBoundingClientRect());
 
     const shoudlAdd =
@@ -424,24 +448,24 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy {
     }
   }
 
-  private flushItems() {
+  private _flushItems() {
     this._tmpItems.forEach((action, item) => {
       if (action === Action.Add) {
-        this.selectItem(item);
+        this._selectItem(item);
       }
 
       if (action === Action.Delete) {
-        this.deselectItem(item);
+        this._deselectItem(item);
       }
     });
 
     this._tmpItems.clear();
   }
 
-  private addItem(item: SelectItemDirective, selectedItems: Array<any>) {
+  private _addItem(item: SelectItemDirective, selectedItems: Array<any>) {
     let success = false;
 
-    if (!this.hasItem(item, selectedItems)) {
+    if (!this._hasItem(item, selectedItems)) {
       success = true;
       selectedItems.push(item.value);
       this._selectedItems$.next(selectedItems);
@@ -450,7 +474,7 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy {
     return success;
   }
 
-  private removeItem(item: SelectItemDirective, selectedItems: Array<any>) {
+  private _removeItem(item: SelectItemDirective, selectedItems: Array<any>) {
     let success = false;
     const value = item instanceof SelectItemDirective ? item.value : item;
     const index = selectedItems.indexOf(value);
@@ -464,15 +488,23 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy {
     return success;
   }
 
-  private selectItem(item: SelectItemDirective) {
+  private _toggleItem(item: SelectItemDirective) {
+    if (item.selected) {
+      this._deselectItem(item);
+    } else {
+      this._selectItem(item);
+    }
+  }
+
+  private _selectItem(item: SelectItemDirective) {
     this.updateItems$.next({ type: UpdateActions.Add, item });
   }
 
-  private deselectItem(item: SelectItemDirective) {
+  private _deselectItem(item: SelectItemDirective) {
     this.updateItems$.next({ type: UpdateActions.Remove, item });
   }
 
-  private hasItem(item: SelectItemDirective, selectedItems: Array<any>) {
+  private _hasItem(item: SelectItemDirective, selectedItems: Array<any>) {
     return selectedItems.includes(item.value);
   }
 }
