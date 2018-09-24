@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, flushMicrotasks, fakeAsync, ComponentFixture, TestBed, tick, flush } from '@angular/core/testing';
 import { Component, ViewChild } from '@angular/core';
 import { DragToSelectModule } from './drag-to-select.module';
 import { SelectContainerComponent } from './select-container.component';
@@ -12,20 +12,33 @@ function triggerDomEvent(eventType: string, target: HTMLElement | Element, event
   target.dispatchEvent(event);
 }
 
+interface SelectItemValue {
+  id: number;
+}
+
 @Component({
   template: `
-    <dts-select-container>
-      <span dtsSelectItem #selectItem="dtsSelectItem">Select me!</span>
+    <dts-select-container [(selectedItems)]="selectedItems" #selectContainer>
+      <span [dtsSelectItem]="{ id: 1 }" #selectItem="dtsSelectItem">Item #1</span>
+      <span [dtsSelectItem]="{ id: 2 }" #selectItem="dtsSelectItem">Item #2</span>
+      <span [dtsSelectItem]="{ id: 3 }" #selectItem="dtsSelectItem">Item #3</span>
     </dts-select-container>
   `
 })
 class TestComponent {
+  @ViewChild('selectContainer')
+  selectContainer: SelectContainerComponent;
+
   @ViewChild('selectItem')
   selectItem: SelectItemDirective;
+
+  selectedItems = [];
 }
 
 describe('SelectContainerComponent', () => {
   let fixture: ComponentFixture<TestComponent>;
+  let componentInstance: TestComponent;
+  let selectContainerInstance: SelectContainerComponent;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -37,6 +50,8 @@ describe('SelectContainerComponent', () => {
   beforeEach(() => {
     window.getSelection = jest.fn().mockReturnValue({});
     fixture = TestBed.createComponent(TestComponent);
+    componentInstance = fixture.componentInstance;
+    selectContainerInstance = fixture.componentInstance.selectContainer;
     fixture.detectChanges();
   });
 
@@ -48,12 +63,117 @@ describe('SelectContainerComponent', () => {
   it('should expose update as part of the public api', () => {
     const selectContainer = fixture.debugElement.query(By.directive(SelectContainerComponent));
 
-    jest.spyOn(selectContainer.componentInstance, 'calculateBoundingClientRect');
+    jest.spyOn(selectContainer.componentInstance, '_calculateBoundingClientRect');
     jest.spyOn(fixture.componentInstance.selectItem, 'calculateBoundingClientRect');
 
     selectContainer.componentInstance.update();
 
-    expect(selectContainer.componentInstance.calculateBoundingClientRect).toHaveBeenCalled();
+    expect(selectContainer.componentInstance._calculateBoundingClientRect).toHaveBeenCalled();
     expect(fixture.componentInstance.selectItem.calculateBoundingClientRect).toHaveBeenCalled();
+  });
+
+  describe('selectItems()', () => {
+    it('should select items', done => {
+      const ids = [1, 2];
+      const result = [{ id: 1 }, { id: 2 }];
+
+      selectContainerInstance.select.subscribe(items => {
+        expect(componentInstance.selectedItems.length).toBe(result.length);
+        expect(items).toEqual(result);
+        expect(componentInstance.selectedItems).toEqual(result);
+        done();
+      });
+
+      selectContainerInstance.selectItems((item: SelectItemValue) => ids.includes(item.id));
+    });
+
+    it('should not throw error when selecting items that do not exist', done => {
+      const result = [];
+
+      selectContainerInstance.select.subscribe(items => {
+        expect(componentInstance.selectedItems.length).toBe(result.length);
+        expect(items).toEqual(result);
+        expect(componentInstance.selectedItems).toEqual(result);
+        done();
+      });
+
+      selectContainerInstance.selectItems((item: SelectItemValue) => item.id === -1);
+      selectContainerInstance.selectItems((item: SelectItemValue) => item.id === 100);
+    });
+  });
+
+  describe('deselectItems()', () => {
+    beforeEach(() => {
+      selectContainerInstance.selectItems((item: SelectItemValue) => true);
+    });
+
+    it('should deselect items', done => {
+      const result = [{ id: 1 }];
+
+      selectContainerInstance.select.subscribe(items => {
+        expect(componentInstance.selectedItems.length).toBe(result.length);
+        expect(items).toEqual(result);
+        expect(componentInstance.selectedItems).toEqual(result);
+        done();
+      });
+
+      selectContainerInstance.deselectItems((item: SelectItemValue) => [2, 3].includes(item.id));
+    });
+
+    it('should not throw error when deselecting items that do not exist', done => {
+      const result = [{ id: 1 }, { id: 2 }, { id: 3 }];
+
+      selectContainerInstance.select.subscribe(items => {
+        expect(componentInstance.selectedItems.length).toBe(result.length);
+        expect(items).toEqual(result);
+        expect(componentInstance.selectedItems).toEqual(result);
+        done();
+      });
+
+      selectContainerInstance.deselectItems((item: SelectItemValue) => item.id === -1);
+      selectContainerInstance.deselectItems((item: SelectItemValue) => item.id === 100);
+    });
+  });
+
+  describe('toggleItems()', () => {
+    it('should select non-selected items', done => {
+      const result = [{ id: 1 }, { id: 2 }];
+
+      selectContainerInstance.select.subscribe(items => {
+        expect(componentInstance.selectedItems.length).toBe(result.length);
+        expect(items).toEqual(result);
+        expect(componentInstance.selectedItems).toEqual(result);
+        done();
+      });
+
+      selectContainerInstance.toggleItems((item: SelectItemValue) => [1, 2].includes(item.id));
+    });
+
+    it('should deselect selected items', done => {
+      const result = [{ id: 2 }];
+
+      selectContainerInstance.select.subscribe(items => {
+        expect(componentInstance.selectedItems.length).toBe(result.length);
+        expect(items).toEqual(result);
+        expect(componentInstance.selectedItems).toEqual(result);
+        done();
+      });
+
+      selectContainerInstance.selectItems((item: SelectItemValue) => [1, 2].includes(item.id));
+      selectContainerInstance.toggleItems((item: SelectItemValue) => item.id === 1);
+    });
+
+    it('should not throw error when toggling items that do not exist', done => {
+      const result = [];
+
+      selectContainerInstance.select.subscribe(items => {
+        expect(componentInstance.selectedItems.length).toBe(result.length);
+        expect(items).toEqual(result);
+        expect(componentInstance.selectedItems).toEqual(result);
+        done();
+      });
+
+      selectContainerInstance.toggleItems((item: SelectItemValue) => [-1, 100].includes(item.id));
+    });
   });
 });

@@ -22,8 +22,8 @@ export class AppComponent implements OnInit {
   constructor(
     private titleService: Title,
     private breakpointObserver: BreakpointObserver,
-    private iconRegistry: MatIconRegistry,
-    private sanitizer: DomSanitizer
+    iconRegistry: MatIconRegistry,
+    sanitizer: DomSanitizer
   ) {
     iconRegistry.addSvgIcon('apple', sanitizer.bypassSecurityTrustResourceUrl('assets/apple-icon.svg'));
     iconRegistry.addSvgIcon('windows', sanitizer.bypassSecurityTrustResourceUrl('assets/windows-icon.svg'));
