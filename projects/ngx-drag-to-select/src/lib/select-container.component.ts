@@ -68,24 +68,38 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy {
   host: SelectContainerHost;
   selectBoxStyles$: Observable<SelectBox<string>>;
 
-  @ViewChild('selectBox') private $selectBox: ElementRef;
+  @ViewChild('selectBox')
+  private $selectBox: ElementRef;
 
   @ContentChildren(SelectItemDirective, { descendants: true })
   private $selectableItems: QueryList<SelectItemDirective>;
 
-  @Input() selectedItems: any;
-  @Input() selectOnDrag = true;
-  @Input() disabled = false;
-  @Input() disableDrag = false;
-  @Input() selectMode = false;
-  @Input() selectWithShortcut = false;
+  @Input()
+  selectedItems: any;
+
+  @Input()
+  selectOnDrag = true;
+
+  @Input()
+  disabled = false;
+
+  @Input()
+  disableDrag = false;
+
+  @Input()
+  selectMode = false;
+
+  @Input()
+  selectWithShortcut = false;
 
   @Input()
   @HostBinding('class.dts-custom')
   custom = false;
 
-  @Output() selectedItemsChange = new EventEmitter<any>();
-  @Output() select = new EventEmitter<any>();
+  @Output()
+  selectedItemsChange = new EventEmitter<any>();
+  @Output()
+  select = new EventEmitter<any>();
 
   private _tmpItems = new Map<SelectItemDirective, Action>();
 

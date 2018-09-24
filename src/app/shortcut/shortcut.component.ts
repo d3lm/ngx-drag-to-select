@@ -31,7 +31,8 @@ export class KeyComponent {}
   `
 })
 export class ModifierKeyComponent {
-  @Input() os;
+  @Input()
+  os;
 }
 
 @Component({

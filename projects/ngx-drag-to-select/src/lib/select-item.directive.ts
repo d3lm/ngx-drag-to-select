@@ -16,7 +16,8 @@ export class SelectItemDirective implements OnInit, DoCheck {
 
   selected = false;
 
-  @Input() dtsSelectItem;
+  @Input()
+  dtsSelectItem;
 
   get value() {
     return this.dtsSelectItem ? this.dtsSelectItem : this;

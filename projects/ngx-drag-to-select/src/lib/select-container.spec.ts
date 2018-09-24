@@ -20,7 +20,8 @@ function triggerDomEvent(eventType: string, target: HTMLElement | Element, event
   `
 })
 class TestComponent {
-  @ViewChild('selectItem') selectItem: SelectItemDirective;
+  @ViewChild('selectItem')
+  selectItem: SelectItemDirective;
 }
 
 describe('SelectContainerComponent', () => {

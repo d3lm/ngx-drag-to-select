@@ -6,5 +6,6 @@ import { Component, Input } from '@angular/core';
   styleUrls: ['./shortcuts.component.scss']
 })
 export class ShortcutsComponent {
-  @Input() os: 'mac' | 'windows' = 'mac';
+  @Input()
+  os: 'mac' | 'windows' = 'mac';
 }
