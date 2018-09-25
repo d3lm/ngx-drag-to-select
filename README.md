@@ -260,14 +260,16 @@ Here's an example of all inputs in action:
 
 **Outputs**
 
-| Input  | Payload Type | Description                                                                                                    |
-| ------ | ------------ | -------------------------------------------------------------------------------------------------------------- |
-| select | Array<any>   | Event that is fired whenever the selection changes. The payload (`$event`) will be the list of selected items. |
+| Input          | Payload Type | Description                                                                                                |
+| -------------- | ------------ | ---------------------------------------------------------------------------------------------------------- |
+| select         | Array<any>   | Event that is fired when the selection changes. The payload (`$event`) will be the list of selected items. |
+| itemSelected   | any          | Event that is fired when the item is selected. The payload (`$event`) will be the item's value             |
+| itemDeselected | any          | Event that is fired when the item is deselected. The payload (`$event`) will be the item's value           |
 
 Example:
 
 ```
-<dts-select-container (select)="someMethod($event)">
+<dts-select-container (select)="someMethod($event)" (itemSelected)="itemSelected($event)" (itemDeselected)="itemDeselected($event)">
   ...
 </dts-select-container>
 ```
