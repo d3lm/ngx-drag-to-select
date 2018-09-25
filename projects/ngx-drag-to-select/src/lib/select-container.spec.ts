@@ -1,5 +1,5 @@
-import { async, flushMicrotasks, fakeAsync, ComponentFixture, TestBed, tick, flush } from '@angular/core/testing';
-import { Component, ViewChild } from '@angular/core';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { Component, ViewChild, ViewChildren, QueryList } from '@angular/core';
 import { DragToSelectModule } from './drag-to-select.module';
 import { SelectContainerComponent } from './select-container.component';
 import { By } from '@angular/platform-browser';
@@ -18,7 +18,9 @@ interface SelectItemValue {
 
 @Component({
   template: `
-    <dts-select-container [(selectedItems)]="selectedItems" #selectContainer>
+    <dts-select-container [(selectedItems)]="selectedItems"
+      (itemSelected)="itemSelected($event)" (itemDeselected)="itemDeselected($event)"
+      #selectContainer>
       <span [dtsSelectItem]="{ id: 1 }" #selectItem="dtsSelectItem">Item #1</span>
       <span [dtsSelectItem]="{ id: 2 }" #selectItem="dtsSelectItem">Item #2</span>
       <span [dtsSelectItem]="{ id: 3 }" #selectItem="dtsSelectItem">Item #3</span>
@@ -29,15 +31,18 @@ class TestComponent {
   @ViewChild('selectContainer')
   selectContainer: SelectContainerComponent;
 
-  @ViewChild('selectItem')
-  selectItem: SelectItemDirective;
+  @ViewChildren('selectItem')
+  selectItems: QueryList<SelectItemDirective>;
 
   selectedItems = [];
+
+  itemSelected(value: any) {}
+  itemDeselected(value: any) {}
 }
 
 describe('SelectContainerComponent', () => {
   let fixture: ComponentFixture<TestComponent>;
-  let componentInstance: TestComponent;
+  let testComponent: TestComponent;
   let selectContainerInstance: SelectContainerComponent;
 
   beforeEach(async(() => {
@@ -50,7 +55,7 @@ describe('SelectContainerComponent', () => {
   beforeEach(() => {
     window.getSelection = jest.fn().mockReturnValue({});
     fixture = TestBed.createComponent(TestComponent);
-    componentInstance = fixture.componentInstance;
+    testComponent = fixture.componentInstance;
     selectContainerInstance = fixture.componentInstance.selectContainer;
     fixture.detectChanges();
   });
@@ -64,12 +69,12 @@ describe('SelectContainerComponent', () => {
     const selectContainer = fixture.debugElement.query(By.directive(SelectContainerComponent));
 
     jest.spyOn(selectContainer.componentInstance, '_calculateBoundingClientRect');
-    jest.spyOn(fixture.componentInstance.selectItem, 'calculateBoundingClientRect');
+    jest.spyOn(fixture.componentInstance.selectItems.first, 'calculateBoundingClientRect');
 
     selectContainer.componentInstance.update();
 
     expect(selectContainer.componentInstance._calculateBoundingClientRect).toHaveBeenCalled();
-    expect(fixture.componentInstance.selectItem.calculateBoundingClientRect).toHaveBeenCalled();
+    expect(fixture.componentInstance.selectItems.first.calculateBoundingClientRect).toHaveBeenCalled();
   });
 
   describe('selectItems()', () => {
@@ -78,9 +83,9 @@ describe('SelectContainerComponent', () => {
       const result = [{ id: 1 }, { id: 2 }];
 
       selectContainerInstance.select.subscribe(items => {
-        expect(componentInstance.selectedItems.length).toBe(result.length);
+        expect(testComponent.selectedItems.length).toBe(result.length);
         expect(items).toEqual(result);
-        expect(componentInstance.selectedItems).toEqual(result);
+        expect(testComponent.selectedItems).toEqual(result);
         done();
       });
 
@@ -91,9 +96,9 @@ describe('SelectContainerComponent', () => {
       const result = [];
 
       selectContainerInstance.select.subscribe(items => {
-        expect(componentInstance.selectedItems.length).toBe(result.length);
+        expect(testComponent.selectedItems.length).toBe(result.length);
         expect(items).toEqual(result);
-        expect(componentInstance.selectedItems).toEqual(result);
+        expect(testComponent.selectedItems).toEqual(result);
         done();
       });
 
@@ -111,9 +116,9 @@ describe('SelectContainerComponent', () => {
       const result = [{ id: 1 }];
 
       selectContainerInstance.select.subscribe(items => {
-        expect(componentInstance.selectedItems.length).toBe(result.length);
+        expect(testComponent.selectedItems.length).toBe(result.length);
         expect(items).toEqual(result);
-        expect(componentInstance.selectedItems).toEqual(result);
+        expect(testComponent.selectedItems).toEqual(result);
         done();
       });
 
@@ -124,9 +129,9 @@ describe('SelectContainerComponent', () => {
       const result = [{ id: 1 }, { id: 2 }, { id: 3 }];
 
       selectContainerInstance.select.subscribe(items => {
-        expect(componentInstance.selectedItems.length).toBe(result.length);
+        expect(testComponent.selectedItems.length).toBe(result.length);
         expect(items).toEqual(result);
-        expect(componentInstance.selectedItems).toEqual(result);
+        expect(testComponent.selectedItems).toEqual(result);
         done();
       });
 
@@ -140,9 +145,9 @@ describe('SelectContainerComponent', () => {
       const result = [{ id: 1 }, { id: 2 }];
 
       selectContainerInstance.select.subscribe(items => {
-        expect(componentInstance.selectedItems.length).toBe(result.length);
+        expect(testComponent.selectedItems.length).toBe(result.length);
         expect(items).toEqual(result);
-        expect(componentInstance.selectedItems).toEqual(result);
+        expect(testComponent.selectedItems).toEqual(result);
         done();
       });
 
@@ -153,9 +158,9 @@ describe('SelectContainerComponent', () => {
       const result = [{ id: 2 }];
 
       selectContainerInstance.select.subscribe(items => {
-        expect(componentInstance.selectedItems.length).toBe(result.length);
+        expect(testComponent.selectedItems.length).toBe(result.length);
         expect(items).toEqual(result);
-        expect(componentInstance.selectedItems).toEqual(result);
+        expect(testComponent.selectedItems).toEqual(result);
         done();
       });
 
@@ -167,13 +172,36 @@ describe('SelectContainerComponent', () => {
       const result = [];
 
       selectContainerInstance.select.subscribe(items => {
-        expect(componentInstance.selectedItems.length).toBe(result.length);
+        expect(testComponent.selectedItems.length).toBe(result.length);
         expect(items).toEqual(result);
-        expect(componentInstance.selectedItems).toEqual(result);
+        expect(testComponent.selectedItems).toEqual(result);
         done();
       });
 
       selectContainerInstance.toggleItems((item: SelectItemValue) => [-1, 100].includes(item.id));
+    });
+  });
+
+  describe('Outputs', () => {
+    it('should trigger itemSelected', () => {
+      jest.spyOn(testComponent, 'itemSelected');
+
+      testComponent.selectContainer.selectItems(() => true);
+
+      expect(testComponent.itemSelected).toHaveBeenCalledTimes(3);
+      expect(testComponent.itemSelected).toHaveBeenCalledWith({ id: 1 });
+      expect(testComponent.itemSelected).toHaveBeenCalledWith({ id: 2 });
+      expect(testComponent.itemSelected).toHaveBeenCalledWith({ id: 3 });
+    });
+
+    it('should trigger itemDeselected', () => {
+      jest.spyOn(testComponent, 'itemDeselected');
+
+      testComponent.selectContainer.selectItems(() => true);
+      testComponent.selectContainer.deselectItems((item: SelectItemValue) => item.id === 2);
+
+      expect(testComponent.itemDeselected).toHaveBeenCalledTimes(1);
+      expect(testComponent.itemDeselected).toHaveBeenCalledWith({ id: 2 });
     });
   });
 });

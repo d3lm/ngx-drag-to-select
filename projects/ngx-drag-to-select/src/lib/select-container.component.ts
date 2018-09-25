@@ -108,8 +108,15 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy {
 
   @Output()
   selectedItemsChange = new EventEmitter<any>();
+
   @Output()
   select = new EventEmitter<any>();
+
+  @Output()
+  itemSelected = new EventEmitter<any>();
+
+  @Output()
+  itemDeselected = new EventEmitter<any>();
 
   private _tmpItems = new Map<SelectItemDirective, Action>();
 
@@ -283,12 +290,12 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy {
         switch (update.type) {
           case UpdateActions.Add:
             if (this._addItem(item, selectedItems)) {
-              item.select();
+              item._select();
             }
             break;
           case UpdateActions.Remove:
             if (this._removeItem(item, selectedItems)) {
-              item.deselect();
+              item._deselect();
             }
             break;
         }
@@ -433,7 +440,7 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy {
       (!inSelection && !item.selected && this.shortcuts.removeFromSelection(event) && this._tmpItems.has(item));
 
     if (shoudlAdd) {
-      item.selected ? item.deselect() : item.select();
+      item.selected ? item._deselect() : item._select();
 
       const action = this.shortcuts.removeFromSelection(event)
         ? Action.Delete
@@ -443,7 +450,7 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy {
 
       this._tmpItems.set(item, action);
     } else if (shouldRemove) {
-      this.shortcuts.removeFromSelection(event) ? item.select() : item.deselect();
+      this.shortcuts.removeFromSelection(event) ? item._select() : item._deselect();
       this._tmpItems.delete(item);
     }
   }
@@ -469,6 +476,7 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy {
       success = true;
       selectedItems.push(item.value);
       this._selectedItems$.next(selectedItems);
+      this.itemSelected.emit(item.value);
     }
 
     return success;
@@ -483,6 +491,7 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy {
       success = true;
       selectedItems.splice(index, 1);
       this._selectedItems$.next(selectedItems);
+      this.itemDeselected.emit(item.value);
     }
 
     return success;
