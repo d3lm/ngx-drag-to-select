@@ -1,3 +1,20 @@
+<a name="2.1.0"></a>
+# [2.1.0](https://github.com/d3lm/ngx-drag-to-select/compare/v2.0.0...v2.1.0) (2018-09-27)
+
+
+### Bug Fixes
+
+* formatting errors ([26eaa90](https://github.com/d3lm/ngx-drag-to-select/commit/26eaa90))
+
+
+### Features
+
+* upgrade dependencies ([8ca7881](https://github.com/d3lm/ngx-drag-to-select/commit/8ca7881)), closes [#39](https://github.com/d3lm/ngx-drag-to-select/issues/39)
+* **lib:** ability to programatically select, deselect and toggle items ([e6d0cd8](https://github.com/d3lm/ngx-drag-to-select/commit/e6d0cd8)), closes [#46](https://github.com/d3lm/ngx-drag-to-select/issues/46)
+* **lib:** add select and deselect output ([351e9e9](https://github.com/d3lm/ngx-drag-to-select/commit/351e9e9)), closes [#35](https://github.com/d3lm/ngx-drag-to-select/issues/35)
+
+
+
 <a name="2.0.0"></a>
 # [2.0.0](https://github.com/d3lm/ngx-drag-to-select/compare/v1.1.1...v2.0.0) (2018-07-22)
 
