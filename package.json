@@ -36,7 +36,8 @@
     "e2e:ci": "cypress run --record",
     "ci": "npm run lint:check && npm run format:check && npm run test:ci && npm run build:prerender-ghpages",
     "commitmsg": "commitlint -e $GIT_PARAMS",
-    "precommit": "lint-staged"
+    "precommit": "lint-staged",
+    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0 -k ./projects/ngx-drag-to-select"
   },
   "lint-staged": {
     "{src,projects,cypress}/**/*{.ts,.js,.json}": [
@@ -78,6 +79,7 @@
     "@nguniversal/module-map-ngfactory-loader": "^6.1.0",
     "@types/node": "^10.10.3",
     "codelyzer": "^4.4.4",
+    "conventional-changelog-cli": "^2.0.5",
     "copyfiles": "^2.1.0",
     "cpr": "^3.0.1",
     "cypress": "^3.1.0",
