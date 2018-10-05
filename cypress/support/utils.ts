@@ -85,7 +85,7 @@ export const clearSelection = () => {
 export const toggleItem = (subject: Cypress.ObjectLike) => {
   return cy
     .wrap(subject)
-    .dispatch('mousedown', { ctrlKey: true, metaKey: true })
+    .dispatch('mousedown', { button: 0, ctrlKey: true, metaKey: true })
     .dispatch('mouseup');
 };
 

@@ -153,16 +153,17 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy {
         share()
       );
 
-      const mousedown$ = fromEvent(this.host, 'mousedown').pipe(
+      const mousedown$ = fromEvent<MouseEvent>(this.host, 'mousedown').pipe(
+        filter(event => event.button === 0), // only emit left mouse
         filter(() => !this.disabled),
-        tap((event: MouseEvent) => this._onMouseDown(event)),
+        tap(event => this._onMouseDown(event)),
         share()
       );
 
       const dragging$ = mousedown$.pipe(
         filter(event => !this.shortcuts.disableSelection(event)),
-        filter(event => !this.selectMode),
-        filter(event => !this.disableDrag),
+        filter(() => !this.selectMode),
+        filter(() => !this.disableDrag),
         switchMap(() => mousemove$.pipe(takeUntil(mouseup$))),
         share()
       );
