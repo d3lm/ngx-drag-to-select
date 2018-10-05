@@ -35,9 +35,13 @@
     "e2e": "cypress open",
     "e2e:ci": "cypress run --record",
     "ci": "npm run lint:check && npm run format:check && npm run test:ci && npm run build:prerender-ghpages",
-    "commitmsg": "commitlint -e $GIT_PARAMS",
-    "precommit": "lint-staged",
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0 -k ./projects/ngx-drag-to-select"
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint --env HUSKY_GIT_PARAMS",
+      "pre-commit": "lint-staged"
+    }
   },
   "lint-staged": {
     "{src,projects,cypress}/**/*{.ts,.js,.json}": [
