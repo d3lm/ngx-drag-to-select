@@ -408,6 +408,7 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy {
       if (this.shortcuts.extendedSelectionShortcut(event) && this.selectOnDrag) {
         this._extendedSelectionMode(selectionBox, item, event);
       } else {
+        this._flushItems();
         this._normalSelectionMode(selectionBox, item, event);
       }
     });

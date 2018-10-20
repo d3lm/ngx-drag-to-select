@@ -299,6 +299,26 @@ describe('Desktop', () => {
       });
     });
 
+    describe('Shortcuts', () => {
+      it('should smoothly transition between normal and extended selection mode', () => {
+        getDesktopExample().within(() => {
+          cy.getSelectItem(0)
+            .dispatch('mousedown', { button: 0 })
+            .getSelectItem(5)
+            .as('end')
+            .dispatch('mousemove')
+            .getSelectItem(6)
+            .dispatch('mousemove', { shiftKey: true, ctrlKey: true, metaKey: true })
+            .get('@end')
+            .dispatch('mousemove')
+            .dispatch('mouseup')
+            .shouldSelect([1, 2, 5, 6])
+            .get(`.${SELECTED_CLASS}`)
+            .should('have.length', 4);
+        });
+      });
+    });
+
     describe('Disabled', () => {
       beforeEach(() => {
         disableSelection();
