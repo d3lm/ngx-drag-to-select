@@ -32,23 +32,23 @@ export class ShortcutService {
     this._shortcuts = this.createShortcutsFromConfig(config.shortcuts);
   }
 
-  disableSelection(event: MouseEvent) {
+  disableSelection(event: Event) {
     return this.isShortcutPressed('disableSelection', event);
   }
 
-  toggleSingleItem(event: MouseEvent) {
+  toggleSingleItem(event: Event) {
     return this.isShortcutPressed('toggleSingleItem', event);
   }
 
-  addToSelection(event: MouseEvent) {
+  addToSelection(event: Event) {
     return this.isShortcutPressed('addToSelection', event);
   }
 
-  removeFromSelection(event: MouseEvent) {
+  removeFromSelection(event: Event) {
     return this.isShortcutPressed('removeFromSelection', event);
   }
 
-  extendedSelectionShortcut(event: MouseEvent) {
+  extendedSelectionShortcut(event: Event) {
     return this.addToSelection(event) || this.removeFromSelection(event);
   }
 
@@ -107,7 +107,7 @@ export class ShortcutService {
     return `${ERROR_PREFIX} ${message}`;
   }
 
-  private isShortcutPressed(shortcutName: string, event: MouseEvent) {
+  private isShortcutPressed(shortcutName: string, event: Event) {
     const shortcuts = this._shortcuts[shortcutName];
 
     return shortcuts.some(shortcut => {
