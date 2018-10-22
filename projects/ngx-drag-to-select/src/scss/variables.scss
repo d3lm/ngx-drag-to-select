@@ -1,5 +1,8 @@
-$select-box-color: #7ddafc !default;
+$dts-primary: #7ddafc !default;
+
+$select-box-color: $dts-primary !default;
 $select-box-border-size: 2px !default;
+$select-box-removing-color: $dts-primary !default;
 
 $selected-item-border: true !default;
 $selected-item-border-color: #d2d2d2 !default;

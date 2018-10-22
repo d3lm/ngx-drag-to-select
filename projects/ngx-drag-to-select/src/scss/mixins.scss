@@ -1,0 +1,4 @@
+@mixin styleSelectBox($background-color, $border-color: currentColor) {
+  background: rgba($background-color, 0.3);
+  border: $select-box-border-size solid $border-color;
+}

@@ -70,13 +70,18 @@ import {
   },
   template: `
     <ng-content></ng-content>
-    <div #selectBox [ngStyle]="selectBoxStyles$ | async" class="dts-select-box"></div>
+    <div class="dts-select-box"
+      #selectBox
+      [ngClass]="selectBoxClasses$ | async"
+      [ngStyle]="selectBoxStyles$ | async">
+    </div>
   `,
   styleUrls: ['./select-container.component.scss']
 })
 export class SelectContainerComponent implements AfterViewInit, OnDestroy {
   host: SelectContainerHost;
   selectBoxStyles$: Observable<SelectBox<string>>;
+  selectBoxClasses$: Observable<{ [key: string]: boolean }>;
 
   @ViewChild('selectBox')
   private $selectBox: ElementRef;
@@ -142,13 +147,13 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy {
       this._observeBoundingRectChanges();
       this._observeSelectableItems();
 
-      const mouseup$ = fromEvent(window, 'mouseup').pipe(
+      const mouseup$ = fromEvent<MouseEvent>(window, 'mouseup').pipe(
         filter(() => !this.disabled),
         tap(() => this._onMouseUp()),
         share()
       );
 
-      const mousemove$ = fromEvent(window, 'mousemove').pipe(
+      const mousemove$ = fromEvent<MouseEvent>(window, 'mousemove').pipe(
         filter(() => !this.disabled),
         share()
       );
@@ -166,6 +171,19 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy {
         filter(() => !this.disableDrag),
         switchMap(() => mousemove$.pipe(takeUntil(mouseup$))),
         share()
+      );
+
+      const keydown$ = fromEvent<KeyboardEvent>(window, 'keydown');
+      const keyup$ = fromEvent<KeyboardEvent>(window, 'keyup');
+
+      this.selectBoxClasses$ = merge(dragging$, keydown$, keyup$).pipe(
+        auditTime(AUDIT_TIME),
+        map(event => {
+          return {
+            'dts-adding': !this.shortcuts.removeFromSelection(event) || !event,
+            'dts-removing': this.shortcuts.removeFromSelection(event)
+          };
+        })
       );
 
       const currentMousePosition$: Observable<MousePosition> = mousedown$.pipe(

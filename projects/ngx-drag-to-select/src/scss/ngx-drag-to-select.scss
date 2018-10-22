@@ -1,16 +1,17 @@
 @import 'variables';
+@import 'mixins';
 
 .dts-no-select {
   user-select: none;
 }
 
 .dts-select-box {
+  @include styleSelectBox($select-box-color);
+
   contain: layout;
   transform: translateZ(0);
   box-sizing: border-box;
   color: $select-box-color;
-  background: rgba($select-box-color, 0.3);
-  border: $select-box-border-size solid currentColor;
   position: absolute;
   left: 0;
   top: 0;
@@ -19,6 +20,10 @@
   pointer-events: none;
   opacity: 0;
   z-index: 1;
+
+  &.dts-removing {
+    @include styleSelectBox($select-box-removing-color, $select-box-removing-color);
+  }
 }
 
 .dts-select-container:not(.dts-custom) {
