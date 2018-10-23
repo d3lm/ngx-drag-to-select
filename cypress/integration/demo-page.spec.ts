@@ -68,6 +68,48 @@ describe('Desktop', () => {
       });
     });
 
+    it(`should add 'dts-adding' when additively selecting items`, () => {
+      getDesktopExample().within(() => {
+        cy.getSelectItem(0)
+          .dispatch('mousedown', { button: 0 })
+          .getSelectItem(2)
+          .as('end')
+          .dispatch('mousemove')
+          .getSelectBox()
+          .should('have.class', 'dts-adding')
+          .should('not.have.class', 'dts-removing')
+          .get('@end')
+          .dispatch('mouseup');
+      });
+    });
+
+    it(`should remove 'dts-adding' on mouseup`, () => {
+      getDesktopExample().within(() => {
+        cy.getSelectItem(0)
+          .dispatch('mousedown', { button: 0 })
+          .getSelectItem(2)
+          .dispatch('mousemove')
+          .dispatch('mouseup')
+          .getSelectBox()
+          .should('not.have.class', 'dts-adding');
+      });
+    });
+
+    it(`should add 'dts-removing' when deselecting items in extended mode`, () => {
+      getDesktopExample().within(() => {
+        cy.getSelectItem(0)
+          .dispatch('mousedown', { button: 0 })
+          .getSelectItem(2)
+          .as('end')
+          .dispatch('mousemove', { shiftKey: true, ctrlKey: true, metaKey: true })
+          .getSelectBox()
+          .should('have.class', 'dts-removing')
+          .should('not.have.class', 'dts-adding')
+          .get('@end')
+          .dispatch('mouseup');
+      });
+    });
+
     it('should apply default styles', () => {
       getDesktopExample().within(() => {
         cy.getSelectItem(0)
@@ -249,6 +291,23 @@ describe('Desktop', () => {
       });
     });
 
+    describe('Keyboard Events', () => {
+      it(`should not remove selection on keyup or downdown if not dragging`, () => {
+        getDesktopExample().within(() => {
+          cy.getSelectItem(0)
+            .dispatch('mousedown', { button: 0 })
+            .getSelectItem(2)
+            .dispatch('mousemove')
+            .dispatch('mouseup');
+
+          cy.getSelectItem(0)
+            .dispatch('keydown')
+            .dispatch('keydown')
+            .shouldSelect([1, 2, 3]);
+        });
+      });
+    });
+
     describe('Select on Mouseup', () => {
       beforeEach(() => {
         disableSelectOnDrag();
@@ -304,17 +363,22 @@ describe('Desktop', () => {
         getDesktopExample().within(() => {
           cy.getSelectItem(0)
             .dispatch('mousedown', { button: 0 })
-            .getSelectItem(5)
+            .getSelectItem(6)
             .as('end')
             .dispatch('mousemove')
-            .getSelectItem(6)
-            .dispatch('mousemove', { shiftKey: true, ctrlKey: true, metaKey: true })
-            .get('@end')
-            .dispatch('mousemove')
-            .dispatch('mouseup')
-            .shouldSelect([1, 2, 5, 6])
             .get(`.${SELECTED_CLASS}`)
-            .should('have.length', 4);
+            .should('have.length', 6)
+            .get('@end')
+            .dispatch('keydown', { shiftKey: true, ctrlKey: true, metaKey: true })
+            .get(`.${SELECTED_CLASS}`)
+            .should('have.length', 0)
+            .shouldSelect([1, 2, 3, 5, 6, 7])
+            .get('@end')
+            .dispatch('keyup')
+            .dispatch('mouseup')
+            .get(`.${SELECTED_CLASS}`)
+            .should('have.length', 6)
+            .shouldSelect([1, 2, 3, 5, 6, 7]);
         });
       });
     });
@@ -453,7 +517,7 @@ describe('Desktop', () => {
           });
         });
 
-        it('should now allow dragging', () => {
+        it('should not allow dragging', () => {
           getDesktopExample().within(() => {
             cy.getSelectItem(0)
               .dispatch('mousedown', { button: 0 })

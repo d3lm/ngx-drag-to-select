@@ -38,7 +38,7 @@ import {
 import { SelectItemDirective } from './select-item.directive';
 import { ShortcutService } from './shortcut.service';
 
-import { createSelectBox } from './operators';
+import { createSelectBox, whenSelectBoxVisible } from './operators';
 
 import {
   Action,
@@ -50,7 +50,7 @@ import {
   PredicateFn
 } from './models';
 
-import { AUDIT_TIME, NO_SELECT_CLASS, MIN_WIDTH, MIN_HEIGHT } from './constants';
+import { AUDIT_TIME, NO_SELECT_CLASS } from './constants';
 
 import {
   inBoundingBox,
@@ -59,7 +59,8 @@ import {
   boxIntersects,
   calculateBoundingClientRect,
   getRelativeMousePosition,
-  getMousePosition
+  getMousePosition,
+  hasMinimumSize
 } from './utils';
 
 @Component({
@@ -147,6 +148,9 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy {
       this._observeBoundingRectChanges();
       this._observeSelectableItems();
 
+      const keydown$ = fromEvent<KeyboardEvent>(window, 'keydown').pipe(share());
+      const keyup$ = fromEvent<KeyboardEvent>(window, 'keyup').pipe(share());
+
       const mouseup$ = fromEvent<MouseEvent>(window, 'mouseup').pipe(
         filter(() => !this.disabled),
         tap(() => this._onMouseUp()),
@@ -173,19 +177,6 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy {
         share()
       );
 
-      const keydown$ = fromEvent<KeyboardEvent>(window, 'keydown');
-      const keyup$ = fromEvent<KeyboardEvent>(window, 'keyup');
-
-      this.selectBoxClasses$ = merge(dragging$, keydown$, keyup$).pipe(
-        auditTime(AUDIT_TIME),
-        map(event => {
-          return {
-            'dts-adding': !this.shortcuts.removeFromSelection(event) || !event,
-            'dts-removing': this.shortcuts.removeFromSelection(event)
-          };
-        })
-      );
-
       const currentMousePosition$: Observable<MousePosition> = mousedown$.pipe(
         map((event: MouseEvent) => getRelativeMousePosition(event, this.host))
       );
@@ -199,32 +190,55 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy {
         share()
       );
 
-      mouseup$
-        .pipe(
-          filter(() => !this.selectOnDrag),
-          filter(() => !this.selectMode),
-          filter((event: MouseEvent) => this._cursorWithinHost(event)),
-          filter(
-            (event: MouseEvent) =>
-              (!this.shortcuts.disableSelection(event) && !this.shortcuts.toggleSingleItem(event)) ||
-              this.shortcuts.removeFromSelection(event)
-          ),
-          takeUntil(this.destroy$)
-        )
-        .subscribe(event => this._selectItems(event));
+      this.selectBoxClasses$ = merge(dragging$, mouseup$, keydown$, keyup$).pipe(
+        auditTime(AUDIT_TIME),
+        withLatestFrom(selectBox$),
+        map(([event, selectBox]) => {
+          return {
+            'dts-adding': hasMinimumSize(selectBox, 0, 0) && !this.shortcuts.removeFromSelection(event),
+            'dts-removing': this.shortcuts.removeFromSelection(event)
+          };
+        }),
+        distinctUntilChanged((a, b) => JSON.stringify(a) === JSON.stringify(b))
+      );
 
-      selectBox$
-        .pipe(
-          auditTime(AUDIT_TIME),
-          withLatestFrom(mousemove$, (selectBox, event: MouseEvent) => ({
-            selectBox,
-            event
-          })),
-          filter(() => this.selectOnDrag),
-          filter(({ selectBox }) => selectBox.width > MIN_WIDTH || selectBox.height > MIN_HEIGHT),
-          takeUntil(this.destroy$)
+      const selectOnMouseUp$ = mouseup$.pipe(
+        filter(() => !this.selectOnDrag),
+        filter(() => !this.selectMode),
+        filter(event => this._cursorWithinHost(event)),
+        filter(
+          event =>
+            (!this.shortcuts.disableSelection(event) && !this.shortcuts.toggleSingleItem(event)) ||
+            this.shortcuts.removeFromSelection(event)
         )
-        .subscribe(({ event }) => this._selectItems(event));
+      );
+
+      const selectOnDrag$ = selectBox$.pipe(
+        auditTime(AUDIT_TIME),
+        withLatestFrom(mousemove$, (selectBox, event: MouseEvent) => ({
+          selectBox,
+          event
+        })),
+        filter(() => this.selectOnDrag),
+        filter(({ selectBox }) => hasMinimumSize(selectBox)),
+        map(({ event }) => event)
+      );
+
+      const selectOnKeyboardEvent$ = merge(keydown$, keyup$).pipe(
+        auditTime(AUDIT_TIME),
+        whenSelectBoxVisible(selectBox$),
+        tap(event => {
+          if (this._isExtendedSelection(event)) {
+            this._tmpItems.clear();
+          } else {
+            this._flushItems();
+          }
+        })
+      );
+
+      merge(selectOnMouseUp$, selectOnDrag$, selectOnKeyboardEvent$)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe(event => this._selectItems(event));
 
       this.selectBoxStyles$ = selectBox$.pipe(
         map(selectBox => ({
@@ -419,20 +433,23 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy {
     });
   }
 
-  private _selectItems(event: MouseEvent) {
+  private _selectItems(event: Event) {
     const selectionBox = calculateBoundingClientRect(this.$selectBox.nativeElement);
 
     this.$selectableItems.forEach(item => {
-      if (this.shortcuts.extendedSelectionShortcut(event) && this.selectOnDrag) {
+      if (this._isExtendedSelection(event)) {
         this._extendedSelectionMode(selectionBox, item, event);
       } else {
-        this._flushItems();
         this._normalSelectionMode(selectionBox, item, event);
       }
     });
   }
 
-  private _normalSelectionMode(selectBox, item: SelectItemDirective, event: MouseEvent) {
+  private _isExtendedSelection(event: Event) {
+    return this.shortcuts.extendedSelectionShortcut(event) && this.selectOnDrag;
+  }
+
+  private _normalSelectionMode(selectBox, item: SelectItemDirective, event: Event) {
     const inSelection = boxIntersects(selectBox, item.getBoundingClientRect());
 
     const shouldAdd = inSelection && !item.selected && !this.shortcuts.removeFromSelection(event);
@@ -448,7 +465,7 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy {
     }
   }
 
-  private _extendedSelectionMode(selectBox, item: SelectItemDirective, event: MouseEvent) {
+  private _extendedSelectionMode(selectBox, item: SelectItemDirective, event: Event) {
     const inSelection = boxIntersects(selectBox, item.getBoundingClientRect());
 
     const shoudlAdd =
