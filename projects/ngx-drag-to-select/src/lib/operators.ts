@@ -1,7 +1,7 @@
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { SelectBox, SelectBoxInput, SelectContainerHost, MousePosition } from './models';
-import { getRelativeMousePosition } from './utils';
+import { filter, map, withLatestFrom } from 'rxjs/operators';
+import { MousePosition, SelectBox, SelectBoxInput, SelectContainerHost } from './models';
+import { getRelativeMousePosition, hasMinimumSize } from './utils';
 
 export const createSelectBox = (container: SelectContainerHost) => (
   source: Observable<SelectBoxInput>
@@ -23,4 +23,11 @@ export const createSelectBox = (container: SelectContainerHost) => (
         opacity
       };
     })
+  );
+
+export const whenSelectBoxVisible = (selectBox$: Observable<SelectBox<number>>) => (source: Observable<Event>) =>
+  source.pipe(
+    withLatestFrom(selectBox$),
+    filter(([, selectBox]) => hasMinimumSize(selectBox, 0, 0)),
+    map(([event, _]) => event)
   );
