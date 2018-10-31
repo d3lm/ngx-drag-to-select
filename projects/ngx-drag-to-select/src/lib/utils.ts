@@ -63,7 +63,7 @@ export const getMousePosition = (event: MouseEvent) => {
 };
 
 export const getScroll = () => {
-  if (!document) {
+  if (!document || !document.documentElement) {
     return {
       x: 0,
       y: 0
