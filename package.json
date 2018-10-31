@@ -82,7 +82,7 @@
     "@nguniversal/express-engine": "^7.0.2",
     "@nguniversal/module-map-ngfactory-loader": "^7.0.2",
     "@types/node": "^10.10.3",
-    "codelyzer": "^4.4.4",
+    "codelyzer": "^4.5.0",
     "conventional-changelog-cli": "^2.0.5",
     "copyfiles": "^2.1.0",
     "cpr": "^3.0.1",
