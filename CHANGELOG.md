@@ -1,3 +1,31 @@
+<a name="3.0.0"></a>
+# [3.0.0](https://github.com/d3lm/ngx-drag-to-select/compare/v2.1.0...v3.0.0) (2018-11-02)
+
+
+### Bug Fixes
+
+* **lib:** flush items when switching between selection modes ([1d753a9](https://github.com/d3lm/ngx-drag-to-select/commit/1d753a9))
+* **lib:** only emit left mouse drag ([4a53fcc](https://github.com/d3lm/ngx-drag-to-select/commit/4a53fcc))
+* **lib:** update selection on mouseup when switching between modes ([4c1a95e](https://github.com/d3lm/ngx-drag-to-select/commit/4c1a95e))
+
+
+### Features
+
+* add changelog script ([0a7c0e8](https://github.com/d3lm/ngx-drag-to-select/commit/0a7c0e8))
+* **lib:** add classes for selection modes ([01a5129](https://github.com/d3lm/ngx-drag-to-select/commit/01a5129)), closes [#52](https://github.com/d3lm/ngx-drag-to-select/issues/52)
+* **lib:** upgrade to angular 7 ([cc7cd3e](https://github.com/d3lm/ngx-drag-to-select/commit/cc7cd3e))
+
+
+### BREAKING CHANGES
+
+* **lib:** BEFORE:
+It was possible to drag with all (left, right, middle) mouse buttons
+
+AFTER:
+It is only possible to drag with the left mouse button
+
+
+
 <a name="2.1.0"></a>
 # [2.1.0](https://github.com/d3lm/ngx-drag-to-select/compare/v2.0.0...v2.1.0) (2018-09-27)
 
