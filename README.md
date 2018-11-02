@@ -137,14 +137,16 @@ This section gives you an overview of things you can customize and configure.
 
 You can override the following variables:
 
-| Variable                      | Type    | Default   | Description                                       |
-| ----------------------------- | ------- | --------- | ------------------------------------------------- |
-| `$select-box-color`           | Color   | `#7ddafc` | Color of the selection rectangle                  |
-| `$select-box-border-size`     | Unit    | `2px`     | Border size for the selection rectangle           |
-| `$selected-item-border`       | Boolean | `true`    | Whether the selected item should get a border     |
-| `$selected-item-border-color` | Color   | `#d2d2d2` | Border color of the selected item                 |
-| `$selected-item-border-size`  | Unit    | `1px`     | Border size of the selected item                  |
-| `$box-shadow`                 | Boolean | `true`    | Whether the selected item should get a box shadow |
+| Variable                      | Type    | Default        | Description                                          |
+| ----------------------------- | ------- | -------------- | ---------------------------------------------------- |
+| `$dts-primary`                | Color   | `#7ddafc`      | Primary color                                        |
+| `$select-box-color`           | Color   | `$dts-primary` | Color of the selection rectangle                     |
+| `$select-box-removing-color`  | Color   | `$dts-primary` | Color of the selection rectangle when removing items |
+| `$select-box-border-size`     | Unit    | `2px`          | Border size for the selection rectangle              |
+| `$selected-item-border`       | Boolean | `true`         | Whether the selected item should get a border        |
+| `$selected-item-border-color` | Color   | `#d2d2d2`      | Border color of the selected item                    |
+| `$selected-item-border-size`  | Unit    | `1px`          | Border size of the selected item                     |
+| `$box-shadow`                 | Boolean | `true`         | Whether the selected item should get a box shadow    |
 
 If you wish to override one of these variables, make sure to do that **before** you import the sass package.
 
@@ -354,6 +356,13 @@ export class AppComponent {
   }
 }
 ```
+
+**Select Box**
+
+Each instance of the `dts-select-container` renders its own select box. Based on the current selection mode, either adding or removing, the container
+adds corresponding css classes for more flexibility in styling. For adding items to the current selection, either in normal or extended mode, the select box gets a class of `dts-adding`. For removing items the class will be `dts-removing`. Both classes can be used to override the look and feel based on the selectio mode.
+
+For instance, the color of the select box, when removing items, can be styled with a separate variable `$select-box-removing-color`. If the color should be the same for both adding and removing, the `$dts-primary` variable can be used.
 
 #### <a id="selectItems"></a> `selectItems(predicate)`
 
