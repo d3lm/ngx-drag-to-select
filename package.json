@@ -33,7 +33,7 @@
     "lint:check": "ng lint",
     "lint:fix": "ng lint app --fix && ng lint ngx-drag-to-select --fix",
     "e2e": "cypress open",
-    "e2e:ci": "cypress run --record --parallel",
+    "e2e:ci": "cypress run --record --parallel --group $STAGE_NAME",
     "ci": "npm run lint:check && npm run format:check && npm run test:ci && npm run build:prerender-ghpages",
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0 -k ./projects/ngx-drag-to-select"
   },

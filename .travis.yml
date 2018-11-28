@@ -1,23 +1,43 @@
 sudo: required
 language: node_js
+
 node_js:
   - 10
+
 dist: trusty
 cache: yarn
+
 branches:
   only:
     - master
+
 notifications:
   email: false
-  addons:
-  chrome: stable
-before_install:
-  - export CHROME_BIN=chromium-browser
-  - export DISPLAY=:99.0
-  - sh -e /etc/init.d/xvfb start
-script:
-  - commitlint-travis
-  - npm run ci
+
+defaults: &defaults
+  script:
+    - commitlint-travis
+    - npm run ci
+
+jobs:
+  include:
+    - stage: test
+      env:
+        - STAGE_NAME=4x-electron
+      <<: *defaults
+    - stage: test
+      env:
+        - STAGE_NAME=4x-electron
+      <<: *defaults
+    - stage: test
+      env:
+        - STAGE_NAME=4x-electron
+      <<: *defaults
+    - stage: test
+      env:
+        - STAGE_NAME=4x-electron
+      <<: *defaults
+
 deploy:
   provider: pages
   skip_cleanup: true
