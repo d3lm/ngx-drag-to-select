@@ -1,5 +1,5 @@
-import { Observable } from 'rxjs';
-import { filter, map, withLatestFrom } from 'rxjs/operators';
+import { Observable, pipe } from 'rxjs';
+import { filter, map, withLatestFrom, distinctUntilChanged } from 'rxjs/operators';
 import { MousePosition, SelectBox, SelectBoxInput, SelectContainerHost } from './models';
 import { getRelativeMousePosition, hasMinimumSize } from './utils';
 
@@ -30,4 +30,11 @@ export const whenSelectBoxVisible = (selectBox$: Observable<SelectBox<number>>) 
     withLatestFrom(selectBox$),
     filter(([, selectBox]) => hasMinimumSize(selectBox, 0, 0)),
     map(([event, _]) => event)
+  );
+
+export const distinctKeyEvents = () => (source: Observable<KeyboardEvent>) =>
+  source.pipe(
+    distinctUntilChanged((prev, curr) => {
+      return prev.keyCode === curr.keyCode;
+    })
   );

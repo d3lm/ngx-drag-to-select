@@ -38,7 +38,7 @@ import {
 import { SelectItemDirective } from './select-item.directive';
 import { ShortcutService } from './shortcut.service';
 
-import { createSelectBox, whenSelectBoxVisible } from './operators';
+import { createSelectBox, whenSelectBoxVisible, distinctKeyEvents } from './operators';
 
 import {
   Action,
@@ -148,8 +148,18 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy {
       this._observeBoundingRectChanges();
       this._observeSelectableItems();
 
-      const keydown$ = fromEvent<KeyboardEvent>(window, 'keydown').pipe(share());
-      const keyup$ = fromEvent<KeyboardEvent>(window, 'keyup').pipe(share());
+      // distinctKeyEvents is used to prevent multiple key events to be fired repeatedly
+      // on Windows when a key is being pressed
+
+      const keydown$ = fromEvent<KeyboardEvent>(window, 'keydown').pipe(
+        distinctKeyEvents(),
+        share()
+      );
+
+      const keyup$ = fromEvent<KeyboardEvent>(window, 'keyup').pipe(
+        distinctKeyEvents(),
+        share()
+      );
 
       const mouseup$ = fromEvent<MouseEvent>(window, 'mouseup').pipe(
         filter(() => !this.disabled),

@@ -1,3 +1,13 @@
+<a name="3.0.3"></a>
+## [3.0.3](https://github.com/d3lm/ngx-drag-to-select/compare/v3.0.2...v3.0.3) (2018-12-19)
+
+
+### Bug Fixes
+
+* **lib:** prevent multiple key events ([115009f](https://github.com/d3lm/ngx-drag-to-select/commit/115009f)), closes [#61](https://github.com/d3lm/ngx-drag-to-select/issues/61)
+
+
+
 <a name="3.0.2"></a>
 ## [3.0.2](https://github.com/d3lm/ngx-drag-to-select/compare/v3.0.1...v3.0.2) (2018-11-28)
 
@@ -26,9 +36,9 @@
 
 ### Features
 
-* add changelog script ([0a7c0e8](https://github.com/d3lm/ngx-drag-to-select/commit/0a7c0e8))
 * **lib:** add classes for selection modes ([01a5129](https://github.com/d3lm/ngx-drag-to-select/commit/01a5129)), closes [#52](https://github.com/d3lm/ngx-drag-to-select/issues/52)
 * **lib:** upgrade to angular 7 ([cc7cd3e](https://github.com/d3lm/ngx-drag-to-select/commit/cc7cd3e))
+* add changelog script ([0a7c0e8](https://github.com/d3lm/ngx-drag-to-select/commit/0a7c0e8))
 
 
 ### BREAKING CHANGES
@@ -52,9 +62,9 @@ It is only possible to drag with the left mouse button
 
 ### Features
 
-* upgrade dependencies ([8ca7881](https://github.com/d3lm/ngx-drag-to-select/commit/8ca7881)), closes [#39](https://github.com/d3lm/ngx-drag-to-select/issues/39)
 * **lib:** ability to programatically select, deselect and toggle items ([e6d0cd8](https://github.com/d3lm/ngx-drag-to-select/commit/e6d0cd8)), closes [#46](https://github.com/d3lm/ngx-drag-to-select/issues/46)
 * **lib:** add select and deselect output ([351e9e9](https://github.com/d3lm/ngx-drag-to-select/commit/351e9e9)), closes [#35](https://github.com/d3lm/ngx-drag-to-select/issues/35)
+* upgrade dependencies ([8ca7881](https://github.com/d3lm/ngx-drag-to-select/commit/8ca7881)), closes [#39](https://github.com/d3lm/ngx-drag-to-select/issues/39)
 
 
 
@@ -64,22 +74,22 @@ It is only possible to drag with the left mouse button
 
 ### Bug Fixes
 
+* **app:** add margin between github buttons ([0e65684](https://github.com/d3lm/ngx-drag-to-select/commit/0e65684))
+* **lib:** add unit test for select-container ([81fc9e6](https://github.com/d3lm/ngx-drag-to-select/commit/81fc9e6))
+* **lib:** select mode ([b7bd0d8](https://github.com/d3lm/ngx-drag-to-select/commit/b7bd0d8))
 * organize imports ([65bac60](https://github.com/d3lm/ngx-drag-to-select/commit/65bac60))
 * prevent error when clicking on the container on first load ([67ecd7e](https://github.com/d3lm/ngx-drag-to-select/commit/67ecd7e))
 * remove peer dependency on cdk ([9dd10e8](https://github.com/d3lm/ngx-drag-to-select/commit/9dd10e8))
-* **app:** add margin between github buttons ([0e65684](https://github.com/d3lm/ngx-drag-to-select/commit/0e65684))
 * **app:** breakpoints are now correctly matched ([f8991fd](https://github.com/d3lm/ngx-drag-to-select/commit/f8991fd))
-* **lib:** add unit test for select-container ([81fc9e6](https://github.com/d3lm/ngx-drag-to-select/commit/81fc9e6))
-* **lib:** select mode ([b7bd0d8](https://github.com/d3lm/ngx-drag-to-select/commit/b7bd0d8))
 
 
 ### Features
 
+* **lib:** change component and directive prefix to dts ([b5d31fd](https://github.com/d3lm/ngx-drag-to-select/commit/b5d31fd)), closes [#32](https://github.com/d3lm/ngx-drag-to-select/issues/32)
 * add way of toggling items with shortcut click only ([03e98eb](https://github.com/d3lm/ngx-drag-to-select/commit/03e98eb))
 * expose update as part of the public api ([ae63c32](https://github.com/d3lm/ngx-drag-to-select/commit/ae63c32))
 * migrate to Angular CLI lib project ([04d6825](https://github.com/d3lm/ngx-drag-to-select/commit/04d6825))
 * upgrade to Angular 6 ([bfcec35](https://github.com/d3lm/ngx-drag-to-select/commit/bfcec35))
-* **lib:** change component and directive prefix to dts ([b5d31fd](https://github.com/d3lm/ngx-drag-to-select/commit/b5d31fd)), closes [#32](https://github.com/d3lm/ngx-drag-to-select/issues/32)
 
 
 ### BREAKING CHANGES
@@ -176,10 +186,10 @@ dtsSelectItem directive was changed to match the directive name.
 
 ### Bug Fixes
 
-* e2e tests ([0881100](https://github.com/d3lm/ngx-drag-to-select/commit/0881100))
 * **app:** incorrect path for svg icons ([01e1954](https://github.com/d3lm/ngx-drag-to-select/commit/01e1954))
 * **lib:** default value for input ([a914583](https://github.com/d3lm/ngx-drag-to-select/commit/a914583))
 * **lib:** sass file name ([4b7bb03](https://github.com/d3lm/ngx-drag-to-select/commit/4b7bb03))
+* e2e tests ([0881100](https://github.com/d3lm/ngx-drag-to-select/commit/0881100))
 
 
 ### Features
