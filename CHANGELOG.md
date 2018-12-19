@@ -4,7 +4,7 @@
 
 ### Bug Fixes
 
-* **lib:** prevent multiple key events ([115009f](https://github.com/d3lm/ngx-drag-to-select/commit/115009f)), closes [#61](https://github.com/d3lm/ngx-drag-to-select/issues/61)
+* **lib:** prevent key events from being fired repeatedly ([ca25d6a](https://github.com/d3lm/ngx-drag-to-select/commit/ca25d6a)), closes [#61](https://github.com/d3lm/ngx-drag-to-select/issues/61)
 
 
 
