@@ -262,11 +262,13 @@ Here's an example of all inputs in action:
 
 **Outputs**
 
-| Input          | Payload Type | Description                                                                                                |
-| -------------- | ------------ | ---------------------------------------------------------------------------------------------------------- |
-| select         | Array<any>   | Event that is fired when the selection changes. The payload (`$event`) will be the list of selected items. |
-| itemSelected   | any          | Event that is fired when the item is selected. The payload (`$event`) will be the item's value             |
-| itemDeselected | any          | Event that is fired when the item is deselected. The payload (`$event`) will be the item's value           |
+| Input            | Payload Type | Description                                                                                                                                        |
+| ---------------- | ------------ | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| select           | Array<any>   | Event that is fired when the selection changes. The payload (`$event`) will be the list of selected items.                                         |
+| itemSelected     | any          | Event that is fired when the item is selected. The payload (`$event`) will be the item's value                                                     |
+| itemDeselected   | any          | Event that is fired when the item is deselected. The payload (`$event`) will be the item's value                                                   |
+| selectionStarted | None         | Event that is fired when the user starts selecting items.                                                                                          |
+| selectionEnded   | Array<any>   | Event that is fired when the user stops selecting items, typically by releasing the mouse button. The payload will be a list of all selected items |
 
 Example:
 
@@ -506,11 +508,7 @@ Suppose, we have the following markup:
 ```html
 <body>
   ...
-  <div class="scrollable">
-    <dts-select-container #container="dts-select-container">
-      ...
-    </dts-select-container>
-  </div>
+  <div class="scrollable"><dts-select-container #container="dts-select-container"> ... </dts-select-container></div>
 </body>
 ```
 
@@ -522,9 +520,7 @@ Check out the solution to the problem:
 <body>
   ...
   <div class="scrollable" (scroll)="container.update()">
-    <dts-select-container #container="dts-select-container">
-      ...
-    </dts-select-container>
+    <dts-select-container #container="dts-select-container"> ... </dts-select-container>
   </div>
 </body>
 ```
