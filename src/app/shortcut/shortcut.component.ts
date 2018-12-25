@@ -4,9 +4,7 @@ import { Component, ViewEncapsulation, Input } from '@angular/core';
   selector: 'app-shortcut',
   encapsulation: ViewEncapsulation.None,
   template: `
-    <div class="shortcut-container">
-      <ng-content></ng-content>
-    </div>
+    <div class="shortcut-container"><ng-content></ng-content></div>
     <ng-content select="app-shortcut-description"></ng-content>
   `,
   styleUrls: ['./shortcut.component.scss']

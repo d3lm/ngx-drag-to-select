@@ -71,11 +71,12 @@ import {
   },
   template: `
     <ng-content></ng-content>
-    <div class="dts-select-box"
+    <div
+      class="dts-select-box"
       #selectBox
       [ngClass]="selectBoxClasses$ | async"
-      [ngStyle]="selectBoxStyles$ | async">
-    </div>
+      [ngStyle]="selectBoxStyles$ | async"
+    ></div>
   `,
   styleUrls: ['./select-container.component.scss']
 })
@@ -492,8 +493,8 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy {
       const action = this.shortcuts.removeFromSelection(event)
         ? Action.Delete
         : this.shortcuts.addToSelection(event)
-          ? Action.Add
-          : Action.None;
+        ? Action.Add
+        : Action.None;
 
       this._tmpItems.set(item, action);
     } else if (shouldRemove) {

@@ -18,9 +18,12 @@ interface SelectItemValue {
 
 @Component({
   template: `
-    <dts-select-container [(selectedItems)]="selectedItems"
-      (itemSelected)="itemSelected($event)" (itemDeselected)="itemDeselected($event)"
-      #selectContainer>
+    <dts-select-container
+      [(selectedItems)]="selectedItems"
+      (itemSelected)="itemSelected($event)"
+      (itemDeselected)="itemDeselected($event)"
+      #selectContainer
+    >
       <span [dtsSelectItem]="{ id: 1 }" #selectItem="dtsSelectItem">Item #1</span>
       <span [dtsSelectItem]="{ id: 2 }" #selectItem="dtsSelectItem">Item #2</span>
       <span [dtsSelectItem]="{ id: 3 }" #selectItem="dtsSelectItem">Item #3</span>
