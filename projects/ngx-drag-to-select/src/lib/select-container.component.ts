@@ -32,7 +32,9 @@ import {
   withLatestFrom,
   distinctUntilChanged,
   observeOn,
-  startWith
+  startWith,
+  concatMapTo,
+  first
 } from 'rxjs/operators';
 
 import { SelectItemDirective } from './select-item.directive';
@@ -124,6 +126,12 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy {
 
   @Output()
   itemDeselected = new EventEmitter<any>();
+
+  @Output()
+  selectionStarted = new EventEmitter<void>();
+
+  @Output()
+  selectionEnded = new EventEmitter<Array<any>>();
 
   private _tmpItems = new Map<SelectItemDirective, Action>();
 
@@ -260,6 +268,8 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy {
           opacity: selectBox.opacity
         }))
       );
+
+      this._initSelectionOutputs(mousedown$, mouseup$);
     }
   }
 
@@ -380,6 +390,21 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy {
           this.update();
         });
     });
+  }
+
+  private _initSelectionOutputs(mousedown$: Observable<MouseEvent>, mouseup$: Observable<MouseEvent>) {
+    mousedown$
+      .pipe(
+        filter(event => this._cursorWithinHost(event)),
+        tap(() => this.selectionStarted.emit()),
+        concatMapTo(mouseup$.pipe(first())),
+        withLatestFrom(this._selectedItems$),
+        map(([, items]) => items),
+        takeUntil(this.destroy$)
+      )
+      .subscribe(items => {
+        this.selectionEnded.emit(items);
+      });
   }
 
   private _calculateBoundingClientRect() {

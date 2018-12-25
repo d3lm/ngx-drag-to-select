@@ -4,15 +4,11 @@
     <h3>Keyboard Shortcuts</h3>
     <mat-tab-group [@.disabled]="true">
       <mat-tab>
-        <ng-template mat-tab-label>
-          <mat-icon svgIcon="apple"></mat-icon>
-        </ng-template>
+        <ng-template mat-tab-label> <mat-icon svgIcon="apple"></mat-icon> </ng-template>
         <app-shortcuts os="mac"></app-shortcuts>
       </mat-tab>
       <mat-tab>
-        <ng-template mat-tab-label>
-          <mat-icon svgIcon="windows"></mat-icon>
-        </ng-template>
+        <ng-template mat-tab-label> <mat-icon svgIcon="windows"></mat-icon> </ng-template>
         <app-shortcuts os="windows"></app-shortcuts>
       </mat-tab>
     </mat-tab-group>
@@ -20,8 +16,7 @@
 
   <section data-cy="desktop" *ngIf="isDesktop">
     <h3>
-      <span>Desktop Demo</span>
-      <a href="https://github.com/d3lm/ngx-drag-to-select/blob/master/src/app">SOURCE</a>
+      <span>Desktop Demo</span> <a href="https://github.com/d3lm/ngx-drag-to-select/blob/master/src/app">SOURCE</a>
     </h3>
 
     <mat-checkbox data-cy="selectOnDrag" [(ngModel)]="selectOnDrag">Select on Drag</mat-checkbox>
@@ -30,11 +25,19 @@
     <mat-checkbox data-cy="selectWithShortcut" [(ngModel)]="selectWithShortcut">Select with Shortcut</mat-checkbox>
 
     <button data-cy="selectAll" mat-raised-button (click)="selectContainer.selectAll()">Select All</button>
-    <button data-cy="clearSelection" mat-raised-button (click)="selectContainer.clearSelection()">Clear Selection</button>
+    <button data-cy="clearSelection" mat-raised-button (click)="selectContainer.clearSelection()">
+      Clear Selection
+    </button>
 
     <div class="drag-area">
-      <dts-select-container #selectContainer="dts-select-container" [selectMode]="selectMode" [(selectedItems)]="selectedDocuments"
-        [disabled]="disable" [selectOnDrag]="selectOnDrag" [selectWithShortcut]="selectWithShortcut" (select)="onSelect($event)">
+      <dts-select-container
+        #selectContainer="dts-select-container"
+        [selectMode]="selectMode"
+        [(selectedItems)]="selectedDocuments"
+        [disabled]="disable"
+        [selectOnDrag]="selectOnDrag"
+        [selectWithShortcut]="selectWithShortcut"
+      >
         <mat-grid-list cols="4" rowHeight="200px" gutterSize="20px">
           <mat-grid-tile [dtsSelectItem]="document" *ngFor="let document of documents">
             {{ document.name }}
@@ -46,8 +49,7 @@
     <div class="meta">
       <h4>Meta Information</h4>
       <div>
-        <label>Selected</label>
-        <span data-cy="select-count">{{ selectedDocuments.length }}</span>
+        <label>Selected</label> <span data-cy="select-count">{{ selectedDocuments.length }}</span>
       </div>
       <ul class="selected-items">
         <li data-cy="selected-item" class="selected-item" *ngFor="let item of selectedDocuments">{{ item.name }}</li>
@@ -57,13 +59,10 @@
 
   <section data-cy="mobile">
     <h3>
-      <span>Mobile Demo</span>
-      <a href="https://github.com/d3lm/ngx-drag-to-select/blob/master/src/app/phone">SOURCE</a>
+      <span>Mobile Demo</span> <a href="https://github.com/d3lm/ngx-drag-to-select/blob/master/src/app/phone">SOURCE</a>
     </h3>
 
-    <div class="mobile-wrapper">
-      <app-phone></app-phone>
-    </div>
+    <div class="mobile-wrapper"><app-phone></app-phone></div>
   </section>
 </main>
 <app-footer></app-footer>

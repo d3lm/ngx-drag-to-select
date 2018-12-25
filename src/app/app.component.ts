@@ -49,8 +49,4 @@ export class AppComponent implements OnInit {
       });
     }
   }
-
-  onSelect(items: Array<any>) {
-    // Do something with the selected items
-  }
 }
