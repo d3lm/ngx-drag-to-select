@@ -1,3 +1,13 @@
+<a name="3.1.0"></a>
+# [3.1.0](https://github.com/d3lm/ngx-drag-to-select/compare/v3.0.3...v3.1.0) (2018-12-28)
+
+
+### Features
+
+* **lib:** add selection outputs ([e0e5944](https://github.com/d3lm/ngx-drag-to-select/commit/e0e5944)), closes [#64](https://github.com/d3lm/ngx-drag-to-select/issues/64)
+
+
+
 <a name="3.0.3"></a>
 ## [3.0.3](https://github.com/d3lm/ngx-drag-to-select/compare/v3.0.2...v3.0.3) (2018-12-19)
 
