@@ -221,10 +221,11 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy {
         distinctUntilChanged((a, b) => JSON.stringify(a) === JSON.stringify(b))
       );
 
-      const selectOnMouseUp$ = mouseup$.pipe(
+      const selectOnMouseUp$ = dragging$.pipe(
         filter(() => !this.selectOnDrag),
         filter(() => !this.selectMode),
         filter(event => this._cursorWithinHost(event)),
+        switchMap(_ => mouseup$.pipe(first())),
         filter(
           event =>
             (!this.shortcuts.disableSelection(event) && !this.shortcuts.toggleSingleItem(event)) ||

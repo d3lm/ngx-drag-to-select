@@ -1,5 +1,5 @@
 import { DEFAULT_CONFIG } from '../../projects/ngx-drag-to-select/src/lib/config';
-import { enableSelectWithShortcut, getDesktopExample } from '../support/utils';
+import { disableSelectOnDrag, enableSelectWithShortcut, getDesktopExample } from '../support/utils';
 
 const SELECTED_CLASS = DEFAULT_CONFIG.selectedClass;
 
@@ -71,6 +71,21 @@ describe('Clicking', () => {
         .shouldSelect([])
         .get(`.${SELECTED_CLASS}`)
         .should('have.length', 0);
+    });
+  });
+
+  describe('Select on Mouseup', () => {
+    beforeEach(() => {
+      disableSelectOnDrag();
+    });
+
+    it.only('should select single item on mousedown', () => {
+      getDesktopExample().within(() => {
+        cy.getSelectItem(0)
+          .dispatch('mousedown', { button: 0 })
+          .dispatch('mouseup')
+          .shouldSelect([1]);
+      });
     });
   });
 });
