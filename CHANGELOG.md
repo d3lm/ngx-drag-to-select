@@ -1,3 +1,13 @@
+<a name="3.1.1"></a>
+## [3.1.1](https://github.com/d3lm/ngx-drag-to-select/compare/v3.1.0...v3.1.1) (2018-12-29)
+
+
+### Bug Fixes
+
+* **lib:** correctly select items when selectOnDrag is false ([fd551fe](https://github.com/d3lm/ngx-drag-to-select/commit/fd551fe)), closes [#67](https://github.com/d3lm/ngx-drag-to-select/issues/67)
+
+
+
 <a name="3.1.0"></a>
 # [3.1.0](https://github.com/d3lm/ngx-drag-to-select/compare/v3.0.3...v3.1.0) (2018-12-28)
 
