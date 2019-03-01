@@ -1,17 +1,6 @@
 import { isPlatformBrowser } from '@angular/common';
 
-import {
-  Directive,
-  DoCheck,
-  ElementRef,
-  EventEmitter,
-  Inject,
-  Input,
-  OnInit,
-  Output,
-  PLATFORM_ID,
-  Renderer2
-} from '@angular/core';
+import { Directive, DoCheck, ElementRef, Inject, Input, PLATFORM_ID, Renderer2 } from '@angular/core';
 
 import { DragToSelectConfig } from './models';
 import { CONFIG } from './tokens';
@@ -24,7 +13,7 @@ import { calculateBoundingClientRect } from './utils';
     class: 'dts-select-item'
   }
 })
-export class SelectItemDirective implements OnInit, DoCheck {
+export class SelectItemDirective implements DoCheck {
   private _boundingClientRect;
 
   selected = false;
@@ -43,17 +32,14 @@ export class SelectItemDirective implements OnInit, DoCheck {
     private renderer: Renderer2
   ) {}
 
-  ngOnInit() {
-    if (isPlatformBrowser(this.platformId)) {
-      this.calculateBoundingClientRect();
-    }
-  }
-
   ngDoCheck() {
     this.applySelectedClass();
   }
 
   getBoundingClientRect() {
+    if (isPlatformBrowser(this.platformId) && !this._boundingClientRect) {
+      this.calculateBoundingClientRect();
+    }
     return this._boundingClientRect;
   }
 
