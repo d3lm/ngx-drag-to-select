@@ -79,7 +79,7 @@ describe('Clicking', () => {
       disableSelectOnDrag();
     });
 
-    it.only('should select single item on mousedown', () => {
+    it('should select single item on mousedown', () => {
       getDesktopExample().within(() => {
         cy.getSelectItem(0)
           .dispatch('mousedown', { button: 0 })

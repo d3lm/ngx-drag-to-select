@@ -1,12 +1,12 @@
 module.exports = {
   preset: 'jest-preset-angular',
-  rootDir: '../../',
-  roots: ['<rootDir>/projects/ngx-drag-to-select'],
-  setupTestFrameworkScriptFile: '<rootDir>/projects/ngx-drag-to-select/test.ts',
+  rootDir: 'projects/ngx-drag-to-select',
+  roots: ['src'],
+  setupFilesAfterEnv: ['<rootDir>/test.ts'],
   globals: {
     'ts-jest': {
-      tsConfigFile: './projects/ngx-drag-to-select/tsconfig.spec.json'
-    },
-    __TRANSFORM_HTML__: true
+      tsConfig: '<rootDir>/tsconfig.spec.json',
+      stringifyContentPathRegex: '\\.html$'
+    }
   }
 };

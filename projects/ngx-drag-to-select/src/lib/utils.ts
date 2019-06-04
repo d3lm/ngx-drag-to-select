@@ -29,6 +29,10 @@ export const hasMinimumSize = (selectBox: SelectBox<number>, minWidth = MIN_WIDT
 export const clearSelection = (window: Window) => {
   const selection = window.getSelection();
 
+  if (!selection) {
+    return;
+  }
+
   if (selection.removeAllRanges) {
     selection.removeAllRanges();
   } else if (selection.empty) {

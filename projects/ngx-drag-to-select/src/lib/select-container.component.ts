@@ -87,7 +87,7 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy {
   selectBoxStyles$: Observable<SelectBox<string>>;
   selectBoxClasses$: Observable<{ [key: string]: boolean }>;
 
-  @ViewChild('selectBox')
+  @ViewChild('selectBox', { static: true })
   private $selectBox: ElementRef;
 
   @ContentChildren(SelectItemDirective, { descendants: true })

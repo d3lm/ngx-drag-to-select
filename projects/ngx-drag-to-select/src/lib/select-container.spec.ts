@@ -31,7 +31,7 @@ interface SelectItemValue {
   `
 })
 class TestComponent {
-  @ViewChild('selectContainer')
+  @ViewChild('selectContainer', { static: true })
   selectContainer: SelectContainerComponent;
 
   @ViewChildren('selectItem')

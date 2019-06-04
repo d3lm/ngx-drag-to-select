@@ -26,7 +26,7 @@ Cypress.Commands.add(
     const expected = ids.map(id => `Document ${id}`);
 
     const checkSelectedItems = (items: Cypress.ObjectLike): { success: boolean; actual: Array<string> } => {
-      const actual: Array<string> = Array.prototype.map.call(items, (item: HTMLElement) => item.textContent);
+      const actual = Array.prototype.map.call(items, (item: HTMLElement) => item.textContent || '') as Array<string>;
 
       const success = expected.every(expectedTextContent =>
         actual.some(actualTextContent => actualTextContent === expectedTextContent)
