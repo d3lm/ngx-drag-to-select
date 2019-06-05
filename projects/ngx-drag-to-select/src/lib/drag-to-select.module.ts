@@ -9,16 +9,14 @@ import { CONFIG, USER_CONFIG } from './tokens';
 import { DEFAULT_CONFIG } from './config';
 import { mergeDeep } from './utils';
 
-const COMPONENTS = [SelectContainerComponent, SelectItemDirective];
-
 export function CONFIG_FACTORY(config: Partial<DragToSelectConfig>) {
   return mergeDeep(DEFAULT_CONFIG, config);
 }
 
 @NgModule({
   imports: [CommonModule],
-  declarations: [...COMPONENTS],
-  exports: [...COMPONENTS]
+  declarations: [SelectContainerComponent, SelectItemDirective],
+  exports: [SelectContainerComponent, SelectItemDirective]
 })
 export class DragToSelectModule {
   static forRoot(config: Partial<DragToSelectConfig> = {}): ModuleWithProviders {
