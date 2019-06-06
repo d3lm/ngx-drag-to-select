@@ -93,45 +93,23 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy {
   @ContentChildren(SelectItemDirective, { descendants: true })
   private $selectableItems: QueryList<SelectItemDirective>;
 
-  @Input()
-  selectedItems: any;
-
-  @Input()
-  selectOnDrag = true;
-
-  @Input()
-  disabled = false;
-
-  @Input()
-  disableDrag = false;
-
-  @Input()
-  selectMode = false;
-
-  @Input()
-  selectWithShortcut = false;
+  @Input() selectedItems: any;
+  @Input() selectOnDrag = true;
+  @Input() disabled = false;
+  @Input() disableDrag = false;
+  @Input() selectMode = false;
+  @Input() selectWithShortcut = false;
 
   @Input()
   @HostBinding('class.dts-custom')
   custom = false;
 
-  @Output()
-  selectedItemsChange = new EventEmitter<any>();
-
-  @Output()
-  select = new EventEmitter<any>();
-
-  @Output()
-  itemSelected = new EventEmitter<any>();
-
-  @Output()
-  itemDeselected = new EventEmitter<any>();
-
-  @Output()
-  selectionStarted = new EventEmitter<void>();
-
-  @Output()
-  selectionEnded = new EventEmitter<Array<any>>();
+  @Output() selectedItemsChange = new EventEmitter<any>();
+  @Output() select = new EventEmitter<any>();
+  @Output() itemSelected = new EventEmitter<any>();
+  @Output() itemDeselected = new EventEmitter<any>();
+  @Output() selectionStarted = new EventEmitter<void>();
+  @Output() selectionEnded = new EventEmitter<Array<any>>();
 
   private _tmpItems = new Map<SelectItemDirective, Action>();
 
