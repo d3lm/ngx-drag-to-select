@@ -345,6 +345,10 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy {
         const newList = items.toArray();
         const removedItems = selectedItems.filter(item => !newList.includes(item.value));
 
+        newList.forEach(element => {
+          element.setContainer(this);
+        });
+
         if (removedItems.length) {
           removedItems.forEach(item => this._removeItem(item, selectedItems));
         }
