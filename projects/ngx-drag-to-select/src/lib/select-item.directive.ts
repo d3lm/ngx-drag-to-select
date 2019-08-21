@@ -1,11 +1,11 @@
 import { isPlatformBrowser } from '@angular/common';
 
-import { Directive, DoCheck, ElementRef, Inject, Input, PLATFORM_ID, Renderer2, Host } from '@angular/core';
+import { Directive, DoCheck, ElementRef, Inject, Input, PLATFORM_ID, Renderer2 } from '@angular/core';
 
 import { DragToSelectConfig } from './models';
 import { CONFIG } from './tokens';
 import { calculateBoundingClientRect } from './utils';
-import { SelectContainerComponent } from './select-container.component';
+import { Subject } from 'rxjs';
 
 @Directive({
   selector: '[dtsSelectItem]',
@@ -19,26 +19,18 @@ export class SelectItemDirective implements DoCheck {
 
   private _selected = false;
 
-  private selectContainer: SelectContainerComponent = null;
+  public onchanged = new Subject<boolean>();
 
   @Input()
   dtsSelectItem;
-
-  public setContainer(selectContainer: SelectContainerComponent) {
-    this.selectContainer = selectContainer;
-  }
 
   public get selected() {
     return this._selected;
   }
 
   public set selected(value: boolean) {
-    // If Changed
-    if (this.selected !== value && this.selectContainer !== null) {
-      if (value === true) this.selectContainer.selectItems(item => item === this.dtsSelectItem);
-      else this.selectContainer.deselectItems(item => item === this.dtsSelectItem);
-    }
     this._selected = value;
+    this.onchanged.next(value);
   }
 
   get value() {
@@ -68,11 +60,11 @@ export class SelectItemDirective implements DoCheck {
   }
 
   _select() {
-    this._selected = true;
+    this.selected = true;
   }
 
   _deselect() {
-    this._selected = false;
+    this.selected = false;
   }
 
   private applySelectedClass() {

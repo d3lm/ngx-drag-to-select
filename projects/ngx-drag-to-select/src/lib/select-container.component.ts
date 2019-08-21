@@ -134,6 +134,7 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy {
       this._calculateBoundingClientRect();
       this._observeBoundingRectChanges();
       this._observeSelectableItems();
+      this._observeSelectedOptionChanges(this.$selectableItems, []);
 
       // distinctKeyEvents is used to prevent multiple key events to be fired repeatedly
       // on Windows when a key is being pressed
@@ -342,19 +343,29 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy {
         takeUntil(this.destroy$)
       )
       .subscribe(([items, selectedItems]: [QueryList<SelectItemDirective>, any[]]) => {
+        this._observeSelectedOptionChanges(items, selectedItems);
+
         const newList = items.toArray();
         const removedItems = selectedItems.filter(item => !newList.includes(item.value));
-
-        newList.forEach(element => {
-          element.setContainer(this);
-        });
-
         if (removedItems.length) {
           removedItems.forEach(item => this._removeItem(item, selectedItems));
         }
 
         this.update();
       });
+  }
+
+  private _observeSelectedOptionChanges(items: QueryList<SelectItemDirective>, selectedItems: any[]) {
+    items.forEach((element: SelectItemDirective) => {
+      element.onchanged.pipe(takeUntil(merge(this.destroy$, this.$selectableItems.changes))).subscribe(result => {
+        // If Container and item selection options do not match
+        if (selectedItems.includes(element.dtsSelectItem) != result) {
+          // Update Container
+          if (result == true) this.selectItems(item => item === element.dtsSelectItem);
+          else this.deselectItems(item => item === element.dtsSelectItem);
+        }
+      });
+    });
   }
 
   private _observeBoundingRectChanges() {
