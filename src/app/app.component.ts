@@ -18,7 +18,14 @@ export class AppComponent implements OnInit {
   disable = false;
   isDesktop = false;
   selectWithShortcut = false;
+  scale = 1;
 
+  zoomOut() {
+    this.scale = 0.6;
+  }
+  zoomReset() {
+    this.scale = 1;
+  }
   constructor(
     private titleService: Title,
     private breakpointObserver: BreakpointObserver,
@@ -42,7 +49,7 @@ export class AppComponent implements OnInit {
       this.isDesktop = this.breakpointObserver.isMatched(breakpoints);
     });
 
-    for (let id = 1; id <= 12; id++) {
+    for (let id = 1; id <= 2; id++) {
       this.documents.push({
         id,
         name: `Document ${id}`

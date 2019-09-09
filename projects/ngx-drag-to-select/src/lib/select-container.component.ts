@@ -100,6 +100,17 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy {
   @Input() selectMode = false;
   @Input() selectWithShortcut = false;
 
+  private _scale = 1;
+  private scaleChange$ = new BehaviorSubject<number>(1);
+  get scale(): number {
+    return this._scale;
+  }
+  @Input()
+  set scale(scale: number) {
+    this._scale = scale;
+    this.scaleChange$.next(this._scale);
+  }
+
   @Input()
   @HostBinding('class.dts-custom')
   custom = false;
@@ -182,7 +193,7 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy {
       const hide$ = mouseup$.pipe(mapTo(0));
       const opacity$ = merge(show$, hide$).pipe(distinctUntilChanged());
 
-      const selectBox$ = combineLatest(dragging$, opacity$, currentMousePosition$).pipe(
+      const selectBox$ = combineLatest([dragging$, opacity$, currentMousePosition$, this.scaleChange$]).pipe(
         createSelectBox(this.host),
         share()
       );
@@ -413,9 +424,8 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy {
     const mousePoint = getMousePosition(event);
 
     this.$selectableItems.forEach((item, index) => {
-      const itemRect = item.getBoundingClientRect();
-      const withinBoundingBox = inBoundingBox(mousePoint, itemRect);
-
+      const itemRect = item.getBoundingClientRect() as ClientRect;
+      const withinBoundingBox = inBoundingBox(mousePoint, this._calcScaleRect(itemRect));
       if (this.shortcuts.extendedSelectionShortcut(event)) {
         return;
       }
@@ -465,7 +475,9 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy {
   }
 
   private _normalSelectionMode(selectBox, item: SelectItemDirective, event: Event) {
-    const inSelection = boxIntersects(selectBox, item.getBoundingClientRect());
+    const clientRect = item.getBoundingClientRect() as ClientRect;
+
+    const inSelection = boxIntersects(selectBox, this._calcScaleRect(clientRect));
 
     const shouldAdd = inSelection && !item.selected && !this.shortcuts.removeFromSelection(event);
 
@@ -481,7 +493,7 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy {
   }
 
   private _extendedSelectionMode(selectBox, item: SelectItemDirective, event: Event) {
-    const inSelection = boxIntersects(selectBox, item.getBoundingClientRect());
+    const inSelection = boxIntersects(selectBox, this._calcScaleRect(item.getBoundingClientRect()));
 
     const shoudlAdd =
       (inSelection && !item.selected && !this.shortcuts.removeFromSelection(event) && !this._tmpItems.has(item)) ||
@@ -567,5 +579,16 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy {
 
   private _hasItem(item: SelectItemDirective, selectedItems: Array<any>) {
     return selectedItems.includes(item.value);
+  }
+
+  private _calcScaleRect(itemRect: ClientRect): ClientRect {
+    const tmpRect = {} as any;
+    const hostClientRect = this.host.getBoundingClientRect();
+    tmpRect.left = hostClientRect.left + (itemRect.left - hostClientRect.left) * this.scale;
+    tmpRect.top = hostClientRect.top + (itemRect.top - hostClientRect.top) * this.scale;
+    tmpRect.width = itemRect.width * this.scale;
+    tmpRect.height = itemRect.height * this.scale;
+
+    return tmpRect as ClientRect;
   }
 }

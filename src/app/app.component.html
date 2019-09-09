@@ -28,10 +28,17 @@
     <button data-cy="clearSelection" mat-raised-button (click)="selectContainer.clearSelection()">
       Clear Selection
     </button>
+    <button data-cy="zoomOut" mat-raised-button (click)="zoomOut()">
+      zoom out
+    </button>
+    <button data-cy="zoomReset" mat-raised-button (click)="zoomReset()">
+      reset zoom
+    </button>
 
-    <div class="drag-area">
+    <div class="drag-area" [style.transform]="'scale('+scale+')'" style="transform-origin: 0px 0px">
       <dts-select-container
         #selectContainer="dts-select-container"
+        [scale]="scale"
         [selectMode]="selectMode"
         [(selectedItems)]="selectedDocuments"
         [disabled]="disable"

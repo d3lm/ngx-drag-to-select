@@ -46,7 +46,7 @@ export interface BoundingBox {
   height: number;
 }
 
-export type SelectBoxInput = [MouseEvent, number, MousePosition];
+export type SelectBoxInput = [MouseEvent, number, MousePosition, number];
 
 export interface SelectBox<T> {
   top: T;
