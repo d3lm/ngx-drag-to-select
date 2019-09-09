@@ -49,7 +49,7 @@ export class AppComponent implements OnInit {
       this.isDesktop = this.breakpointObserver.isMatched(breakpoints);
     });
 
-    for (let id = 1; id <= 2; id++) {
+    for (let id = 1; id <= 12; id++) {
       this.documents.push({
         id,
         name: `Document ${id}`

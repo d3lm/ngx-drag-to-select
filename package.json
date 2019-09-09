@@ -49,7 +49,7 @@
       "git add"
     ]
   },
-  "private": false,
+  "private": true,
   "dependencies": {
     "@angular/animations": "^8.0.0",
     "@angular/cdk": "^8.0.0",
