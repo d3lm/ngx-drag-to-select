@@ -101,7 +101,7 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy {
   @Input() selectWithShortcut = false;
 
   private _scale = 1;
-  private scaleChange$ = new BehaviorSubject<number>(1);
+  private scaleChange$ = new BehaviorSubject<number>(this.scale);
   get scale(): number {
     return this._scale;
   }
