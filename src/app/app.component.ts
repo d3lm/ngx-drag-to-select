@@ -20,8 +20,13 @@ export class AppComponent implements OnInit {
   selectWithShortcut = false;
   scale = 1;
 
+  zoomIn() {
+    const s = this.scale + 0.2;
+    this.scale = s >= 5 ? 5 : s;
+  }
   zoomOut() {
-    this.scale = 0.6;
+    const s = this.scale - 0.2;
+    this.scale = s <= 0.2 ? 0.2 : s;
   }
   zoomReset() {
     this.scale = 1;

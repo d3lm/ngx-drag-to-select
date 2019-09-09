@@ -14,7 +14,7 @@
     "build:app": "ng build app --prod",
     "build:server": "ng build server --prod",
     "build:lib": "npm run clean && npm run build:lib:code && npm run build:lib:sass && npm run copy:styles && npm run copy:readme",
-    "build:lib:code": "ng build ngx-drag-to-select",
+    "build:lib:code": "ng build ngx-drag-to-select ",
     "build:lib:sass": "node-sass projects/ngx-drag-to-select/src/scss/ngx-drag-to-select.scss -o dist/ngx-drag-to-select",
     "deploy": "ngh --dir dist/browser",
     "copy:styles": "cpr projects/ngx-drag-to-select/src/scss dist/ngx-drag-to-select/scss",
