@@ -10,7 +10,7 @@ export const createSelectBox = (container: SelectContainerHost) => (
     map(([event, opacity, { x, y }, scale]) => {
       // Type annotation is required here, because `getRelativeMousePosition` returns a `MousePosition`,
       // the TS compiler cannot figure out the shape of this type.
-      const mousePosition: MousePosition = getRelativeMousePosition(event, container);
+      const mousePosition: MousePosition = getRelativeMousePosition(event, container, scale);
       const width = opacity > 0 ? mousePosition.x - x : 0;
       const height = opacity > 0 ? mousePosition.y - y : 0;
 

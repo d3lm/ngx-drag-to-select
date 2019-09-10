@@ -80,11 +80,15 @@ export const getScroll = () => {
   };
 };
 
-export const getRelativeMousePosition = (event: MouseEvent, container: SelectContainerHost): MousePosition => {
+export const getRelativeMousePosition = (
+  event: MouseEvent,
+  container: SelectContainerHost,
+  scale: number
+): MousePosition => {
   const { x: clientX, y: clientY } = getMousePosition(event);
   const scroll = getScroll();
 
-  const borderSize = (container.boundingClientRect.width - container.clientWidth) / 2;
+  const borderSize = (container.boundingClientRect.width / scale - container.clientWidth) / 2;
   const offsetLeft = container.boundingClientRect.left + scroll.x;
   const offsetTop = container.boundingClientRect.top + scroll.y;
 
