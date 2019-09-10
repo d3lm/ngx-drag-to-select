@@ -370,7 +370,13 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy {
       const windowScroll$ = fromEvent(window, 'scroll');
       const containerScroll$ = fromEvent(this.host, 'scroll');
 
-      merge(resize$, windowScroll$, containerScroll$, this.scaleChange$)
+      // if this.host(container) has parent element or ancestor, 
+      // and then if we scale the parent element and
+      // scroll it, we need to update container.
+      // if we didn't do that , mouse pointer would be wrong position
+      const allParentScroll$ = this._getAllParentScrollEvent(this.host);
+
+      merge(resize$, windowScroll$, containerScroll$, allParentScroll$, this.scaleChange$)
         .pipe(
           startWith('INITIAL_UPDATE'),
           auditTime(AUDIT_TIME),
@@ -380,6 +386,23 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy {
           this.update();
         });
     });
+  }
+
+  /**
+   * get all parent and ancestor's scroll events
+   */
+  private _getAllParentScrollEvent(current: HTMLElement) {
+    const eventTargets: EventTarget[] = [];
+
+    let nativeElement = current.parentElement;
+    while (nativeElement) {
+      eventTargets.push(nativeElement);
+      nativeElement = nativeElement.parentElement;
+    }
+    const allScroll$ = merge<Event>(
+      ...eventTargets.map<Observable<Event>>(element => fromEvent(element, 'scroll')),
+    );
+    return allScroll$;
   }
 
   private _initSelectionOutputs(mousedown$: Observable<MouseEvent>, mouseup$: Observable<MouseEvent>) {
@@ -507,8 +530,8 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy {
       const action = this.shortcuts.removeFromSelection(event)
         ? Action.Delete
         : this.shortcuts.addToSelection(event)
-        ? Action.Add
-        : Action.None;
+          ? Action.Add
+          : Action.None;
 
       this._tmpItems.set(item, action);
     } else if (shouldRemove) {
