@@ -475,9 +475,7 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy {
   }
 
   private _normalSelectionMode(selectBox, item: SelectItemDirective, event: Event) {
-    const clientRect = item.getBoundingClientRect() as ClientRect;
-
-    const inSelection = boxIntersects(selectBox, clientRect);
+    const inSelection = boxIntersects(selectBox, item.getBoundingClientRect());
 
     const shouldAdd = inSelection && !item.selected && !this.shortcuts.removeFromSelection(event);
 
