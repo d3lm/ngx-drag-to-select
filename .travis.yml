@@ -4,8 +4,20 @@ language: node_js
 node_js:
   - 12
 
+before_install:
+  - npm install -g yarn
+
+before_script:
+  # where is Cypress binary cached?
+  - yarn cypress cache path
+  # show me all versions of Cypress binary cached
+  - yarn cypress cache list
+  - yarn cypress verify
+
 dist: trusty
-cache: yarn
+cache:
+  directories:
+    - $HOME/.cache
 
 addons:
   chrome: stable
