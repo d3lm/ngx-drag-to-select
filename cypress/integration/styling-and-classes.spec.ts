@@ -99,6 +99,13 @@ describe('Styling and Classes', () => {
         .dispatch('mouseup')
         .then($element => {
           expect($element.css('box-shadow')).not.to.eq('none');
+          expect($element.css('border')).to.eq('1px solid rgb(33, 150, 243)');
+        });
+
+      cy.getSelectItem(1)
+        .dispatch('mousedown', { button: 0, shiftKey: true })
+        .dispatch('mouseup')
+        .then($element => {
           expect($element.css('border')).to.eq('1px solid rgb(210, 210, 210)');
         });
     });

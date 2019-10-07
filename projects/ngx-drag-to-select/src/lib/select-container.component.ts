@@ -13,7 +13,8 @@ import {
   HostBinding,
   AfterViewInit,
   PLATFORM_ID,
-  Inject
+  Inject,
+  AfterContentInit
 } from '@angular/core';
 
 import { isPlatformBrowser } from '@angular/common';
@@ -37,7 +38,7 @@ import {
   first
 } from 'rxjs/operators';
 
-import { SelectItemDirective } from './select-item.directive';
+import { SelectItemDirective, SELECT_ITEM_INSTANCE } from './select-item.directive';
 import { ShortcutService } from './shortcut.service';
 
 import { createSelectBox, whenSelectBoxVisible, distinctKeyEvents } from './operators';
@@ -49,7 +50,8 @@ import {
   SelectContainerHost,
   UpdateAction,
   UpdateActions,
-  PredicateFn
+  PredicateFn,
+  BoundingBox
 } from './models';
 
 import { AUDIT_TIME, NO_SELECT_CLASS } from './constants';
@@ -82,7 +84,7 @@ import {
   `,
   styleUrls: ['./select-container.component.scss']
 })
-export class SelectContainerComponent implements AfterViewInit, OnDestroy {
+export class SelectContainerComponent implements AfterViewInit, OnDestroy, AfterContentInit {
   host: SelectContainerHost;
   selectBoxStyles$: Observable<SelectBox<string>>;
   selectBoxClasses$: Observable<{ [key: string]: boolean }>;
@@ -114,11 +116,15 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy {
   private _tmpItems = new Map<SelectItemDirective, Action>();
 
   private _selectedItems$ = new BehaviorSubject<Array<any>>([]);
+  private _selectableItems: Array<SelectItemDirective> = [];
   private updateItems$ = new Subject<UpdateAction>();
   private destroy$ = new Subject<void>();
 
+  private _lastRange: [number, number] = [-1, -1];
+  private _lastStartIndex: number | undefined = undefined;
+
   constructor(
-    @Inject(PLATFORM_ID) private platformId,
+    @Inject(PLATFORM_ID) private platformId: Object,
     private shortcuts: ShortcutService,
     private hostElementRef: ElementRef,
     private renderer: Renderer2,
@@ -182,7 +188,7 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy {
       const hide$ = mouseup$.pipe(mapTo(0));
       const opacity$ = merge(show$, hide$).pipe(distinctUntilChanged());
 
-      const selectBox$ = combineLatest(dragging$, opacity$, currentMousePosition$).pipe(
+      const selectBox$ = combineLatest([dragging$, opacity$, currentMousePosition$]).pipe(
         createSelectBox(this.host),
         share()
       );
@@ -252,6 +258,10 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy {
     }
   }
 
+  ngAfterContentInit() {
+    this._selectableItems = this.$selectableItems.toArray();
+  }
+
   selectAll() {
     this.$selectableItems.forEach(item => {
       this._selectItem(item);
@@ -290,7 +300,7 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy {
     // Wrap select items in an observable for better efficiency as
     // no intermediate arrays are created and we only need to process
     // every item once.
-    return from(this.$selectableItems.toArray()).pipe(filter(item => predicate(item.value)));
+    return from(this._selectableItems).pipe(filter(item => predicate(item.value)));
   }
 
   private _initSelectedItemsChange() {
@@ -343,6 +353,7 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy {
       )
       .subscribe(([items, selectedItems]: [QueryList<SelectItemDirective>, any[]]) => {
         const newList = items.toArray();
+        this._selectableItems = newList;
         const removedItems = selectedItems.filter(item => !newList.includes(item.value));
 
         if (removedItems.length) {
@@ -410,21 +421,61 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy {
       this.renderer.addClass(document.body, NO_SELECT_CLASS);
     }
 
+    if (this.shortcuts.removeFromSelection(event)) {
+      return;
+    }
+
     const mousePoint = getMousePosition(event);
+    const [currentIndex, clickedItem] = this._getClosestSelectItem(event);
+
+    let [startIndex, endIndex] = this._lastRange;
+
+    if (!this.shortcuts.extendedSelectionShortcut(event) && currentIndex > -1) {
+      const lastRangeStart = this._selectableItems[this._lastStartIndex];
+
+      if (lastRangeStart) {
+        lastRangeStart.toggleRangeStart();
+      }
+
+      this._lastStartIndex = currentIndex;
+      clickedItem.toggleRangeStart();
+    }
+
+    if (!this.shortcuts.extendedSelectionShortcut(event) && currentIndex === -1) {
+      if (this._lastStartIndex >= 0) {
+        const lastStart = this._selectableItems[this._lastStartIndex];
+        lastStart.toggleRangeStart();
+      }
+
+      this._lastStartIndex = -1;
+    }
+
+    if (!this.shortcuts.extendedSelectionShortcut(event)) {
+      this._resetRange();
+    }
+
+    if (currentIndex > -1) {
+      startIndex = Math.min(this._lastStartIndex, currentIndex);
+      endIndex = Math.max(this._lastStartIndex, currentIndex);
+      this._lastRange = [startIndex, endIndex];
+    }
 
     this.$selectableItems.forEach((item, index) => {
       const itemRect = item.getBoundingClientRect();
       const withinBoundingBox = inBoundingBox(mousePoint, itemRect);
-
-      if (this.shortcuts.extendedSelectionShortcut(event)) {
-        return;
-      }
 
       const shouldAdd =
         (withinBoundingBox &&
           !this.shortcuts.toggleSingleItem(event) &&
           !this.selectMode &&
           !this.selectWithShortcut) ||
+        // captured by range and start != end
+        (this.shortcuts.extendedSelectionShortcut(event) &&
+          startIndex > -1 &&
+          endIndex > -1 &&
+          index >= startIndex &&
+          index <= endIndex &&
+          startIndex !== endIndex) ||
         (withinBoundingBox && this.shortcuts.toggleSingleItem(event) && !item.selected) ||
         (!withinBoundingBox && this.shortcuts.toggleSingleItem(event) && item.selected) ||
         (withinBoundingBox && !item.selected && this.selectMode) ||
@@ -434,7 +485,9 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy {
         (!withinBoundingBox &&
           !this.shortcuts.toggleSingleItem(event) &&
           !this.selectMode &&
+          !this.shortcuts.extendedSelectionShortcut(event) &&
           !this.selectWithShortcut) ||
+        (this.shortcuts.extendedSelectionShortcut(event) && currentIndex > -1) ||
         (!withinBoundingBox && this.shortcuts.toggleSingleItem(event) && !item.selected) ||
         (withinBoundingBox && this.shortcuts.toggleSingleItem(event) && item.selected) ||
         (!withinBoundingBox && !item.selected && this.selectMode) ||
@@ -451,11 +504,16 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy {
   private _selectItems(event: Event) {
     const selectionBox = calculateBoundingClientRect(this.$selectBox.nativeElement);
 
-    this.$selectableItems.forEach(item => {
+    this.$selectableItems.forEach((item, index) => {
       if (this._isExtendedSelection(event)) {
         this._extendedSelectionMode(selectionBox, item, event);
       } else {
         this._normalSelectionMode(selectionBox, item, event);
+
+        if (this._lastStartIndex < 0 && item.selected) {
+          item.toggleRangeStart();
+          this._lastStartIndex = index;
+        }
       }
     });
   }
@@ -464,7 +522,7 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy {
     return this.shortcuts.extendedSelectionShortcut(event) && this.selectOnDrag;
   }
 
-  private _normalSelectionMode(selectBox, item: SelectItemDirective, event: Event) {
+  private _normalSelectionMode(selectBox: BoundingBox, item: SelectItemDirective, event: Event) {
     const inSelection = boxIntersects(selectBox, item.getBoundingClientRect());
 
     const shouldAdd = inSelection && !item.selected && !this.shortcuts.removeFromSelection(event);
@@ -567,5 +625,22 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy {
 
   private _hasItem(item: SelectItemDirective, selectedItems: Array<any>) {
     return selectedItems.includes(item.value);
+  }
+
+  private _getClosestSelectItem(event: Event): [number, SelectItemDirective] {
+    const target = (event.target as HTMLElement).closest('.dts-select-item');
+    let index = -1;
+    let targetItem = null;
+
+    if (target) {
+      targetItem = target[SELECT_ITEM_INSTANCE];
+      index = this._selectableItems.indexOf(targetItem);
+    }
+
+    return [index, targetItem];
+  }
+
+  private _resetRange() {
+    this._lastRange = [-1, -1];
   }
 }
