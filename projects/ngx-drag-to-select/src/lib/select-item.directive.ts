@@ -1,10 +1,22 @@
 import { isPlatformBrowser } from '@angular/common';
 
-import { Directive, DoCheck, ElementRef, Inject, Input, PLATFORM_ID, Renderer2 } from '@angular/core';
+import {
+  Directive,
+  DoCheck,
+  ElementRef,
+  Inject,
+  Input,
+  PLATFORM_ID,
+  Renderer2,
+  OnInit,
+  HostBinding
+} from '@angular/core';
 
-import { DragToSelectConfig } from './models';
+import { DragToSelectConfig, BoundingBox } from './models';
 import { CONFIG } from './tokens';
 import { calculateBoundingClientRect } from './utils';
+
+export const SELECT_ITEM_INSTANCE = Symbol();
 
 @Directive({
   selector: '[dtsSelectItem]',
@@ -13,27 +25,40 @@ import { calculateBoundingClientRect } from './utils';
     class: 'dts-select-item'
   }
 })
-export class SelectItemDirective implements DoCheck {
-  private _boundingClientRect;
+export class SelectItemDirective implements OnInit, DoCheck {
+  private _boundingClientRect: BoundingBox | undefined;
 
   selected = false;
 
-  @Input()
-  dtsSelectItem;
+  @HostBinding('class.dts-range-start') rangeStart = false;
 
-  get value() {
+  @Input() dtsSelectItem: any | undefined;
+
+  get value(): SelectItemDirective | any {
     return this.dtsSelectItem ? this.dtsSelectItem : this;
   }
 
   constructor(
     @Inject(CONFIG) private config: DragToSelectConfig,
-    @Inject(PLATFORM_ID) private platformId,
+    @Inject(PLATFORM_ID) private platformId: Object,
     private host: ElementRef,
     private renderer: Renderer2
   ) {}
 
+  ngOnInit() {
+    this.nativeElememnt[SELECT_ITEM_INSTANCE] = this;
+  }
+
   ngDoCheck() {
     this.applySelectedClass();
+  }
+
+  toggleRangeStart() {
+    this.rangeStart = !this.rangeStart;
+  }
+
+  get nativeElememnt() {
+    return this.host.nativeElement;
   }
 
   getBoundingClientRect() {
@@ -44,7 +69,9 @@ export class SelectItemDirective implements DoCheck {
   }
 
   calculateBoundingClientRect() {
-    this._boundingClientRect = calculateBoundingClientRect(this.host.nativeElement);
+    const boundingBox = calculateBoundingClientRect(this.host.nativeElement);
+    this._boundingClientRect = boundingBox;
+    return boundingBox;
   }
 
   _select() {

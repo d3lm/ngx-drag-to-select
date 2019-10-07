@@ -137,16 +137,18 @@ This section gives you an overview of things you can customize and configure.
 
 You can override the following variables:
 
-| Variable                      | Type    | Default        | Description                                          |
-| ----------------------------- | ------- | -------------- | ---------------------------------------------------- |
-| `$dts-primary`                | Color   | `#7ddafc`      | Primary color                                        |
-| `$select-box-color`           | Color   | `$dts-primary` | Color of the selection rectangle                     |
-| `$select-box-removing-color`  | Color   | `$dts-primary` | Color of the selection rectangle when removing items |
-| `$select-box-border-size`     | Unit    | `2px`          | Border size for the selection rectangle              |
-| `$selected-item-border`       | Boolean | `true`         | Whether the selected item should get a border        |
-| `$selected-item-border-color` | Color   | `#d2d2d2`      | Border color of the selected item                    |
-| `$selected-item-border-size`  | Unit    | `1px`          | Border size of the selected item                     |
-| `$box-shadow`                 | Boolean | `true`         | Whether the selected item should get a box shadow    |
+| Variable                      | Type    | Default        | Description                                               |
+| ----------------------------- | ------- | -------------- | --------------------------------------------------------- |
+| `$dts-primary`                | Color   | `#7ddafc`      | Primary color                                             |
+| `$select-box-color`           | Color   | `$dts-primary` | Color of the selection rectangle                          |
+| `$select-box-removing-color`  | Color   | `$dts-primary` | Color of the selection rectangle when removing items      |
+| `$select-box-border-size`     | Unit    | `2px`          | Border size for the selection rectangle                   |
+| `$selected-item-border`       | Boolean | `true`         | Whether the selected item should get a border             |
+| `$selected-item-border-color` | Color   | `#d2d2d2`      | Border color of the selected item                         |
+| `$selected-item-border-size`  | Unit    | `1px`          | Border size of the selected item                          |
+| `$box-shadow`                 | Boolean | `true`         | Whether the selected item should get a box shadow         |
+| `$range-start-border`         | Boolean | `true`         | Whether the range start item is highlighted with a border |
+| `$range-start-border-color`   | Color   | `#2196f3`      | Border color of the range start item                      |
 
 If you wish to override one of these variables, make sure to do that **before** you import the sass package.
 
@@ -177,7 +179,7 @@ Class that is added to an item when it's selected. The default class is `selecte
 | ------------------- | ---------------- | --------------------------------------------------------------------------------- |
 | disableSelection    | `alt`            | Disable selection mode to allow selecting text on the screen within the drag area |
 | toggleSingleItem    | `meta`           | Add or remove single item to / from selection                                     |
-| addToSelection      | `shift`          | Add items to selection                                                            |
+| addToSelection      | `shift`          | Range selection, Add items to selection                                           |
 | removeFromSelection | `shift` + `meta` | Remove items from selection                                                       |
 
 You can override these options by passing a configuration object to `forRoot()`.

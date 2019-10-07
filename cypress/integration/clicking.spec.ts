@@ -1,11 +1,68 @@
 import { DEFAULT_CONFIG } from '../../projects/ngx-drag-to-select/src/lib/config';
-import { disableSelectOnDrag, enableSelectWithShortcut, getDesktopExample } from '../support/utils';
+import { disableSelectOnDrag, enableSelectWithShortcut, getDesktopExample, toggleItem } from '../support/utils';
 
 const SELECTED_CLASS = DEFAULT_CONFIG.selectedClass;
 
 describe('Clicking', () => {
   beforeEach(() => {
     cy.visit('/');
+  });
+
+  describe('Range', () => {
+    it('should select items in a row if shift is pressed', () => {
+      getDesktopExample().within(() => {
+        cy.getSelectItem(0)
+          .dispatch('mousedown', { button: 0 })
+          .dispatch('mouseup')
+          .getSelectItem(6)
+          .dispatch('mousedown', { button: 0, shiftKey: true })
+          .dispatch('mouseup')
+          .shouldSelect([1, 2, 3, 4, 5, 6, 7])
+          .get(`.${SELECTED_CLASS}`)
+          .should('have.length', 7);
+      });
+    });
+
+    it('should reset range start when item is toggled', () => {
+      getDesktopExample().within(() => {
+        cy.getSelectItem(0)
+          .as('start')
+          .dispatch('mousedown', { button: 0 })
+          .dispatch('mouseup');
+
+        cy.get('@start').should('have.class', 'dts-range-start');
+
+        cy.getSelectItem(2)
+          .dispatch('mousedown', { button: 0, shiftKey: true })
+          .dispatch('mouseup')
+          .getSelectItem(6)
+          .as('end')
+          .then(toggleItem);
+
+        cy.get('@end').should('have.class', 'dts-range-start');
+      });
+    });
+
+    it('should reset range start to be the first item of selection', () => {
+      getDesktopExample().within(() => {
+        cy.getSelectItem(0)
+          .as('start')
+          .dispatch('mousedown', { button: 0 })
+          .dispatch('mouseup')
+          .getSelectItem(5)
+          .dispatch('mousedown', { button: 0, shiftKey: true })
+          .dispatch('mouseup');
+
+        cy.getSelectContainer()
+          .dispatch('mousedown', 'top', { button: 0 })
+          .getSelectItem(7)
+          .dispatch('mousemove')
+          .dispatch('mouseup');
+
+        cy.getSelectItem(0).should('not.have.class', 'dts-range-start');
+        cy.getSelectItem(2).should('have.class', 'dts-range-start');
+      });
+    });
   });
 
   it('should select single item on mousedown', () => {

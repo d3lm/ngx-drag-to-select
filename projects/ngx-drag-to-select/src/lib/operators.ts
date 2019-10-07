@@ -35,6 +35,6 @@ export const whenSelectBoxVisible = (selectBox$: Observable<SelectBox<number>>) 
 export const distinctKeyEvents = () => (source: Observable<KeyboardEvent>) =>
   source.pipe(
     distinctUntilChanged((prev, curr) => {
-      return prev.keyCode === curr.keyCode;
+      return prev.code === curr.code;
     })
   );
