@@ -22,10 +22,6 @@ cache:
 addons:
   chrome: stable
 
-branches:
-  only:
-    - master
-
 notifications:
   email: false
 
