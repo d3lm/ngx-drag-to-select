@@ -53,7 +53,7 @@ jobs:
         - STAGE_NAME=4x-chrome
       <<: *defaults
     - stage: deploy
-      if: branch = master
+      if: branch = master AND type != pull_request
       script:
         - npm run build:prerender-ghpages
       deploy:
