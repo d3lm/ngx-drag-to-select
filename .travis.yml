@@ -7,6 +7,10 @@ node_js:
 before_install:
   - npm install -g yarn
 
+branches:
+  only:
+    - master
+
 before_script:
   # where is Cypress binary cached?
   - yarn cypress cache path
