@@ -23,6 +23,7 @@ export interface SelectContainerHost extends HTMLElement {
 }
 
 export interface Shortcuts {
+  moveRangeStart: string;
   disableSelection: string;
   toggleSingleItem: string;
   addToSelection: string;

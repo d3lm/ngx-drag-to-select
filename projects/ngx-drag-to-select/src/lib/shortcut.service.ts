@@ -1,13 +1,15 @@
-import { Injectable, Inject } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { DragToSelectConfig } from './models';
 import { CONFIG } from './tokens';
 
-const SUPPORTED_KEYS = {
+const SUPPORTED_META_KEYS = {
   alt: true,
   shift: true,
   meta: true,
   ctrl: true
 };
+
+const SUPPORTED_KEYS = /[a-z]/;
 
 const META_KEY = 'meta';
 
@@ -16,6 +18,7 @@ const KEY_ALIASES = {
 };
 
 const SUPPORTED_SHORTCUTS = {
+  moveRangeStart: true,
   disableSelection: true,
   toggleSingleItem: true,
   addToSelection: true,
@@ -28,12 +31,16 @@ const ERROR_PREFIX = '[ShortcutService]';
 export class ShortcutService {
   private _shortcuts: { [key: string]: string[][] } = {};
 
-  constructor(@Inject(CONFIG) private config: DragToSelectConfig) {
+  constructor(@Inject(CONFIG) config: DragToSelectConfig) {
     this._shortcuts = this.createShortcutsFromConfig(config.shortcuts);
   }
 
   disableSelection(event: Event) {
     return this.isShortcutPressed('disableSelection', event);
+  }
+
+  moveRangeStart(mouseEvent: MouseEvent, keyboardEvent: KeyboardEvent) {
+    return this.isShortcutPressed('moveRangeStart', mouseEvent, keyboardEvent);
   }
 
   toggleSingleItem(event: Event) {
@@ -78,7 +85,11 @@ export class ShortcutService {
               throw new Error(this.getErrorMessage(`Key '${unsupportedKey}' in shortcut ${shortcut} not supported`));
             }
 
-            shortcutMap[key].push(cleanCombo.map(comboKey => `${comboKey}Key`));
+            shortcutMap[key].push(
+              cleanCombo.map(comboKey => {
+                return SUPPORTED_META_KEYS[comboKey] ? `${comboKey}Key` : `Key${comboKey.toUpperCase()}`;
+              })
+            );
           });
         });
     }
@@ -88,7 +99,7 @@ export class ShortcutService {
 
   private substituteKey(shortcut: string, combo: Array<string>, substituteKey: string) {
     const hasSpecialKey = shortcut.includes(substituteKey);
-    const substitutedShortcut = [];
+    const substitutedShortcut: string[][] = [];
 
     if (hasSpecialKey) {
       const cleanShortcut = combo.filter(element => element !== META_KEY);
@@ -107,11 +118,11 @@ export class ShortcutService {
     return `${ERROR_PREFIX} ${message}`;
   }
 
-  private isShortcutPressed(shortcutName: string, event: Event) {
+  private isShortcutPressed(shortcutName: string, event: Event, keyboardEvent?: KeyboardEvent) {
     const shortcuts = this._shortcuts[shortcutName];
 
     return shortcuts.some(shortcut => {
-      return shortcut.every(key => event[key]);
+      return shortcut.every(key => (key.startsWith('Key') && keyboardEvent ? keyboardEvent.code === key : event[key]));
     });
   }
 
@@ -119,7 +130,7 @@ export class ShortcutService {
     let unsupportedKey = null;
 
     combo.forEach(key => {
-      if (!SUPPORTED_KEYS[key]) {
+      if (!SUPPORTED_META_KEYS[key] && !SUPPORTED_KEYS.test(key)) {
         unsupportedKey = key;
         return;
       }
