@@ -23,6 +23,51 @@ describe('Clicking', () => {
       });
     });
 
+    it('should move range start without selecting the item', () => {
+      getDesktopExample().within(() => {
+        cy.getSelectItem(1)
+          .dispatch('keydown', { code: 'KeyR' })
+          .dispatch('mousedown', { button: 0, shiftKey: true })
+          .dispatch('mouseup')
+          .dispatch('keyup')
+          .should('have.class', 'dts-range-start')
+          .shouldSelect([])
+          .get(`.${SELECTED_CLASS}`)
+          .should('have.length', 0);
+
+        cy.getSelectItem(5)
+          .dispatch('keydown', { code: 'KeyR' })
+          .dispatch('mousedown', { button: 0, shiftKey: true })
+          .dispatch('mouseup')
+          .dispatch('keyup')
+          .should('have.class', 'dts-range-start');
+      });
+    });
+
+    it('should allow multiple consecutive range selections', () => {
+      getDesktopExample().within(() => {
+        cy.getSelectItem(1)
+          .dispatch('mousedown', { button: 0 })
+          .dispatch('mouseup')
+          .getSelectItem(2)
+          .dispatch('mousedown', { button: 0, shiftKey: true })
+          .dispatch('mouseup')
+          .shouldSelect([2, 3]);
+
+        cy.getSelectItem(6)
+          .then(toggleItem)
+          .getSelectItem(10)
+          .dispatch('mousedown', { button: 0, shiftKey: true })
+          .dispatch('mouseup')
+          .shouldSelect([2, 3, 7, 8, 9, 10, 11]);
+
+        cy.getSelectItem(4)
+          .dispatch('mousedown', { button: 0, shiftKey: true })
+          .dispatch('mouseup')
+          .shouldSelect([2, 3, 5, 6, 7]);
+      });
+    });
+
     it('should reset range start when item is toggled', () => {
       getDesktopExample().within(() => {
         cy.getSelectItem(0)

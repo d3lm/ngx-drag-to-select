@@ -122,6 +122,8 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy, After
 
   private _lastRange: [number, number] = [-1, -1];
   private _lastStartIndex: number | undefined = undefined;
+  private _newRangeStart = false;
+  private _lastRangeSelection: Map<SelectItemDirective, boolean> = new Map();
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
@@ -141,15 +143,18 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy, After
       this._observeBoundingRectChanges();
       this._observeSelectableItems();
 
+      const keydown$ = fromEvent<KeyboardEvent>(window, 'keydown').pipe(share());
+      const keyup$ = fromEvent<KeyboardEvent>(window, 'keyup').pipe(share());
+
       // distinctKeyEvents is used to prevent multiple key events to be fired repeatedly
       // on Windows when a key is being pressed
 
-      const keydown$ = fromEvent<KeyboardEvent>(window, 'keydown').pipe(
+      const distinctKeydown$ = keydown$.pipe(
         distinctKeyEvents(),
         share()
       );
 
-      const keyup$ = fromEvent<KeyboardEvent>(window, 'keyup').pipe(
+      const distinctKeyup$ = keyup$.pipe(
         distinctKeyEvents(),
         share()
       );
@@ -165,10 +170,18 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy, After
         share()
       );
 
+      const shortcuts$ = merge<KeyboardEvent | null>(keydown$, keyup$.pipe(mapTo(null))).pipe(
+        startWith(null),
+        distinctKeyEvents(),
+        distinctUntilChanged()
+      );
+
       const mousedown$ = fromEvent<MouseEvent>(this.host, 'mousedown').pipe(
-        filter(event => event.button === 0), // only emit left mouse
+        withLatestFrom(shortcuts$),
+        filter(([event]) => event.button === 0), // only emit left mouse
         filter(() => !this.disabled),
-        tap(event => this._onMouseDown(event)),
+        tap(([event, keyboardEvent]) => this._onMouseDown(event, keyboardEvent)),
+        map(([mouseEvent]) => mouseEvent),
         share()
       );
 
@@ -193,7 +206,7 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy, After
         share()
       );
 
-      this.selectBoxClasses$ = merge(dragging$, mouseup$, keydown$, keyup$).pipe(
+      this.selectBoxClasses$ = merge(dragging$, mouseup$, distinctKeydown$, distinctKeyup$).pipe(
         auditTime(AUDIT_TIME),
         withLatestFrom(selectBox$),
         map(([event, selectBox]) => {
@@ -228,7 +241,7 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy, After
         map(({ event }) => event)
       );
 
-      const selectOnKeyboardEvent$ = merge(keydown$, keyup$).pipe(
+      const selectOnKeyboardEvent$ = merge(distinctKeydown$, distinctKeyup$).pipe(
         auditTime(AUDIT_TIME),
         whenSelectBoxVisible(selectBox$),
         tap(event => {
@@ -410,7 +423,7 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy, After
     this.renderer.removeClass(document.body, NO_SELECT_CLASS);
   }
 
-  private _onMouseDown(event: MouseEvent) {
+  private _onMouseDown(event: MouseEvent, keyboardEvent: KeyboardEvent | null) {
     if (this.shortcuts.disableSelection(event) || this.disabled) {
       return;
     }
@@ -430,28 +443,25 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy, After
 
     let [startIndex, endIndex] = this._lastRange;
 
-    if (!this.shortcuts.extendedSelectionShortcut(event) && currentIndex > -1) {
-      const lastRangeStart = this._selectableItems[this._lastStartIndex];
+    const isMoveRangeStart = this.shortcuts.moveRangeStart(event, keyboardEvent);
 
-      if (lastRangeStart) {
+    if (!this.shortcuts.extendedSelectionShortcut(event) || isMoveRangeStart) {
+      this._resetRange();
+
+      if (this._lastStartIndex >= 0) {
+        const lastRangeStart = this._selectableItems[this._lastStartIndex];
         lastRangeStart.toggleRangeStart();
       }
 
-      this._lastStartIndex = currentIndex;
-      clickedItem.toggleRangeStart();
-    }
+      if (currentIndex > -1) {
+        this._newRangeStart = true;
+        this._lastStartIndex = currentIndex;
+        clickedItem.toggleRangeStart();
 
-    if (!this.shortcuts.extendedSelectionShortcut(event) && currentIndex === -1) {
-      if (this._lastStartIndex >= 0) {
-        const lastStart = this._selectableItems[this._lastStartIndex];
-        lastStart.toggleRangeStart();
+        this._lastRangeSelection.clear();
+      } else {
+        this._lastStartIndex = -1;
       }
-
-      this._lastStartIndex = -1;
-    }
-
-    if (!this.shortcuts.extendedSelectionShortcut(event)) {
-      this._resetRange();
     }
 
     if (currentIndex > -1) {
@@ -460,22 +470,29 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy, After
       this._lastRange = [startIndex, endIndex];
     }
 
+    if (this.shortcuts.moveRangeStart(event, keyboardEvent)) {
+      return;
+    }
+
     this.$selectableItems.forEach((item, index) => {
       const itemRect = item.getBoundingClientRect();
       const withinBoundingBox = inBoundingBox(mousePoint, itemRect);
+
+      const withinRange =
+        this.shortcuts.extendedSelectionShortcut(event) &&
+        startIndex > -1 &&
+        endIndex > -1 &&
+        index >= startIndex &&
+        index <= endIndex &&
+        startIndex !== endIndex;
 
       const shouldAdd =
         (withinBoundingBox &&
           !this.shortcuts.toggleSingleItem(event) &&
           !this.selectMode &&
           !this.selectWithShortcut) ||
-        // captured by range and start != end
-        (this.shortcuts.extendedSelectionShortcut(event) &&
-          startIndex > -1 &&
-          endIndex > -1 &&
-          index >= startIndex &&
-          index <= endIndex &&
-          startIndex !== endIndex) ||
+        (this.shortcuts.extendedSelectionShortcut(event) && item.selected && !this._lastRangeSelection.get(item)) ||
+        withinRange ||
         (withinBoundingBox && this.shortcuts.toggleSingleItem(event) && !item.selected) ||
         (!withinBoundingBox && this.shortcuts.toggleSingleItem(event) && item.selected) ||
         (withinBoundingBox && !item.selected && this.selectMode) ||
@@ -498,7 +515,19 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy, After
       } else if (shouldRemove) {
         this._deselectItem(item);
       }
+
+      if (withinRange && !this._lastRangeSelection.get(item)) {
+        this._lastRangeSelection.set(item, true);
+      } else if (!withinRange && !this._newRangeStart && !item.selected) {
+        this._lastRangeSelection.delete(item);
+      }
     });
+
+    // if we don't toggle a single item, we set `newRangeStart` to `false`
+    // meaning that we are building up a range
+    if (!this.shortcuts.toggleSingleItem(event)) {
+      this._newRangeStart = false;
+    }
   }
 
   private _selectItems(event: Event) {

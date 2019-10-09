@@ -177,6 +177,7 @@ Class that is added to an item when it's selected. The default class is `selecte
 
 | Shortcut            | Default          | Description                                                                       |
 | ------------------- | ---------------- | --------------------------------------------------------------------------------- |
+| moveRangeStart      | `shift` + `r`    | Move range start without selecting the item                                       |
 | disableSelection    | `alt`            | Disable selection mode to allow selecting text on the screen within the drag area |
 | toggleSingleItem    | `meta`           | Add or remove single item to / from selection                                     |
 | addToSelection      | `shift`          | Range selection, Add items to selection                                           |
@@ -202,7 +203,7 @@ import { DragToSelectModule } from 'ngx-drag-to-select';
 export class AppModule { }
 ```
 
-**Note**: If you override one of the shortscut you have to make sure they do not interfear with one another to ensure a smooth selecting experience.
+**Note**: If you override one of the shortcuts you have to make sure they do not interfear with one another to ensure a smooth selecting experience.
 
 #### Modifiers
 
