@@ -1,4 +1,5 @@
 import { TestBed } from '@angular/core/testing';
+import { KeyboardEventsService } from './keyboard-events.service';
 import { ShortcutService } from './shortcut.service';
 import { CONFIG } from './tokens';
 
@@ -14,7 +15,7 @@ describe('ShortcutService', () => {
       };
 
       TestBed.configureTestingModule({
-        providers: [ShortcutService, { provide: CONFIG, useValue: config }]
+        providers: [KeyboardEventsService, ShortcutService, { provide: CONFIG, useValue: config }]
       });
 
       expect(() => {
@@ -30,7 +31,7 @@ describe('ShortcutService', () => {
       };
 
       TestBed.configureTestingModule({
-        providers: [ShortcutService, { provide: CONFIG, useValue: config }]
+        providers: [KeyboardEventsService, ShortcutService, { provide: CONFIG, useValue: config }]
       });
 
       expect(() => {
@@ -51,7 +52,7 @@ describe('ShortcutService', () => {
 
     beforeEach(() => {
       TestBed.configureTestingModule({
-        providers: [ShortcutService, { provide: CONFIG, useValue: CUSTOM_CONFIG }]
+        providers: [KeyboardEventsService, ShortcutService, { provide: CONFIG, useValue: CUSTOM_CONFIG }]
       });
 
       shortcutService = TestBed.get(ShortcutService);

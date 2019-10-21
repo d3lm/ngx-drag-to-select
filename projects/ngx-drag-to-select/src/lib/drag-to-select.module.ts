@@ -1,12 +1,12 @@
-import { NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
+import { ModuleWithProviders, NgModule } from '@angular/core';
+import { DEFAULT_CONFIG } from './config';
+import { KeyboardEventsService } from './keyboard-events.service';
+import { DragToSelectConfig } from './models';
 import { SelectContainerComponent } from './select-container.component';
 import { SelectItemDirective } from './select-item.directive';
 import { ShortcutService } from './shortcut.service';
-import { DragToSelectConfig } from './models';
 import { CONFIG, USER_CONFIG } from './tokens';
-import { DEFAULT_CONFIG } from './config';
 import { mergeDeep } from './utils';
 
 const COMPONENTS = [SelectContainerComponent, SelectItemDirective];
@@ -26,6 +26,7 @@ export class DragToSelectModule {
       ngModule: DragToSelectModule,
       providers: [
         ShortcutService,
+        KeyboardEventsService,
         { provide: USER_CONFIG, useValue: config },
         {
           provide: CONFIG,
