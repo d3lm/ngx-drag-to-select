@@ -66,6 +66,7 @@ import {
   getMousePosition,
   hasMinimumSize
 } from './utils';
+import { KeyboardEventsService } from './keyboard-events.service';
 
 @Component({
   selector: 'dts-select-container',
@@ -128,6 +129,7 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy, After
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
     private shortcuts: ShortcutService,
+    private keyboardEvents: KeyboardEventsService,
     private hostElementRef: ElementRef,
     private renderer: Renderer2,
     private ngZone: NgZone
@@ -143,45 +145,21 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy, After
       this._observeBoundingRectChanges();
       this._observeSelectableItems();
 
-      const keydown$ = fromEvent<KeyboardEvent>(window, 'keydown').pipe(share());
-      const keyup$ = fromEvent<KeyboardEvent>(window, 'keyup').pipe(share());
-
-      // distinctKeyEvents is used to prevent multiple key events to be fired repeatedly
-      // on Windows when a key is being pressed
-
-      const distinctKeydown$ = keydown$.pipe(
-        distinctKeyEvents(),
-        share()
-      );
-
-      const distinctKeyup$ = keyup$.pipe(
-        distinctKeyEvents(),
-        share()
-      );
-
-      const mouseup$ = fromEvent<MouseEvent>(window, 'mouseup').pipe(
+      const mouseup$ = this.keyboardEvents.mouseup$.pipe(
         filter(() => !this.disabled),
         tap(() => this._onMouseUp()),
         share()
       );
 
-      const mousemove$ = fromEvent<MouseEvent>(window, 'mousemove').pipe(
+      const mousemove$ = this.keyboardEvents.mousemove$.pipe(
         filter(() => !this.disabled),
         share()
       );
 
-      const shortcuts$ = merge<KeyboardEvent | null>(keydown$, keyup$.pipe(mapTo(null))).pipe(
-        startWith(null),
-        distinctKeyEvents(),
-        distinctUntilChanged()
-      );
-
       const mousedown$ = fromEvent<MouseEvent>(this.host, 'mousedown').pipe(
-        withLatestFrom(shortcuts$),
-        filter(([event]) => event.button === 0), // only emit left mouse
+        filter(event => event.button === 0), // only emit left mouse
         filter(() => !this.disabled),
-        tap(([event, keyboardEvent]) => this._onMouseDown(event, keyboardEvent)),
-        map(([mouseEvent]) => mouseEvent),
+        tap(event => this._onMouseDown(event)),
         share()
       );
 
@@ -206,7 +184,12 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy, After
         share()
       );
 
-      this.selectBoxClasses$ = merge(dragging$, mouseup$, distinctKeydown$, distinctKeyup$).pipe(
+      this.selectBoxClasses$ = merge(
+        dragging$,
+        mouseup$,
+        this.keyboardEvents.distinctKeydown$,
+        this.keyboardEvents.distinctKeyup$
+      ).pipe(
         auditTime(AUDIT_TIME),
         withLatestFrom(selectBox$),
         map(([event, selectBox]) => {
@@ -241,7 +224,10 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy, After
         map(({ event }) => event)
       );
 
-      const selectOnKeyboardEvent$ = merge(distinctKeydown$, distinctKeyup$).pipe(
+      const selectOnKeyboardEvent$ = merge(
+        this.keyboardEvents.distinctKeydown$,
+        this.keyboardEvents.distinctKeyup$
+      ).pipe(
         auditTime(AUDIT_TIME),
         whenSelectBoxVisible(selectBox$),
         tap(event => {
@@ -423,7 +409,7 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy, After
     this.renderer.removeClass(document.body, NO_SELECT_CLASS);
   }
 
-  private _onMouseDown(event: MouseEvent, keyboardEvent: KeyboardEvent | null) {
+  private _onMouseDown(event: MouseEvent) {
     if (this.shortcuts.disableSelection(event) || this.disabled) {
       return;
     }
@@ -443,7 +429,7 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy, After
 
     let [startIndex, endIndex] = this._lastRange;
 
-    const isMoveRangeStart = this.shortcuts.moveRangeStart(event, keyboardEvent);
+    const isMoveRangeStart = this.shortcuts.moveRangeStart(event);
 
     if (!this.shortcuts.extendedSelectionShortcut(event) || isMoveRangeStart) {
       this._resetRange();
@@ -470,7 +456,7 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy, After
       this._lastRange = [startIndex, endIndex];
     }
 
-    if (this.shortcuts.moveRangeStart(event, keyboardEvent)) {
+    if (isMoveRangeStart) {
       return;
     }
 
