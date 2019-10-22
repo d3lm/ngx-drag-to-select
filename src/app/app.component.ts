@@ -16,6 +16,7 @@ export class AppComponent implements OnInit {
   selectOnDrag = true;
   selectMode = false;
   disable = false;
+  disableRangeSelection = false;
   isDesktop = false;
   selectWithShortcut = false;
 

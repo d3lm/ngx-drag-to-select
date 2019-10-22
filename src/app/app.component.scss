@@ -78,8 +78,11 @@ mat-checkbox {
   }
 }
 
+.action-buttons {
+  margin: 1rem 0;
+}
+
 button {
-  &:first-of-type,
   & + & {
     margin-left: 1rem;
   }
