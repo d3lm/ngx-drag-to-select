@@ -21,13 +21,18 @@
 
     <mat-checkbox data-cy="selectOnDrag" [(ngModel)]="selectOnDrag">Select on Drag</mat-checkbox>
     <mat-checkbox data-cy="disable" [(ngModel)]="disable">Disable</mat-checkbox>
+    <mat-checkbox data-cy="disableRangeSelection" [(ngModel)]="disableRangeSelection"
+      >Disable Range Selection</mat-checkbox
+    >
     <mat-checkbox data-cy="selectMode" [(ngModel)]="selectMode">Select Mode</mat-checkbox>
     <mat-checkbox data-cy="selectWithShortcut" [(ngModel)]="selectWithShortcut">Select with Shortcut</mat-checkbox>
 
-    <button data-cy="selectAll" mat-raised-button (click)="selectContainer.selectAll()">Select All</button>
-    <button data-cy="clearSelection" mat-raised-button (click)="selectContainer.clearSelection()">
-      Clear Selection
-    </button>
+    <div class="action-buttons">
+      <button data-cy="selectAll" mat-raised-button (click)="selectContainer.selectAll()">Select All</button>
+      <button data-cy="clearSelection" mat-raised-button (click)="selectContainer.clearSelection()">
+        Clear Selection
+      </button>
+    </div>
 
     <div class="drag-area">
       <dts-select-container
@@ -36,6 +41,7 @@
         [selectMode]="selectMode"
         [(selectedItems)]="selectedDocuments"
         [disabled]="disable"
+        [disableRangeSelection]="disableRangeSelection"
         [selectOnDrag]="selectOnDrag"
         [selectWithShortcut]="selectWithShortcut"
       >

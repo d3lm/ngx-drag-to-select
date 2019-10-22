@@ -100,6 +100,7 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy, After
   @Input() selectOnDrag = true;
   @Input() disabled = false;
   @Input() disableDrag = false;
+  @Input() disableRangeSelection = false;
   @Input() selectMode = false;
   @Input() selectWithShortcut = false;
 
@@ -431,14 +432,15 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy, After
 
     const isMoveRangeStart = this.shortcuts.moveRangeStart(event);
 
-    if (!this.shortcuts.extendedSelectionShortcut(event) || isMoveRangeStart) {
-      this._resetRange();
+    const shouldResetRangeSelection =
+      !this.shortcuts.extendedSelectionShortcut(event) || isMoveRangeStart || this.disableRangeSelection;
 
-      if (this._lastStartIndex >= 0) {
-        const lastRangeStart = this._selectableItems[this._lastStartIndex];
-        lastRangeStart.toggleRangeStart();
-      }
+    if (shouldResetRangeSelection) {
+      this._resetRangeStart();
+    }
 
+    // move range start
+    if (shouldResetRangeSelection && !this.disableRangeSelection) {
       if (currentIndex > -1) {
         this._newRangeStart = true;
         this._lastStartIndex = currentIndex;
@@ -463,6 +465,10 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy, After
     this.$selectableItems.forEach((item, index) => {
       const itemRect = item.getBoundingClientRect();
       const withinBoundingBox = inBoundingBox(mousePoint, itemRect);
+
+      if (this.shortcuts.extendedSelectionShortcut(event) && this.disableRangeSelection) {
+        return;
+      }
 
       const withinRange =
         this.shortcuts.extendedSelectionShortcut(event) &&
@@ -655,7 +661,20 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy, After
     return [index, targetItem];
   }
 
-  private _resetRange() {
+  private _resetRangeStart() {
     this._lastRange = [-1, -1];
+    const lastRangeStart = this._getLastRangeSelection();
+
+    if (lastRangeStart && lastRangeStart.rangeStart) {
+      lastRangeStart.toggleRangeStart();
+    }
+  }
+
+  private _getLastRangeSelection(): SelectItemDirective | null {
+    if (this._lastStartIndex >= 0) {
+      return this._selectableItems[this._lastStartIndex];
+    }
+
+    return null;
   }
 }

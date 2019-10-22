@@ -1,5 +1,12 @@
 import { DEFAULT_CONFIG } from '../../projects/ngx-drag-to-select/src/lib/config';
-import { disableSelectOnDrag, enableSelectWithShortcut, getDesktopExample, toggleItem } from '../support/utils';
+
+import {
+  disableRangeSelection,
+  disableSelectOnDrag,
+  enableSelectWithShortcut,
+  getDesktopExample,
+  toggleItem
+} from '../support/utils';
 
 const SELECTED_CLASS = DEFAULT_CONFIG.selectedClass;
 
@@ -8,7 +15,43 @@ describe('Clicking', () => {
     cy.visit('/');
   });
 
-  describe('Range', () => {
+  describe('Range Selection', () => {
+    describe('Disabled', () => {
+      it('should reset range selection after disabling this feature', () => {
+        getDesktopExample().within(() => {
+          cy.getSelectItem(0)
+            .dispatch('mousedown', { button: 0 })
+            .dispatch('mouseup')
+            .should('have.class', 'dts-range-start');
+
+          disableRangeSelection();
+
+          cy.getSelectItem(2)
+            .dispatch('mousedown', { button: 0 })
+            .dispatch('mouseup')
+            .should('not.have.class', 'dts-range-start');
+
+          cy.getSelectItem(0).should('not.have.class', 'dts-range-start');
+        });
+      });
+
+      it('should disable range selection', () => {
+        getDesktopExample().within(() => {
+          disableRangeSelection();
+
+          cy.getSelectItem(2)
+            .dispatch('mousedown', { button: 0 })
+            .dispatch('mouseup')
+            .getSelectItem(6)
+            .dispatch('mousedown', { button: 0, shiftKey: true })
+            .dispatch('mouseup')
+            .shouldSelect([3])
+            .get(`.${SELECTED_CLASS}`)
+            .should('have.length', 1);
+        });
+      });
+    });
+
     it('should select items in a row if shift is pressed', () => {
       getDesktopExample().within(() => {
         cy.getSelectItem(0)
