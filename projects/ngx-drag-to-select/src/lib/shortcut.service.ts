@@ -1,4 +1,5 @@
-import { Inject, Injectable } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { merge } from 'rxjs';
 import { distinctUntilChanged, map } from 'rxjs/operators';
 import { KeyboardEventsService } from './keyboard-events.service';
@@ -41,30 +42,36 @@ export class ShortcutService {
 
   private _latestShortcut: Map<string, boolean> = new Map();
 
-  constructor(@Inject(CONFIG) config: DragToSelectConfig, private keyboardEvents: KeyboardEventsService) {
+  constructor(
+    @Inject(PLATFORM_ID) private platformId: Object,
+    @Inject(CONFIG) config: DragToSelectConfig,
+    private keyboardEvents: KeyboardEventsService
+  ) {
     this._shortcuts = this._createShortcutsFromConfig(config.shortcuts);
 
-    const keydown$ = this.keyboardEvents.keydown$.pipe(
-      map<KeyboardEvent, KeyState>(event => ({ code: event.code, pressed: true }))
-    );
+    if (isPlatformBrowser(this.platformId)) {
+      const keydown$ = this.keyboardEvents.keydown$.pipe(
+        map<KeyboardEvent, KeyState>(event => ({ code: event.code, pressed: true }))
+      );
 
-    const keyup$ = this.keyboardEvents.keyup$.pipe(
-      map<KeyboardEvent, KeyState>(event => ({ code: event.code, pressed: false }))
-    );
+      const keyup$ = this.keyboardEvents.keyup$.pipe(
+        map<KeyboardEvent, KeyState>(event => ({ code: event.code, pressed: false }))
+      );
 
-    merge<KeyState>(keydown$, keyup$)
-      .pipe(
-        distinctUntilChanged((prev, curr) => {
-          return prev.pressed === curr.pressed && prev.code === curr.code;
-        })
-      )
-      .subscribe(keyState => {
-        if (keyState.pressed) {
-          this._latestShortcut.set(keyState.code, true);
-        } else {
-          this._latestShortcut.delete(keyState.code);
-        }
-      });
+      merge<KeyState>(keydown$, keyup$)
+        .pipe(
+          distinctUntilChanged((prev, curr) => {
+            return prev.pressed === curr.pressed && prev.code === curr.code;
+          })
+        )
+        .subscribe(keyState => {
+          if (keyState.pressed) {
+            this._latestShortcut.set(keyState.code, true);
+          } else {
+            this._latestShortcut.delete(keyState.code);
+          }
+        });
+    }
   }
 
   disableSelection(event: Event) {

@@ -1,26 +1,42 @@
-import { Injectable } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
+import { fromEvent, Observable } from 'rxjs';
 import { share } from 'rxjs/operators';
-import { fromEvent } from 'rxjs';
 import { distinctKeyEvents } from './operators';
 
 @Injectable()
 export class KeyboardEventsService {
-  keydown$ = fromEvent<KeyboardEvent>(window, 'keydown').pipe(share());
-  keyup$ = fromEvent<KeyboardEvent>(window, 'keyup').pipe(share());
+  keydown$: Observable<KeyboardEvent>;
+  keyup$: Observable<KeyboardEvent>;
+  distinctKeydown$: Observable<KeyboardEvent>;
+  distinctKeyup$: Observable<KeyboardEvent>;
+  mouseup$: Observable<MouseEvent>;
+  mousemove$: Observable<MouseEvent>;
 
-  // distinctKeyEvents is used to prevent multiple key events to be fired repeatedly
-  // on Windows when a key is being pressed
+  constructor(@Inject(PLATFORM_ID) private platformId: Object) {
+    if (isPlatformBrowser(this.platformId)) {
+      this._initializeKeyboardStreams();
+    }
+  }
 
-  distinctKeydown$ = this.keydown$.pipe(
-    distinctKeyEvents(),
-    share()
-  );
+  private _initializeKeyboardStreams() {
+    this.keydown$ = fromEvent<KeyboardEvent>(window, 'keydown').pipe(share());
+    this.keyup$ = fromEvent<KeyboardEvent>(window, 'keyup').pipe(share());
 
-  distinctKeyup$ = this.keyup$.pipe(
-    distinctKeyEvents(),
-    share()
-  );
+    // distinctKeyEvents is used to prevent multiple key events to be fired repeatedly
+    // on Windows when a key is being pressed
 
-  mouseup$ = fromEvent<MouseEvent>(window, 'mouseup').pipe(share());
-  mousemove$ = fromEvent<MouseEvent>(window, 'mousemove').pipe(share());
+    this.distinctKeydown$ = this.keydown$.pipe(
+      distinctKeyEvents(),
+      share()
+    );
+
+    this.distinctKeyup$ = this.keyup$.pipe(
+      distinctKeyEvents(),
+      share()
+    );
+
+    this.mouseup$ = fromEvent<MouseEvent>(window, 'mouseup').pipe(share());
+    this.mousemove$ = fromEvent<MouseEvent>(window, 'mousemove').pipe(share());
+  }
 }
