@@ -88,7 +88,7 @@
     "conventional-changelog-cli": "^2.0.21",
     "copyfiles": "^2.1.0",
     "cpr": "^3.0.1",
-    "cypress": "^3.3.1",
+    "cypress": "^3.5.0",
     "del-cli": "^2.0.0",
     "express": "^4.17.1",
     "husky": "^2.3.0",
