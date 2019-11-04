@@ -71,7 +71,7 @@
   "devDependencies": {
     "@angular-builders/jest": "^8.0.2",
     "@angular-devkit/build-angular": "~0.803.14",
-    "@angular-devkit/build-ng-packagr": "^0.803.14",
+    "@angular-devkit/build-ng-packagr": "^0.803.17",
     "@angular/cli": "^8.3.14",
     "@angular/compiler-cli": "^8.2.12",
     "@angular/language-service": "^8.2.12",
@@ -95,7 +95,7 @@
     "jest": "^24.8.0",
     "jest-preset-angular": "^7.1.1",
     "lint-staged": "^8.1.7",
-    "ng-packagr": "^5.7.0",
+    "ng-packagr": "^5.7.1",
     "node-sass": "^4.12.0",
     "prettier": "^1.17.1",
     "start-server-and-test": "^1.9.1",

@@ -59,6 +59,8 @@ or
 yarn add ngx-drag-to-select
 ```
 
+The above will install the **latest stable** version. If you wish to live on the edge you can also use the `next` tag. Doing so gives you the latest `alpha`, `beta` or `release candidate`.
+
 ## Setup
 
 Setting up `ngx-drag-to-select` is easy, and it only takes a few steps!
