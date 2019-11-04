@@ -1,14 +1,34 @@
-<a name="3.1.1"></a>
+# [3.2.0-rc.0](https://github.com/d3lm/ngx-drag-to-select/compare/v3.1.1...v3.2.0-rc.0) (2019-11-04)
+
+
+### Features
+
+* update angular ([875ed98](https://github.com/d3lm/ngx-drag-to-select/commit/875ed98))
+* update angular material ([d0fffc2](https://github.com/d3lm/ngx-drag-to-select/commit/d0fffc2))
+* update cypress ([a0d0d54](https://github.com/d3lm/ngx-drag-to-select/commit/a0d0d54))
+* **app:** update shortcuts ([3213dad](https://github.com/d3lm/ngx-drag-to-select/commit/3213dad))
+* **lib:** add range selection behavior ([13cbbd3](https://github.com/d3lm/ngx-drag-to-select/commit/13cbbd3)), closes [#62](https://github.com/d3lm/ngx-drag-to-select/issues/62)
+* **lib:** allow multiple consecutive range selections ([d7f7c4b](https://github.com/d3lm/ngx-drag-to-select/commit/d7f7c4b))
+* **lib:** allow shortcuts to contain alphabetic characters ([f41c934](https://github.com/d3lm/ngx-drag-to-select/commit/f41c934))
+* **lib:** allow to disable range selection ([bd4883d](https://github.com/d3lm/ngx-drag-to-select/commit/bd4883d))
+* upgrade to Angular 8 ([d4e7b86](https://github.com/d3lm/ngx-drag-to-select/commit/d4e7b86))
+
+
+### Performance Improvements
+
+* lazily calculate position of each selectable item ([0c9efaa](https://github.com/d3lm/ngx-drag-to-select/commit/0c9efaa))
+
+
+
 ## [3.1.1](https://github.com/d3lm/ngx-drag-to-select/compare/v3.1.0...v3.1.1) (2018-12-29)
 
 
 ### Bug Fixes
 
-* **lib:** correctly select items when selectOnDrag is false ([fd551fe](https://github.com/d3lm/ngx-drag-to-select/commit/fd551fe)), closes [#67](https://github.com/d3lm/ngx-drag-to-select/issues/67)
+* **lib:** correctly select items when selectOnDrag is false ([e7a4543](https://github.com/d3lm/ngx-drag-to-select/commit/e7a4543)), closes [#67](https://github.com/d3lm/ngx-drag-to-select/issues/67)
 
 
 
-<a name="3.1.0"></a>
 # [3.1.0](https://github.com/d3lm/ngx-drag-to-select/compare/v3.0.3...v3.1.0) (2018-12-28)
 
 
@@ -18,7 +38,6 @@
 
 
 
-<a name="3.0.3"></a>
 ## [3.0.3](https://github.com/d3lm/ngx-drag-to-select/compare/v3.0.2...v3.0.3) (2018-12-19)
 
 
@@ -28,7 +47,6 @@
 
 
 
-<a name="3.0.2"></a>
 ## [3.0.2](https://github.com/d3lm/ngx-drag-to-select/compare/v3.0.1...v3.0.2) (2018-11-28)
 
 
@@ -38,12 +56,10 @@
 
 
 
-<a name="3.0.1"></a>
 ## [3.0.1](https://github.com/d3lm/ngx-drag-to-select/compare/v3.0.0...v3.0.1) (2018-11-02)
 
 
 
-<a name="3.0.0"></a>
 # [3.0.0](https://github.com/d3lm/ngx-drag-to-select/compare/v2.1.0...v3.0.0) (2018-11-02)
 
 
@@ -71,7 +87,6 @@ It is only possible to drag with the left mouse button
 
 
 
-<a name="2.1.0"></a>
 # [2.1.0](https://github.com/d3lm/ngx-drag-to-select/compare/v2.0.0...v2.1.0) (2018-09-27)
 
 
@@ -88,7 +103,6 @@ It is only possible to drag with the left mouse button
 
 
 
-<a name="2.0.0"></a>
 # [2.0.0](https://github.com/d3lm/ngx-drag-to-select/compare/v1.1.1...v2.0.0) (2018-07-22)
 
 
@@ -120,7 +134,6 @@ dtsSelectItem directive was changed to match the directive name.
 
 
 
-<a name="1.1.1"></a>
 ## [1.1.1](https://github.com/d3lm/ngx-drag-to-select/compare/v1.1.0...v1.1.1) (2018-04-06)
 
 
@@ -138,7 +151,6 @@ dtsSelectItem directive was changed to match the directive name.
 
 
 
-<a name="1.1.0"></a>
 # [1.1.0](https://github.com/d3lm/ngx-drag-to-select/compare/v1.0.6...v1.1.0) (2018-04-06)
 
 
@@ -148,7 +160,6 @@ dtsSelectItem directive was changed to match the directive name.
 
 
 
-<a name="1.0.6"></a>
 ## [1.0.6](https://github.com/d3lm/ngx-drag-to-select/compare/v1.0.5...v1.0.6) (2018-04-05)
 
 
@@ -158,7 +169,6 @@ dtsSelectItem directive was changed to match the directive name.
 
 
 
-<a name="1.0.5"></a>
 ## [1.0.5](https://github.com/d3lm/ngx-drag-to-select/compare/v1.0.4...v1.0.5) (2018-04-05)
 
 
@@ -169,7 +179,6 @@ dtsSelectItem directive was changed to match the directive name.
 
 
 
-<a name="1.0.4"></a>
 ## [1.0.4](https://github.com/d3lm/ngx-drag-to-select/compare/v1.0.3...v1.0.4) (2018-04-03)
 
 
@@ -185,7 +194,6 @@ dtsSelectItem directive was changed to match the directive name.
 
 
 
-<a name="1.0.3"></a>
 ## [1.0.3](https://github.com/d3lm/ngx-drag-to-select/compare/v1.0.1...v1.0.3) (2018-03-31)
 
 
@@ -195,12 +203,10 @@ dtsSelectItem directive was changed to match the directive name.
 
 
 
-<a name="1.0.1"></a>
 ## [1.0.1](https://github.com/d3lm/ngx-drag-to-select/compare/v1.0.0...v1.0.1) (2018-03-31)
 
 
 
-<a name="1.0.0"></a>
 # [1.0.0](https://github.com/d3lm/ngx-drag-to-select/compare/80d54f6...v1.0.0) (2018-03-30)
 
 
