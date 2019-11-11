@@ -26,6 +26,7 @@
     >
     <mat-checkbox data-cy="selectMode" [(ngModel)]="selectMode">Select Mode</mat-checkbox>
     <mat-checkbox data-cy="selectWithShortcut" [(ngModel)]="selectWithShortcut">Select with Shortcut</mat-checkbox>
+    <mat-checkbox data-cy="additive" [(ngModel)]="additive">Additive</mat-checkbox>
 
     <div class="action-buttons">
       <button data-cy="selectAll" mat-raised-button (click)="selectContainer.selectAll()">Select All</button>
@@ -44,6 +45,7 @@
         [disableRangeSelection]="disableRangeSelection"
         [selectOnDrag]="selectOnDrag"
         [selectWithShortcut]="selectWithShortcut"
+        [additive]="additive"
       >
         <mat-grid-list cols="4" rowHeight="200px" gutterSize="20px">
           <mat-grid-tile [dtsSelectItem]="document" *ngFor="let document of documents">

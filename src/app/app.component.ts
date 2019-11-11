@@ -19,6 +19,7 @@ export class AppComponent implements OnInit {
   disableRangeSelection = false;
   isDesktop = false;
   selectWithShortcut = false;
+  additive = false;
 
   constructor(
     private titleService: Title,
