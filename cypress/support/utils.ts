@@ -68,6 +68,10 @@ export const enableSelectWithShortcut = () => {
   return cy.get('[data-cy="selectWithShortcut"]').click();
 };
 
+export const enableAdditive = () => {
+  return cy.get('[data-cy="additive"]').click();
+};
+
 export const selectAll = () => {
   return getSelectAllButton().click();
 };

@@ -4,6 +4,7 @@ import {
   disableSelection,
   disableSelectOnDrag,
   enableSelectMode,
+  enableAdditive,
   getDesktopExample,
   shouldBeInvisible,
   shouldBeVisible,
@@ -368,6 +369,31 @@ describe('Dragging', () => {
             .get(`.${SELECTED_CLASS}`)
             .should('have.length', 2);
         });
+      });
+    });
+  });
+
+  describe('Additive', () => {
+    beforeEach(() => {
+      enableAdditive();
+    });
+
+    it('should extend selection after mouseup', () => {
+      getDesktopExample().within(() => {
+        cy.getSelectItem(0)
+          .dispatch('mousedown', { button: 0 })
+          .getSelectItem(5)
+          .dispatch('mousemove')
+          .dispatch('mouseup')
+          .shouldSelect([1, 2, 5, 6])
+          .getSelectItem(2)
+          .dispatch('mousedown', { button: 0 })
+          .getSelectItem(7)
+          .dispatch('mousemove')
+          .dispatch('mouseup')
+          .shouldSelect([1, 2, 3, 4, 5, 6, 7, 8])
+          .get(`.${SELECTED_CLASS}`)
+          .should('have.length', 8);
       });
     });
   });

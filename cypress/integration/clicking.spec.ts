@@ -3,6 +3,7 @@ import { DEFAULT_CONFIG } from '../../projects/ngx-drag-to-select/src/lib/config
 import {
   disableRangeSelection,
   disableSelectOnDrag,
+  enableAdditive,
   enableSelectWithShortcut,
   getDesktopExample,
   toggleItem
@@ -230,6 +231,40 @@ describe('Clicking', () => {
           .dispatch('mousedown', { button: 0 })
           .dispatch('mouseup')
           .shouldSelect([1]);
+      });
+    });
+  });
+
+  describe('Select with Additive', () => {
+    beforeEach(() => {
+      enableAdditive();
+    });
+
+    it('should add item to selection if clicked', () => {
+      getDesktopExample().within(() => {
+        cy.getSelectItem(0)
+          .dispatch('mousedown', { button: 0 })
+          .dispatch('mouseup')
+          .getSelectItem(1)
+          .dispatch('mousedown', { button: 0 })
+          .dispatch('mouseup')
+          .shouldSelect([1, 2]);
+      });
+    });
+
+    it('should remove the item if clicked', () => {
+      getDesktopExample().within(() => {
+        cy.getSelectItem(0)
+          .dispatch('mousedown', { button: 0 })
+          .dispatch('mouseup')
+          .getSelectItem(1)
+          .dispatch('mousedown', { button: 0 })
+          .dispatch('mouseup')
+          .shouldSelect([1, 2])
+          .getSelectItem(0)
+          .dispatch('mousedown', { button: 0 })
+          .dispatch('mouseup')
+          .shouldSelect([2]);
       });
     });
   });

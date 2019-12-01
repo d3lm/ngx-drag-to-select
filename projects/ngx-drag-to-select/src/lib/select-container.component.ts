@@ -103,6 +103,7 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy, After
   @Input() disableRangeSelection = false;
   @Input() selectMode = false;
   @Input() selectWithShortcut = false;
+  @Input() additive = false;
 
   @Input()
   @HostBinding('class.dts-custom')
@@ -482,25 +483,27 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy, After
         (withinBoundingBox &&
           !this.shortcuts.toggleSingleItem(event) &&
           !this.selectMode &&
+          !this.additive &&
           !this.selectWithShortcut) ||
         (this.shortcuts.extendedSelectionShortcut(event) && item.selected && !this._lastRangeSelection.get(item)) ||
         withinRange ||
         (withinBoundingBox && this.shortcuts.toggleSingleItem(event) && !item.selected) ||
         (!withinBoundingBox && this.shortcuts.toggleSingleItem(event) && item.selected) ||
-        (withinBoundingBox && !item.selected && this.selectMode) ||
-        (!withinBoundingBox && item.selected && this.selectMode);
+        (withinBoundingBox && !item.selected && (this.selectMode || this.additive)) ||
+        (!withinBoundingBox && item.selected && (this.selectMode || this.additive));
 
       const shouldRemove =
         (!withinBoundingBox &&
           !this.shortcuts.toggleSingleItem(event) &&
           !this.selectMode &&
+          !this.additive &&
           !this.shortcuts.extendedSelectionShortcut(event) &&
           !this.selectWithShortcut) ||
         (this.shortcuts.extendedSelectionShortcut(event) && currentIndex > -1) ||
         (!withinBoundingBox && this.shortcuts.toggleSingleItem(event) && !item.selected) ||
         (withinBoundingBox && this.shortcuts.toggleSingleItem(event) && item.selected) ||
-        (!withinBoundingBox && !item.selected && this.selectMode) ||
-        (withinBoundingBox && item.selected && this.selectMode);
+        (!withinBoundingBox && !item.selected && (this.selectMode || this.additive)) ||
+        (withinBoundingBox && item.selected && (this.selectMode || this.additive));
 
       if (shouldAdd) {
         this._selectItem(item);
@@ -546,11 +549,14 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy, After
   private _normalSelectionMode(selectBox: BoundingBox, item: SelectItemDirective, event: Event) {
     const inSelection = boxIntersects(selectBox, item.getBoundingClientRect());
 
-    const shouldAdd = inSelection && !item.selected && !this.shortcuts.removeFromSelection(event);
+    const shouldAdd =
+      (inSelection && !item.selected && !this.shortcuts.removeFromSelection(event)) ||
+      (this.additive && ((inSelection && !item.selected) || (!inSelection && item.selected)));
 
     const shouldRemove =
       (!inSelection && item.selected && !this.shortcuts.addToSelection(event)) ||
-      (inSelection && item.selected && this.shortcuts.removeFromSelection(event));
+      (inSelection && item.selected && this.shortcuts.removeFromSelection(event)) ||
+      (this.additive && !inSelection && !item.selected);
 
     if (shouldAdd) {
       this._selectItem(item);
@@ -562,7 +568,7 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy, After
   private _extendedSelectionMode(selectBox, item: SelectItemDirective, event: Event) {
     const inSelection = boxIntersects(selectBox, item.getBoundingClientRect());
 
-    const shoudlAdd =
+    const shouldAdd =
       (inSelection && !item.selected && !this.shortcuts.removeFromSelection(event) && !this._tmpItems.has(item)) ||
       (inSelection && item.selected && this.shortcuts.removeFromSelection(event) && !this._tmpItems.has(item));
 
@@ -570,12 +576,12 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy, After
       (!inSelection && item.selected && this.shortcuts.addToSelection(event) && this._tmpItems.has(item)) ||
       (!inSelection && !item.selected && this.shortcuts.removeFromSelection(event) && this._tmpItems.has(item));
 
-    if (shoudlAdd) {
+    if (shouldAdd) {
       item.selected ? item._deselect() : item._select();
 
       const action = this.shortcuts.removeFromSelection(event)
         ? Action.Delete
-        : this.shortcuts.addToSelection(event)
+        : this.shortcuts.addToSelection(event) || this.additive
         ? Action.Add
         : Action.None;
 
