@@ -250,7 +250,7 @@ shortcuts: {
 | selectMode            | Boolean    | `false` | If set to `true`, a _toggle_ mode is activated similar to the `toggleSingleItem` shortcut. Useful for mobile. |
 | custom                | Boolean    | `false` | If set to `true`, all default styles for selected items will not be applied.                                  |
 | selectWithShortcut    | Boolean    | `false` | If set to `true`, items can only be selected when single clicking and applying a keyboard shortcut            |
-| additive              | Boolean    | `false` | If set to `true`, will add items to selection the same way as holding the `shift` key.                        |
+| additive              | Boolean    | `false` | If set to `true`, will add items to selection when clicking and dragging.                                     |
 
 Here's an example of all inputs in action:
 
