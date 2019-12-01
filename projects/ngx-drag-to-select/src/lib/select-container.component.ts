@@ -467,7 +467,7 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy, After
       const itemRect = item.getBoundingClientRect();
       const withinBoundingBox = inBoundingBox(mousePoint, itemRect);
 
-      if (this.shortcuts.extendedSelectionShortcut(event) && this.disableRangeSelection /* || this.additive*/) {
+      if (this.shortcuts.extendedSelectionShortcut(event) && this.disableRangeSelection) {
         return;
       }
 
