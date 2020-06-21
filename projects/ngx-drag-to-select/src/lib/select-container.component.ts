@@ -103,6 +103,7 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy, After
   @Input() disableRangeSelection = false;
   @Input() selectMode = false;
   @Input() selectWithShortcut = false;
+  @Input() selectAllUnderCursor = true;
 
   @Input()
   @HostBinding('class.dts-custom')
@@ -304,29 +305,21 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy, After
   }
 
   private _initSelectedItemsChange() {
-    this._selectedItems$
-      .pipe(
-        auditTime(AUDIT_TIME),
-        takeUntil(this.destroy$)
-      )
-      .subscribe({
-        next: selectedItems => {
-          this.selectedItemsChange.emit(selectedItems);
-          this.select.emit(selectedItems);
-        },
-        complete: () => {
-          this.selectedItemsChange.emit([]);
-        }
-      });
+    this._selectedItems$.pipe(auditTime(AUDIT_TIME), takeUntil(this.destroy$)).subscribe({
+      next: selectedItems => {
+        this.selectedItemsChange.emit(selectedItems);
+        this.select.emit(selectedItems);
+      },
+      complete: () => {
+        this.selectedItemsChange.emit([]);
+      }
+    });
   }
 
   private _observeSelectableItems() {
     // Listen for updates and either select or deselect an item
     this.updateItems$
-      .pipe(
-        withLatestFrom(this._selectedItems$),
-        takeUntil(this.destroy$)
-      )
+      .pipe(withLatestFrom(this._selectedItems$), takeUntil(this.destroy$))
       .subscribe(([update, selectedItems]: [UpdateAction, any[]]) => {
         const item = update.item;
 
@@ -346,11 +339,7 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy, After
 
     // Update the container as well as all selectable items if the list has changed
     this.$selectableItems.changes
-      .pipe(
-        withLatestFrom(this._selectedItems$),
-        observeOn(asyncScheduler),
-        takeUntil(this.destroy$)
-      )
+      .pipe(withLatestFrom(this._selectedItems$), observeOn(asyncScheduler), takeUntil(this.destroy$))
       .subscribe(([items, selectedItems]: [QueryList<SelectItemDirective>, any[]]) => {
         const newList = items.toArray();
         this._selectableItems = newList;
@@ -371,11 +360,7 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy, After
       const containerScroll$ = fromEvent(this.host, 'scroll');
 
       merge(resize$, windowScroll$, containerScroll$)
-        .pipe(
-          startWith('INITIAL_UPDATE'),
-          auditTime(AUDIT_TIME),
-          takeUntil(this.destroy$)
-        )
+        .pipe(startWith('INITIAL_UPDATE'), auditTime(AUDIT_TIME), takeUntil(this.destroy$))
         .subscribe(() => {
           this.update();
         });
@@ -462,13 +447,39 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy, After
       return;
     }
 
-    this.$selectableItems.forEach((item, index) => {
-      const itemRect = item.getBoundingClientRect();
-      const withinBoundingBox = inBoundingBox(mousePoint, itemRect);
+    const clickedItems: SelectItemDirective[] = [];
 
+    if (this.selectAllUnderCursor) {
+      // add all items with bounding box containing mouse location
+      this.$selectableItems.forEach((item, index) => {
+        const itemRect = item.getBoundingClientRect();
+        const withinBoundingBox = inBoundingBox(mousePoint, itemRect);
+        if (withinBoundingBox) {
+          clickedItems.push(item);
+        }
+      });
+    } else {
+      // add only top-most item with bounding box containing mouse location
+      const selectableItemElements = this.$selectableItems.map(item => item.nativeElememnt);
+      const elementFromPoint = document.elementFromPoint(mousePoint.x, mousePoint.y);
+
+      // iterate from the clicked element up the tree until a selectableItem is encountered
+      for (let el = elementFromPoint; el; el = el.parentElement) {
+        const index = selectableItemElements.indexOf(el);
+        if (index > -1) {
+          const selectableItem = this.$selectableItems.toArray()[index];
+          clickedItems.push(selectableItem);
+          break;
+        }
+      }
+    }
+
+    this.$selectableItems.forEach((item, index) => {
       if (this.shortcuts.extendedSelectionShortcut(event) && this.disableRangeSelection) {
         return;
       }
+
+      const wasClicked = clickedItems.includes(item);
 
       const withinRange =
         this.shortcuts.extendedSelectionShortcut(event) &&
@@ -479,28 +490,25 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy, After
         startIndex !== endIndex;
 
       const shouldAdd =
-        (withinBoundingBox &&
-          !this.shortcuts.toggleSingleItem(event) &&
-          !this.selectMode &&
-          !this.selectWithShortcut) ||
+        (wasClicked && !this.shortcuts.toggleSingleItem(event) && !this.selectMode && !this.selectWithShortcut) ||
         (this.shortcuts.extendedSelectionShortcut(event) && item.selected && !this._lastRangeSelection.get(item)) ||
         withinRange ||
-        (withinBoundingBox && this.shortcuts.toggleSingleItem(event) && !item.selected) ||
-        (!withinBoundingBox && this.shortcuts.toggleSingleItem(event) && item.selected) ||
-        (withinBoundingBox && !item.selected && this.selectMode) ||
-        (!withinBoundingBox && item.selected && this.selectMode);
+        (wasClicked && this.shortcuts.toggleSingleItem(event) && !item.selected) ||
+        (!wasClicked && this.shortcuts.toggleSingleItem(event) && item.selected) ||
+        (wasClicked && !item.selected && this.selectMode) ||
+        (!wasClicked && item.selected && this.selectMode);
 
       const shouldRemove =
-        (!withinBoundingBox &&
+        (!wasClicked &&
           !this.shortcuts.toggleSingleItem(event) &&
           !this.selectMode &&
           !this.shortcuts.extendedSelectionShortcut(event) &&
           !this.selectWithShortcut) ||
         (this.shortcuts.extendedSelectionShortcut(event) && currentIndex > -1) ||
-        (!withinBoundingBox && this.shortcuts.toggleSingleItem(event) && !item.selected) ||
-        (withinBoundingBox && this.shortcuts.toggleSingleItem(event) && item.selected) ||
-        (!withinBoundingBox && !item.selected && this.selectMode) ||
-        (withinBoundingBox && item.selected && this.selectMode);
+        (!wasClicked && this.shortcuts.toggleSingleItem(event) && !item.selected) ||
+        (wasClicked && this.shortcuts.toggleSingleItem(event) && item.selected) ||
+        (!wasClicked && !item.selected && this.selectMode) ||
+        (wasClicked && item.selected && this.selectMode);
 
       if (shouldAdd) {
         this._selectItem(item);
