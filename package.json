@@ -96,7 +96,7 @@
     "jest-preset-angular": "^7.1.1",
     "lint-staged": "^8.1.7",
     "ng-packagr": "^5.7.1",
-    "node-sass": "^4.12.0",
+    "node-sass": "^4.13.1",
     "prettier": "^1.17.1",
     "start-server-and-test": "^1.9.1",
     "ts-loader": "^6.0.2",
