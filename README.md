@@ -503,15 +503,15 @@ Yes.
 
 ### Can I use this library with an older version of Angular?
 
-Yep you totally can! But this also means you won't be able to use the latest and greatest and all of the newer features. The reason for this is that we are not back porting new features to older versions of this library, due to maintenance overhead. Severe bugs and security issues, however, are back ported.
+Yep you totally can! But this also means you won't be able to use the latest features. We are not back porting new features due to the maintenance overhead it would create. Severe bugs and security issues, however, are back ported.
 
 What does that mean for you now? We recommend to stay up to date with new Angular versions. If for some reasons you can't then here's an overview of versions you could use with older versions of Angular:
 
-| Angular Version      | ngx-drag-to-select Version |
-| -------------------- | -------------------------- |
-| 5.x.x                | <= 1.1.1                   |
-| 6.x.x - 7.x.x        | > 1.1.1 <= 3.1.1           |
-| >= 8.0.0             | >= 4.0.0                   |
+| Angular        | ngx-drag-to-select |
+| -------------- | ------------------ |
+| 5.x.x          | <= 1.1.1           |
+| 6.x.x - 7.x.x  | > 1.1.1 <= 3.1.1   |
+| >= 8.0.0       | >= 4.0.0           |
 
 To install a specific version run for example `npm install ngx-drag-to-select@x.x.x`.
 
