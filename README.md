@@ -501,18 +501,19 @@ Example:
 
 Yes.
 
-### Does this library work with Angular Versions < 8.0.0?
+### Can I use this library with an older version of Angular?
 
-Please have a look here to see which version supports your angular application. 
+Yep you totally can! But this also means you won't be able to use the latest and greatest and all of the newer features. The reason for this is that we are not back porting new features to older versions of this library, due to maintenance overhead. Severe bugs and security issues, however, are back ported.
 
-You can still install it via npm or yarn, e.g. `npm install ngx-drag-to-select@x.x.x`.
+What does that mean for you now? We recommend to stay up to date with new Angular versions. If for some reasons you can't then here's an overview of versions you could use with older versions of Angular:
 
 | Angular Version      | ngx-drag-to-select Version |
 | -------------------- | -------------------------- |
-| 5.x.x                |                      1.1.1 |
-| 6.x.x - 7.x.x        |                      3.1.1 |
+| 5.x.x                | <= 1.1.1                   |
+| 6.x.x - 7.x.x        | > 1.1.1 <= 3.1.1           |
+| >= 8.0.0             | >= 4.0.0                   |
 
-Note, that we try to always keep up with Angular's latest version, hence, older versions will not receive bug fixes nor new features.
+To install a specific version run for example `npm install ngx-drag-to-select@x.x.x`.
 
 ### Does this library work with mobile?
 
