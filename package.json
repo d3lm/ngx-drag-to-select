@@ -27,11 +27,11 @@
     "test": "ng test",
     "test:ci": "npm run test && start-server-and-test start http-get://localhost:4200 e2e:ci",
     "test:watch": "npm run test -- --watch",
-    "lint:check": "ng lint",
-    "lint:fix": "ng lint app --fix && ng lint ngx-drag-to-select --fix",
     "e2e": "cypress open",
     "e2e:ci": "cypress run --record --parallel --group $STAGE_NAME --browser chrome",
-    "ci": "npm run lint:check && npm run format:check && npm run test:ci",
+    "lint:check": "ng lint",
+    "lint:fix": "ng lint app --fix && ng lint ngx-drag-to-select --fix",
+    "lint:ci": "npm run lint:check && npm run format:check",
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0 -k ./projects/ngx-drag-to-select"
   },
   "husky": {
