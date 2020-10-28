@@ -14,7 +14,7 @@ import {
   AfterViewInit,
   PLATFORM_ID,
   Inject,
-  AfterContentInit
+  AfterContentInit,
 } from '@angular/core';
 
 import { isPlatformBrowser } from '@angular/common';
@@ -35,7 +35,7 @@ import {
   observeOn,
   startWith,
   concatMapTo,
-  first
+  first,
 } from 'rxjs/operators';
 
 import { SelectItemDirective, SELECT_ITEM_INSTANCE } from './select-item.directive';
@@ -51,7 +51,7 @@ import {
   UpdateAction,
   UpdateActions,
   PredicateFn,
-  BoundingBox
+  BoundingBox,
 } from './models';
 
 import { AUDIT_TIME, NO_SELECT_CLASS } from './constants';
@@ -64,7 +64,7 @@ import {
   calculateBoundingClientRect,
   getRelativeMousePosition,
   getMousePosition,
-  hasMinimumSize
+  hasMinimumSize,
 } from './utils';
 import { KeyboardEventsService } from './keyboard-events.service';
 
@@ -72,7 +72,7 @@ import { KeyboardEventsService } from './keyboard-events.service';
   selector: 'dts-select-container',
   exportAs: 'dts-select-container',
   host: {
-    class: 'dts-select-container'
+    class: 'dts-select-container',
   },
   template: `
     <ng-content></ng-content>
@@ -83,7 +83,7 @@ import { KeyboardEventsService } from './keyboard-events.service';
       [ngStyle]="selectBoxStyles$ | async"
     ></div>
   `,
-  styleUrls: ['./select-container.component.scss']
+  styleUrls: ['./select-container.component.scss'],
 })
 export class SelectContainerComponent implements AfterViewInit, OnDestroy, AfterContentInit {
   host: SelectContainerHost;
@@ -158,14 +158,14 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy, After
       );
 
       const mousedown$ = fromEvent<MouseEvent>(this.host, 'mousedown').pipe(
-        filter(event => event.button === 0), // only emit left mouse
+        filter((event) => event.button === 0), // only emit left mouse
         filter(() => !this.disabled),
-        tap(event => this._onMouseDown(event)),
+        tap((event) => this._onMouseDown(event)),
         share()
       );
 
       const dragging$ = mousedown$.pipe(
-        filter(event => !this.shortcuts.disableSelection(event)),
+        filter((event) => !this.shortcuts.disableSelection(event)),
         filter(() => !this.selectMode),
         filter(() => !this.disableDrag),
         switchMap(() => mousemove$.pipe(takeUntil(mouseup$))),
@@ -196,7 +196,7 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy, After
         map(([event, selectBox]) => {
           return {
             'dts-adding': hasMinimumSize(selectBox, 0, 0) && !this.shortcuts.removeFromSelection(event),
-            'dts-removing': this.shortcuts.removeFromSelection(event)
+            'dts-removing': this.shortcuts.removeFromSelection(event),
           };
         }),
         distinctUntilChanged((a, b) => JSON.stringify(a) === JSON.stringify(b))
@@ -205,10 +205,10 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy, After
       const selectOnMouseUp$ = dragging$.pipe(
         filter(() => !this.selectOnDrag),
         filter(() => !this.selectMode),
-        filter(event => this._cursorWithinHost(event)),
-        switchMap(_ => mouseup$.pipe(first())),
+        filter((event) => this._cursorWithinHost(event)),
+        switchMap((_) => mouseup$.pipe(first())),
         filter(
-          event =>
+          (event) =>
             (!this.shortcuts.disableSelection(event) && !this.shortcuts.toggleSingleItem(event)) ||
             this.shortcuts.removeFromSelection(event)
         )
@@ -218,7 +218,7 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy, After
         auditTime(AUDIT_TIME),
         withLatestFrom(mousemove$, (selectBox, event: MouseEvent) => ({
           selectBox,
-          event
+          event,
         })),
         filter(() => this.selectOnDrag),
         filter(({ selectBox }) => hasMinimumSize(selectBox)),
@@ -231,7 +231,7 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy, After
       ).pipe(
         auditTime(AUDIT_TIME),
         whenSelectBoxVisible(selectBox$),
-        tap(event => {
+        tap((event) => {
           if (this._isExtendedSelection(event)) {
             this._tmpItems.clear();
           } else {
@@ -242,15 +242,15 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy, After
 
       merge(selectOnMouseUp$, selectOnDrag$, selectOnKeyboardEvent$)
         .pipe(takeUntil(this.destroy$))
-        .subscribe(event => this._selectItems(event));
+        .subscribe((event) => this._selectItems(event));
 
       this.selectBoxStyles$ = selectBox$.pipe(
-        map(selectBox => ({
+        map((selectBox) => ({
           top: `${selectBox.top}px`,
           left: `${selectBox.left}px`,
           width: `${selectBox.width}px`,
           height: `${selectBox.height}px`,
-          opacity: selectBox.opacity
+          opacity: selectBox.opacity,
         }))
       );
 
@@ -263,7 +263,7 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy, After
   }
 
   selectAll() {
-    this.$selectableItems.forEach(item => {
+    this.$selectableItems.forEach((item) => {
       this._selectItem(item);
     });
   }
@@ -281,14 +281,14 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy, After
   }
 
   clearSelection() {
-    this.$selectableItems.forEach(item => {
+    this.$selectableItems.forEach((item) => {
       this._deselectItem(item);
     });
   }
 
   update() {
     this._calculateBoundingClientRect();
-    this.$selectableItems.forEach(item => item.calculateBoundingClientRect());
+    this.$selectableItems.forEach((item) => item.calculateBoundingClientRect());
   }
 
   ngOnDestroy() {
@@ -300,33 +300,25 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy, After
     // Wrap select items in an observable for better efficiency as
     // no intermediate arrays are created and we only need to process
     // every item once.
-    return from(this._selectableItems).pipe(filter(item => predicate(item.value)));
+    return from(this._selectableItems).pipe(filter((item) => predicate(item.value)));
   }
 
   private _initSelectedItemsChange() {
-    this._selectedItems$
-      .pipe(
-        auditTime(AUDIT_TIME),
-        takeUntil(this.destroy$)
-      )
-      .subscribe({
-        next: selectedItems => {
-          this.selectedItemsChange.emit(selectedItems);
-          this.select.emit(selectedItems);
-        },
-        complete: () => {
-          this.selectedItemsChange.emit([]);
-        }
-      });
+    this._selectedItems$.pipe(auditTime(AUDIT_TIME), takeUntil(this.destroy$)).subscribe({
+      next: (selectedItems) => {
+        this.selectedItemsChange.emit(selectedItems);
+        this.select.emit(selectedItems);
+      },
+      complete: () => {
+        this.selectedItemsChange.emit([]);
+      },
+    });
   }
 
   private _observeSelectableItems() {
     // Listen for updates and either select or deselect an item
     this.updateItems$
-      .pipe(
-        withLatestFrom(this._selectedItems$),
-        takeUntil(this.destroy$)
-      )
+      .pipe(withLatestFrom(this._selectedItems$), takeUntil(this.destroy$))
       .subscribe(([update, selectedItems]: [UpdateAction, any[]]) => {
         const item = update.item;
 
@@ -346,18 +338,14 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy, After
 
     // Update the container as well as all selectable items if the list has changed
     this.$selectableItems.changes
-      .pipe(
-        withLatestFrom(this._selectedItems$),
-        observeOn(asyncScheduler),
-        takeUntil(this.destroy$)
-      )
+      .pipe(withLatestFrom(this._selectedItems$), observeOn(asyncScheduler), takeUntil(this.destroy$))
       .subscribe(([items, selectedItems]: [QueryList<SelectItemDirective>, any[]]) => {
         const newList = items.toArray();
         this._selectableItems = newList;
-        const removedItems = selectedItems.filter(item => !newList.includes(item.value));
+        const removedItems = selectedItems.filter((item) => !newList.includes(item.value));
 
         if (removedItems.length) {
-          removedItems.forEach(item => this._removeItem(item, selectedItems));
+          removedItems.forEach((item) => this._removeItem(item, selectedItems));
         }
 
         this.update();
@@ -371,11 +359,7 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy, After
       const containerScroll$ = fromEvent(this.host, 'scroll');
 
       merge(resize$, windowScroll$, containerScroll$)
-        .pipe(
-          startWith('INITIAL_UPDATE'),
-          auditTime(AUDIT_TIME),
-          takeUntil(this.destroy$)
-        )
+        .pipe(startWith('INITIAL_UPDATE'), auditTime(AUDIT_TIME), takeUntil(this.destroy$))
         .subscribe(() => {
           this.update();
         });
@@ -385,14 +369,14 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy, After
   private _initSelectionOutputs(mousedown$: Observable<MouseEvent>, mouseup$: Observable<MouseEvent>) {
     mousedown$
       .pipe(
-        filter(event => this._cursorWithinHost(event)),
+        filter((event) => this._cursorWithinHost(event)),
         tap(() => this.selectionStarted.emit()),
         concatMapTo(mouseup$.pipe(first())),
         withLatestFrom(this._selectedItems$),
         map(([, items]) => items),
         takeUntil(this.destroy$)
       )
-      .subscribe(items => {
+      .subscribe((items) => {
         this.selectionEnded.emit(items);
       });
   }

@@ -5,7 +5,7 @@ import {
   disableSelectOnDrag,
   enableSelectWithShortcut,
   getDesktopExample,
-  toggleItem
+  toggleItem,
 } from '../support/utils';
 
 const SELECTED_CLASS = DEFAULT_CONFIG.selectedClass;
@@ -113,10 +113,7 @@ describe('Clicking', () => {
 
     it('should reset range start when item is toggled', () => {
       getDesktopExample().within(() => {
-        cy.getSelectItem(0)
-          .as('start')
-          .dispatch('mousedown', { button: 0 })
-          .dispatch('mouseup');
+        cy.getSelectItem(0).as('start').dispatch('mousedown', { button: 0 }).dispatch('mouseup');
 
         cy.get('@start').should('have.class', 'dts-range-start');
 
@@ -226,10 +223,7 @@ describe('Clicking', () => {
 
     it('should select single item on mousedown', () => {
       getDesktopExample().within(() => {
-        cy.getSelectItem(0)
-          .dispatch('mousedown', { button: 0 })
-          .dispatch('mouseup')
-          .shouldSelect([1]);
+        cy.getSelectItem(0).dispatch('mousedown', { button: 0 }).dispatch('mouseup').shouldSelect([1]);
       });
     });
   });

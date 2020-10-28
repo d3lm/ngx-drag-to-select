@@ -26,15 +26,9 @@ export class KeyboardEventsService {
     // distinctKeyEvents is used to prevent multiple key events to be fired repeatedly
     // on Windows when a key is being pressed
 
-    this.distinctKeydown$ = this.keydown$.pipe(
-      distinctKeyEvents(),
-      share()
-    );
+    this.distinctKeydown$ = this.keydown$.pipe(distinctKeyEvents(), share());
 
-    this.distinctKeyup$ = this.keyup$.pipe(
-      distinctKeyEvents(),
-      share()
-    );
+    this.distinctKeyup$ = this.keyup$.pipe(distinctKeyEvents(), share());
 
     this.mouseup$ = fromEvent<MouseEvent>(window, 'mouseup').pipe(share());
     this.mousemove$ = fromEvent<MouseEvent>(window, 'mousemove').pipe(share());

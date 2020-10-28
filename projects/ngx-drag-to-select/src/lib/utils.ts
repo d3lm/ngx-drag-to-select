@@ -7,7 +7,7 @@ export const isObject = (item: any) => {
 
 export function mergeDeep(target: Object, source: Object) {
   if (isObject(target) && isObject(source)) {
-    Object.keys(source).forEach(key => {
+    Object.keys(source).forEach((key) => {
       if (isObject(source[key])) {
         if (!target[key]) {
           Object.assign(target, { [key]: {} });
@@ -62,7 +62,7 @@ export const calculateBoundingClientRect = (element: HTMLElement): BoundingBox =
 export const getMousePosition = (event: MouseEvent) => {
   return {
     x: event.clientX,
-    y: event.clientY
+    y: event.clientY,
   };
 };
 
@@ -70,13 +70,13 @@ export const getScroll = () => {
   if (!document || !document.documentElement) {
     return {
       x: 0,
-      y: 0
+      y: 0,
     };
   }
 
   return {
     x: document.documentElement.scrollLeft || document.body.scrollLeft,
-    y: document.documentElement.scrollTop || document.body.scrollTop
+    y: document.documentElement.scrollTop || document.body.scrollTop,
   };
 };
 
@@ -90,7 +90,7 @@ export const getRelativeMousePosition = (event: MouseEvent, container: SelectCon
 
   return {
     x: clientX - borderSize - (offsetLeft - window.pageXOffset) + container.scrollLeft,
-    y: clientY - borderSize - (offsetTop - window.pageYOffset) + container.scrollTop
+    y: clientY - borderSize - (offsetTop - window.pageYOffset) + container.scrollTop,
   };
 };
 

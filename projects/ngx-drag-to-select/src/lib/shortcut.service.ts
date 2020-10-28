@@ -10,7 +10,7 @@ const SUPPORTED_META_KEYS = {
   alt: true,
   shift: true,
   meta: true,
-  ctrl: true
+  ctrl: true,
 };
 
 const SUPPORTED_KEYS = /[a-z]/;
@@ -18,7 +18,7 @@ const SUPPORTED_KEYS = /[a-z]/;
 const META_KEY = 'meta';
 
 const KEY_ALIASES = {
-  [META_KEY]: ['ctrl', 'meta']
+  [META_KEY]: ['ctrl', 'meta'],
 };
 
 const SUPPORTED_SHORTCUTS = {
@@ -26,7 +26,7 @@ const SUPPORTED_SHORTCUTS = {
   disableSelection: true,
   toggleSingleItem: true,
   addToSelection: true,
-  removeFromSelection: true
+  removeFromSelection: true,
 };
 
 const ERROR_PREFIX = '[ShortcutService]';
@@ -51,11 +51,11 @@ export class ShortcutService {
 
     if (isPlatformBrowser(this.platformId)) {
       const keydown$ = this.keyboardEvents.keydown$.pipe(
-        map<KeyboardEvent, KeyState>(event => ({ code: event.code, pressed: true }))
+        map<KeyboardEvent, KeyState>((event) => ({ code: event.code, pressed: true }))
       );
 
       const keyup$ = this.keyboardEvents.keyup$.pipe(
-        map<KeyboardEvent, KeyState>(event => ({ code: event.code, pressed: false }))
+        map<KeyboardEvent, KeyState>((event) => ({ code: event.code, pressed: false }))
       );
 
       merge<KeyState>(keydown$, keyup$)
@@ -64,7 +64,7 @@ export class ShortcutService {
             return prev.pressed === curr.pressed && prev.code === curr.code;
           })
         )
-        .subscribe(keyState => {
+        .subscribe((keyState) => {
           if (keyState.pressed) {
             this._latestShortcut.set(keyState.code, true);
           } else {
@@ -109,7 +109,7 @@ export class ShortcutService {
       shortcutsForCommand
         .replace(/ /g, '')
         .split(',')
-        .forEach(shortcut => {
+        .forEach((shortcut) => {
           if (!shortcutMap[key]) {
             shortcutMap[key] = [];
           }
@@ -117,7 +117,7 @@ export class ShortcutService {
           const combo = shortcut.split('+');
           const cleanCombos = this._substituteKey(shortcut, combo, META_KEY);
 
-          cleanCombos.forEach(cleanCombo => {
+          cleanCombos.forEach((cleanCombo) => {
             const unsupportedKey = this._isSupportedCombo(cleanCombo);
 
             if (unsupportedKey) {
@@ -125,7 +125,7 @@ export class ShortcutService {
             }
 
             shortcutMap[key].push(
-              cleanCombo.map(comboKey => {
+              cleanCombo.map((comboKey) => {
                 return SUPPORTED_META_KEYS[comboKey] ? `${comboKey}Key` : `Key${comboKey.toUpperCase()}`;
               })
             );
@@ -141,9 +141,9 @@ export class ShortcutService {
     const substitutedShortcut: string[][] = [];
 
     if (hasSpecialKey) {
-      const cleanShortcut = combo.filter(element => element !== META_KEY);
+      const cleanShortcut = combo.filter((element) => element !== META_KEY);
 
-      KEY_ALIASES.meta.forEach(alias => {
+      KEY_ALIASES.meta.forEach((alias) => {
         substitutedShortcut.push([...cleanShortcut, alias]);
       });
     } else {
@@ -160,8 +160,8 @@ export class ShortcutService {
   private _isShortcutPressed(shortcutName: string, event: Event) {
     const shortcuts = this._shortcuts[shortcutName];
 
-    return shortcuts.some(shortcut => {
-      return shortcut.every(key => this._isKeyPressed(event, key));
+    return shortcuts.some((shortcut) => {
+      return shortcut.every((key) => this._isKeyPressed(event, key));
     });
   }
 
@@ -172,7 +172,7 @@ export class ShortcutService {
   private _isSupportedCombo(combo: Array<string>) {
     let unsupportedKey = null;
 
-    combo.forEach(key => {
+    combo.forEach((key) => {
       if (!SUPPORTED_META_KEYS[key] && (!SUPPORTED_KEYS.test(key) || this._isSingleChar(key))) {
         unsupportedKey = key;
         return;

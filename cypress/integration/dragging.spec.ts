@@ -7,7 +7,7 @@ import {
   getDesktopExample,
   shouldBeInvisible,
   shouldBeVisible,
-  toggleItem
+  toggleItem,
 } from '../support/utils';
 
 const SELECTED_CLASS = DEFAULT_CONFIG.selectedClass;
@@ -102,10 +102,7 @@ describe('Dragging', () => {
           .dispatch('mousemove')
           .dispatch('mouseup');
 
-        cy.getSelectItem(0)
-          .dispatch('keydown')
-          .dispatch('keydown')
-          .shouldSelect([1, 2, 3]);
+        cy.getSelectItem(0).dispatch('keydown').dispatch('keydown').shouldSelect([1, 2, 3]);
       });
     });
   });
@@ -429,7 +426,7 @@ describe('Dragging', () => {
             force: true,
             shiftKey: true,
             ctrlKey: true,
-            metaKey: true
+            metaKey: true,
           })
           .shouldSelect([1, 2, 5, 6])
           .getSelectItem(1)

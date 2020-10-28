@@ -5,7 +5,7 @@ export type PredicateFn<T> = (item: T) => boolean;
 
 export enum UpdateActions {
   Add,
-  Remove
+  Remove,
 }
 
 export interface UpdateAction {
@@ -60,5 +60,5 @@ export interface SelectBox<T> {
 export enum Action {
   Add,
   Delete,
-  None
+  None,
 }

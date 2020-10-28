@@ -10,12 +10,12 @@ describe('ShortcutService', () => {
     it('should throw an error for using an unsupported key', () => {
       const config = {
         shortcuts: {
-          disableSelection: 'foo'
-        }
+          disableSelection: 'foo',
+        },
       };
 
       TestBed.configureTestingModule({
-        providers: [KeyboardEventsService, ShortcutService, { provide: CONFIG, useValue: config }]
+        providers: [KeyboardEventsService, ShortcutService, { provide: CONFIG, useValue: config }],
       });
 
       expect(() => {
@@ -26,12 +26,12 @@ describe('ShortcutService', () => {
     it('should throw an error when using an unsupported shortcut', () => {
       const config = {
         shortcuts: {
-          foo: 'bar'
-        }
+          foo: 'bar',
+        },
       };
 
       TestBed.configureTestingModule({
-        providers: [KeyboardEventsService, ShortcutService, { provide: CONFIG, useValue: config }]
+        providers: [KeyboardEventsService, ShortcutService, { provide: CONFIG, useValue: config }],
       });
 
       expect(() => {
@@ -46,13 +46,13 @@ describe('ShortcutService', () => {
         disableSelection: 'alt+meta',
         toggleSingleItem: 'meta',
         addToSelection: 'shift',
-        removeFromSelection: 'shift+meta,alt+shift'
-      }
+        removeFromSelection: 'shift+meta,alt+shift',
+      },
     };
 
     beforeEach(() => {
       TestBed.configureTestingModule({
-        providers: [KeyboardEventsService, ShortcutService, { provide: CONFIG, useValue: CUSTOM_CONFIG }]
+        providers: [KeyboardEventsService, ShortcutService, { provide: CONFIG, useValue: CUSTOM_CONFIG }],
       });
 
       shortcutService = TestBed.get(ShortcutService);

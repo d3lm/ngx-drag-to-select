@@ -25,7 +25,7 @@ import {
   KeyComponent,
   ModifierKeyComponent,
   ShortcutComponent,
-  ShortcutDescriptionComponent
+  ShortcutDescriptionComponent,
 } from './shortcut/shortcut.component';
 
 import { ShortcutsComponent } from './shortcuts/shortcuts.component';
@@ -36,7 +36,7 @@ const MATERIAL_MODULES = [
   MatChipsModule,
   MatTabsModule,
   MatIconModule,
-  MatButtonModule
+  MatButtonModule,
 ];
 
 @NgModule({
@@ -49,7 +49,7 @@ const MATERIAL_MODULES = [
     ModifierKeyComponent,
     FooterComponent,
     HeaderComponent,
-    PhoneComponent
+    PhoneComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'demo-app' }),
@@ -59,9 +59,9 @@ const MATERIAL_MODULES = [
     LayoutModule,
     FormsModule,
     ...MATERIAL_MODULES,
-    DragToSelectModule.forRoot()
+    DragToSelectModule.forRoot(),
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
 export class AppModule {}

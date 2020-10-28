@@ -28,7 +28,7 @@ interface SelectItemValue {
       <span [dtsSelectItem]="{ id: 2 }" #selectItem="dtsSelectItem">Item #2</span>
       <span [dtsSelectItem]="{ id: 3 }" #selectItem="dtsSelectItem">Item #3</span>
     </dts-select-container>
-  `
+  `,
 })
 class TestComponent {
   @ViewChild('selectContainer', { static: true })
@@ -51,7 +51,7 @@ describe('SelectContainerComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [TestComponent],
-      imports: [DragToSelectModule.forRoot()]
+      imports: [DragToSelectModule.forRoot()],
     }).compileComponents();
   }));
 
@@ -81,11 +81,11 @@ describe('SelectContainerComponent', () => {
   });
 
   describe('selectItems()', () => {
-    it('should select items', done => {
+    it('should select items', (done) => {
       const ids = [1, 2];
       const result = [{ id: 1 }, { id: 2 }];
 
-      selectContainerInstance.select.subscribe(items => {
+      selectContainerInstance.select.subscribe((items) => {
         expect(testComponent.selectedItems.length).toBe(result.length);
         expect(items).toEqual(result);
         expect(testComponent.selectedItems).toEqual(result);
@@ -95,10 +95,10 @@ describe('SelectContainerComponent', () => {
       selectContainerInstance.selectItems((item: SelectItemValue) => ids.includes(item.id));
     });
 
-    it('should not throw error when selecting items that do not exist', done => {
+    it('should not throw error when selecting items that do not exist', (done) => {
       const result = [];
 
-      selectContainerInstance.select.subscribe(items => {
+      selectContainerInstance.select.subscribe((items) => {
         expect(testComponent.selectedItems.length).toBe(result.length);
         expect(items).toEqual(result);
         expect(testComponent.selectedItems).toEqual(result);
@@ -115,10 +115,10 @@ describe('SelectContainerComponent', () => {
       selectContainerInstance.selectItems((item: SelectItemValue) => true);
     });
 
-    it('should deselect items', done => {
+    it('should deselect items', (done) => {
       const result = [{ id: 1 }];
 
-      selectContainerInstance.select.subscribe(items => {
+      selectContainerInstance.select.subscribe((items) => {
         expect(testComponent.selectedItems.length).toBe(result.length);
         expect(items).toEqual(result);
         expect(testComponent.selectedItems).toEqual(result);
@@ -128,10 +128,10 @@ describe('SelectContainerComponent', () => {
       selectContainerInstance.deselectItems((item: SelectItemValue) => [2, 3].includes(item.id));
     });
 
-    it('should not throw error when deselecting items that do not exist', done => {
+    it('should not throw error when deselecting items that do not exist', (done) => {
       const result = [{ id: 1 }, { id: 2 }, { id: 3 }];
 
-      selectContainerInstance.select.subscribe(items => {
+      selectContainerInstance.select.subscribe((items) => {
         expect(testComponent.selectedItems.length).toBe(result.length);
         expect(items).toEqual(result);
         expect(testComponent.selectedItems).toEqual(result);
@@ -144,10 +144,10 @@ describe('SelectContainerComponent', () => {
   });
 
   describe('toggleItems()', () => {
-    it('should select non-selected items', done => {
+    it('should select non-selected items', (done) => {
       const result = [{ id: 1 }, { id: 2 }];
 
-      selectContainerInstance.select.subscribe(items => {
+      selectContainerInstance.select.subscribe((items) => {
         expect(testComponent.selectedItems.length).toBe(result.length);
         expect(items).toEqual(result);
         expect(testComponent.selectedItems).toEqual(result);
@@ -157,10 +157,10 @@ describe('SelectContainerComponent', () => {
       selectContainerInstance.toggleItems((item: SelectItemValue) => [1, 2].includes(item.id));
     });
 
-    it('should deselect selected items', done => {
+    it('should deselect selected items', (done) => {
       const result = [{ id: 2 }];
 
-      selectContainerInstance.select.subscribe(items => {
+      selectContainerInstance.select.subscribe((items) => {
         expect(testComponent.selectedItems.length).toBe(result.length);
         expect(items).toEqual(result);
         expect(testComponent.selectedItems).toEqual(result);
@@ -171,10 +171,10 @@ describe('SelectContainerComponent', () => {
       selectContainerInstance.toggleItems((item: SelectItemValue) => item.id === 1);
     });
 
-    it('should not throw error when toggling items that do not exist', done => {
+    it('should not throw error when toggling items that do not exist', (done) => {
       const result = [];
 
-      selectContainerInstance.select.subscribe(items => {
+      selectContainerInstance.select.subscribe((items) => {
         expect(testComponent.selectedItems.length).toBe(result.length);
         expect(items).toEqual(result);
         expect(testComponent.selectedItems).toEqual(result);

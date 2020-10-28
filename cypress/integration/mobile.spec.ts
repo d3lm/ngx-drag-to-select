@@ -8,7 +8,7 @@ import {
   getSelectCount,
   selectAll,
   shouldBeInSelectMode,
-  shouldBeInvisible
+  shouldBeInvisible,
 } from '../support/utils';
 
 const SELECTED_CLASS = DEFAULT_CONFIG.selectedClass;
@@ -25,7 +25,7 @@ describe('Mobile', () => {
         .getSelectItem(0)
         .as('end')
         .dispatch('mousedown', { button: 0 })
-        .then($element => {
+        .then(($element) => {
           expect($element.css('box-shadow')).to.eq('none');
           expect($element.css('border-width')).to.eq('0px');
         })

@@ -8,7 +8,7 @@ const json = require('../../projects/ngx-drag-to-select/package.json');
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
   documents: Array<any> = [];
@@ -39,14 +39,14 @@ export class AppComponent implements OnInit {
 
     const breakpoints = [Breakpoints.Medium, Breakpoints.Large, Breakpoints.XLarge];
 
-    this.breakpointObserver.observe(breakpoints).subscribe(state => {
+    this.breakpointObserver.observe(breakpoints).subscribe((state) => {
       this.isDesktop = this.breakpointObserver.isMatched(breakpoints);
     });
 
     for (let id = 1; id <= 12; id++) {
       this.documents.push({
         id,
-        name: `Document ${id}`
+        name: `Document ${id}`,
       });
     }
   }

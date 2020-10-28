@@ -20,7 +20,7 @@ export const createSelectBox = (container: SelectContainerHost) => (
         left: width < 0 ? mousePosition.x : x,
         width: Math.abs(width),
         height: Math.abs(height),
-        opacity
+        opacity,
       };
     })
   );

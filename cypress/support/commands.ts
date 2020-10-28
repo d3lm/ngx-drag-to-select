@@ -7,100 +7,81 @@
  * be emitted first before any other mouse event. Hence, we scroll the element into view, wait for 16ms and
  * eventually trigger the mouse event.
  */
-Cypress.Commands.add(
-  'dispatch',
-  { prevSubject: 'element' },
-  (subject, event, ...args): any => {
-    return cy
-      .wrap(subject)
-      .scrollIntoView()
-      .wait(16)
-      .trigger(event, ...args)
-      .wait(16);
-  }
-);
+Cypress.Commands.add('dispatch', { prevSubject: 'element' }, (subject, event, ...args): any => {
+  return cy
+    .wrap(subject)
+    .scrollIntoView()
+    .wait(16)
+    .trigger(event, ...args)
+    .wait(16);
+});
 
-Cypress.Commands.add(
-  'shouldSelect',
-  (ids: Array<number>, ...args): any => {
-    const expected = ids.map(id => `Document ${id}`);
+Cypress.Commands.add('shouldSelect', (ids: Array<number>, ...args): any => {
+  const expected = ids.map((id) => `Document ${id}`);
 
-    const checkSelectedItems = (items: Cypress.ObjectLike): { success: boolean; actual: Array<string> } => {
-      const actual = Array.prototype.map.call(items, (item: HTMLElement) => item.textContent || '') as Array<string>;
+  const checkSelectedItems = (items: Cypress.ObjectLike): { success: boolean; actual: Array<string> } => {
+    const actual = Array.prototype.map.call(items, (item: HTMLElement) => item.textContent || '') as Array<string>;
 
-      const success = expected.every(expectedTextContent =>
-        actual.some(actualTextContent => actualTextContent === expectedTextContent)
-      );
+    const success = expected.every((expectedTextContent) =>
+      actual.some((actualTextContent) => actualTextContent === expectedTextContent)
+    );
 
-      return {
-        success,
-        actual
-      };
+    return {
+      success,
+      actual,
     };
+  };
 
-    return cy
-      .getSelectedItems()
-      .should('have.length', ids.length)
-      .then(checkSelectedItems)
-      .then(result => {
-        if (!result.success) {
-          Cypress.log({
-            message: ['Selected items do not match'],
-            consoleProps: () => ({
-              [`Expected: ${expected}`]: `Actual: ${result.actual}`
-            })
-          });
-        }
+  return cy
+    .getSelectedItems()
+    .should('have.length', ids.length)
+    .then(checkSelectedItems)
+    .then((result) => {
+      if (!result.success) {
+        Cypress.log({
+          message: ['Selected items do not match'],
+          consoleProps: () => ({
+            [`Expected: ${expected}`]: `Actual: ${result.actual}`,
+          }),
+        });
+      }
 
-        return result.success;
-      })
-      .should('eq', true);
+      return result.success;
+    })
+    .should('eq', true);
+});
+
+Cypress.Commands.add('getSelectItem', (index: number, ...args): any => {
+  let options: any = {};
+
+  if (Cypress._.isObject(args[0])) {
+    options = args[0];
   }
-);
 
-Cypress.Commands.add(
-  'getSelectItem',
-  (index: number, ...args): any => {
-    let options: any = {};
-
-    if (Cypress._.isObject(args[0])) {
-      options = args[0];
-    }
-
-    if (Cypress._.isString(args[0])) {
-      options.alias = args[0];
-    }
-
-    let selectItems = cy.get('.dts-select-item', options).eq(index);
-
-    if (options.alias) {
-      selectItems = selectItems.as(options.alias);
-    }
-
-    return selectItems;
+  if (Cypress._.isString(args[0])) {
+    options.alias = args[0];
   }
-);
 
-Cypress.Commands.add(
-  'getSelectedItems',
-  (options): any => {
-    return cy.get('[data-cy="selected-item"]', options);
-  }
-);
+  let selectItems = cy.get('.dts-select-item', options).eq(index);
 
-Cypress.Commands.add(
-  'getSelectBox',
-  (options): any => {
-    return cy.get('.dts-select-box', options);
+  if (options.alias) {
+    selectItems = selectItems.as(options.alias);
   }
-);
 
-Cypress.Commands.add(
-  'getSelectContainer',
-  (options): any => {
-    return cy.get('.dts-select-container', options);
-  }
-);
+  return selectItems;
+});
+
+Cypress.Commands.add('getSelectedItems', (options): any => {
+  return cy.get('[data-cy="selected-item"]', options);
+});
+
+Cypress.Commands.add('getSelectBox', (options): any => {
+  return cy.get('.dts-select-box', options);
+});
+
+Cypress.Commands.add('getSelectContainer', (options): any => {
+  return cy.get('.dts-select-container', options);
+});
 
 declare namespace Cypress {
   interface Chainable {

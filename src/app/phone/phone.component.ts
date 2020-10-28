@@ -9,28 +9,28 @@ import { trigger, transition, stagger, animate, style, query } from '@angular/an
     trigger('editButtons', [
       transition('void => *', [
         query('button', style({ opacity: 0 }), { optional: true }),
-        query('button', stagger('100ms', [animate('100ms ease-in', style({ opacity: 1 }))]), { optional: true })
+        query('button', stagger('100ms', [animate('100ms ease-in', style({ opacity: 1 }))]), { optional: true }),
       ]),
       transition('* => void', [
         query('button', style({ opacity: 1 }), { optional: true }),
-        query('button', stagger('-100ms', [animate('100ms ease-in', style({ opacity: 0 }))]), { optional: true })
-      ])
+        query('button', stagger('-100ms', [animate('100ms ease-in', style({ opacity: 0 }))]), { optional: true }),
+      ]),
     ]),
     trigger('selectCount', [
       transition(':enter', [
         style({ opacity: 0, transform: 'translateX(100%)' }),
-        animate('150ms 100ms ease-in-out', style({ opacity: 1, transform: 'translateX(0)' }))
+        animate('150ms 100ms ease-in-out', style({ opacity: 1, transform: 'translateX(0)' })),
       ]),
       transition(':leave', [
         style({ transform: 'translateX(0)' }),
-        animate('150ms ease-in-out', style({ opacity: 1, transform: 'translateX(100%)' }))
-      ])
+        animate('150ms ease-in-out', style({ opacity: 1, transform: 'translateX(100%)' })),
+      ]),
     ]),
     trigger('fade', [
       transition(':enter', [style({ opacity: 0 }), animate('200ms 150ms ease-in', style({ opacity: 1 }))]),
-      transition(':leave', [style({ opacity: 1 }), animate('200ms ease-in', style({ opacity: 0 }))])
-    ])
-  ]
+      transition(':leave', [style({ opacity: 1 }), animate('200ms ease-in', style({ opacity: 0 }))]),
+    ]),
+  ],
 })
 export class PhoneComponent implements OnInit {
   contacts: Array<any> = [];
@@ -48,12 +48,12 @@ export class PhoneComponent implements OnInit {
 
     this.contacts.push({
       initials: contact.name[0].toUpperCase(),
-      ...contact
+      ...contact,
     });
   }
 
   deleteContacts(contacts: Array<any>) {
-    this.contacts = this.contacts.filter(contact => !contacts.includes(contact));
+    this.contacts = this.contacts.filter((contact) => !contacts.includes(contact));
     this.selectMode = false;
   }
 
@@ -70,7 +70,7 @@ export class PhoneComponent implements OnInit {
       { name: 'Larry Delgado', color: '#2bcbba' },
       { name: 'Elena Matthews', color: '#778ca3' },
       { name: 'Kurt	Neal', color: '#a55eea' },
-      { name: 'Peter Gardner', color: '#a5b1c2' }
+      { name: 'Peter Gardner', color: '#a5b1c2' },
     ];
 
     return names[this.getRandomNumber(names.length)];

@@ -9,7 +9,7 @@ import {
   PLATFORM_ID,
   Renderer2,
   OnInit,
-  HostBinding
+  HostBinding,
 } from '@angular/core';
 
 import { DragToSelectConfig, BoundingBox } from './models';
@@ -22,8 +22,8 @@ export const SELECT_ITEM_INSTANCE = Symbol();
   selector: '[dtsSelectItem]',
   exportAs: 'dtsSelectItem',
   host: {
-    class: 'dts-select-item'
-  }
+    class: 'dts-select-item',
+  },
 })
 export class SelectItemDirective implements OnInit, DoCheck {
   private _boundingClientRect: BoundingBox | undefined;

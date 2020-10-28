@@ -12,10 +12,7 @@ describe('Styling and Classes', () => {
 
   it(`should add class '${NO_SELECT_CLASS}' to body on mousedown`, () => {
     getDesktopExample().within(() => {
-      cy.getSelectItem(0)
-        .dispatch('mousedown', { button: 0 })
-        .get('@body')
-        .should('have.class', NO_SELECT_CLASS);
+      cy.getSelectItem(0).dispatch('mousedown', { button: 0 }).get('@body').should('have.class', NO_SELECT_CLASS);
     });
   });
 
@@ -35,10 +32,7 @@ describe('Styling and Classes', () => {
 
   it(`should add '${SELECTED_CLASS}' class to selected elements`, () => {
     getDesktopExample().within(() => {
-      cy.getSelectItem(0)
-        .dispatch('mousedown', { button: 0 })
-        .dispatch('mouseup')
-        .should('have.class', SELECTED_CLASS);
+      cy.getSelectItem(0).dispatch('mousedown', { button: 0 }).dispatch('mouseup').should('have.class', SELECTED_CLASS);
 
       cy.getSelectItem(0)
         .dispatch('mousedown', { button: 0 })
@@ -97,7 +91,7 @@ describe('Styling and Classes', () => {
       cy.getSelectItem(0)
         .dispatch('mousedown', { button: 0 })
         .dispatch('mouseup')
-        .then($element => {
+        .then(($element) => {
           expect($element.css('box-shadow')).not.to.eq('none');
           expect($element.css('border')).to.eq('1px solid rgb(33, 150, 243)');
         });
@@ -105,7 +99,7 @@ describe('Styling and Classes', () => {
       cy.getSelectItem(1)
         .dispatch('mousedown', { button: 0, shiftKey: true })
         .dispatch('mouseup')
-        .then($element => {
+        .then(($element) => {
           expect($element.css('border')).to.eq('1px solid rgb(210, 210, 210)');
         });
     });

@@ -12,9 +12,7 @@ describe('Public APIs', () => {
     getDesktopExample().within(() => {
       selectAll();
 
-      cy.shouldSelect([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12])
-        .get(`.${SELECTED_CLASS}`)
-        .should('have.length', 12);
+      cy.shouldSelect([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]).get(`.${SELECTED_CLASS}`).should('have.length', 12);
     });
   });
 
@@ -23,9 +21,7 @@ describe('Public APIs', () => {
       selectAll();
       clearSelection();
 
-      cy.shouldSelect([])
-        .get(`.${SELECTED_CLASS}`)
-        .should('have.length', 0);
+      cy.shouldSelect([]).get(`.${SELECTED_CLASS}`).should('have.length', 0);
     });
   });
 });

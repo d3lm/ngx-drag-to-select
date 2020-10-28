@@ -81,16 +81,11 @@ export const deleteItems = () => {
 };
 
 export const clearSelection = () => {
-  return getClearButton()
-    .click()
-    .wait(150);
+  return getClearButton().click().wait(150);
 };
 
 export const toggleItem = (subject: Cypress.ObjectLike) => {
-  return cy
-    .wrap(subject)
-    .dispatch('mousedown', { button: 0, ctrlKey: true, metaKey: true })
-    .dispatch('mouseup');
+  return cy.wrap(subject).dispatch('mousedown', { button: 0, ctrlKey: true, metaKey: true }).dispatch('mouseup');
 };
 
 export const shouldBeInSelectMode = (inSelectMode: boolean = true) => {

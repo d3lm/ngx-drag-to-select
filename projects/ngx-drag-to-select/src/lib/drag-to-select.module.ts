@@ -18,7 +18,7 @@ export function CONFIG_FACTORY(config: Partial<DragToSelectConfig>) {
 @NgModule({
   imports: [CommonModule],
   declarations: [...COMPONENTS],
-  exports: [...COMPONENTS]
+  exports: [...COMPONENTS],
 })
 export class DragToSelectModule {
   static forRoot(config: Partial<DragToSelectConfig> = {}): ModuleWithProviders<DragToSelectModule> {
@@ -31,9 +31,9 @@ export class DragToSelectModule {
         {
           provide: CONFIG,
           useFactory: CONFIG_FACTORY,
-          deps: [USER_CONFIG]
-        }
-      ]
+          deps: [USER_CONFIG],
+        },
+      ],
     };
   }
 }

@@ -7,6 +7,6 @@ export const DEFAULT_CONFIG: DragToSelectConfig = {
     disableSelection: 'alt',
     toggleSingleItem: 'meta',
     addToSelection: 'shift',
-    removeFromSelection: 'shift+meta'
-  }
+    removeFromSelection: 'shift+meta',
+  },
 };
