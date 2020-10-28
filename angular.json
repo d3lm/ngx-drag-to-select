@@ -9,6 +9,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "aot": true,
             "outputPath": "dist/browser",
             "index": "src/index.html",
             "main": "src/main.ts",
@@ -35,6 +36,12 @@
           },
           "configurations": {
             "production": {
+              "budgets": [
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb"
+                }
+              ],
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
@@ -96,8 +103,7 @@
               "outputHashing": "none",
               "sourceMap": false,
               "namedChunks": false,
-              "extractLicenses": true,
-              "vendorChunk": false
+              "extractLicenses": true
             }
           }
         }
@@ -117,7 +123,8 @@
           },
           "configurations": {
             "production": {
-              "project": "projects/ngx-drag-to-select/ng-package.prod.json"
+              "project": "projects/ngx-drag-to-select/ng-package.prod.json",
+              "tsConfig": "projects/ngx-drag-to-select/tsconfig.lib.prod.json"
             }
           }
         },
@@ -140,7 +147,7 @@
   "schematics": {
     "@schematics/angular:component": {
       "prefix": "ngx",
-      "styleext": "scss"
+      "style": "scss"
     },
     "@schematics/angular:directive": {
       "prefix": "ngx"

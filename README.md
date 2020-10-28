@@ -501,11 +501,19 @@ Example:
 
 Yes.
 
-### Does this library work with Angular 5.x?
+### Can I use this library with an older version of Angular?
 
-The latest version that supports Angular 5.x is 1.1.1. You can still install it via npm or yarn, e.g. `npm install ngx-drag-to-select@1.1.1`.
+Yep you totally can! But this also means you won't be able to use the latest features. We are not back porting new features due to the maintenance overhead it would create. Severe bugs and security issues, however, are back ported.
 
-Note, that we try to always keep up with Angular's latest version, hence, older versions will not receive bug fixes nor new features.
+What does that mean for you now? We recommend to stay up to date with new Angular versions. If for some reasons you can't then here's an overview of versions you could use with older versions of Angular:
+
+| Angular        | ngx-drag-to-select |
+| -------------- | ------------------ |
+| 5.x.x          | <= 1.1.1           |
+| 6.x.x - 7.x.x  | > 1.1.1 <= 3.1.1   |
+| >= 8.0.0       | >= 4.0.0           |
+
+To install a specific version run for example `npm install ngx-drag-to-select@x.x.x`.
 
 ### Does this library work with mobile?
 
