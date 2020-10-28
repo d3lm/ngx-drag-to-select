@@ -47,7 +47,6 @@
               "sourceMap": false,
               "extractCss": true,
               "namedChunks": false,
-              "aot": true,
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": true,
@@ -57,6 +56,9 @@
                   "replaceWith": "src/environments/environment.prod.ts"
                 }
               ]
+            },
+            "ghpages": {
+              "baseHref": "/ngx-drag-to-select/"
             }
           }
         },
@@ -80,31 +82,53 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": ["src/tsconfig.app.json"],
+            "tsConfig": ["src/tsconfig.app.json", "src/tsconfig.server.json"],
             "exclude": ["**/node_modules/**"]
           }
-        }
-      }
-    },
-    "server": {
-      "root": "",
-      "projectType": "application",
-      "architect": {
-        "build": {
+        },
+        "server": {
           "builder": "@angular-devkit/build-angular:server",
           "options": {
             "outputPath": "dist/server",
-            "main": "src/main.server.ts",
+            "main": "server.ts",
             "tsConfig": "src/tsconfig.server.json"
           },
           "configurations": {
             "production": {
-              "optimization": true,
-              "outputHashing": "none",
+              "outputHashing": "media",
+              "fileReplacements": [
+                {
+                  "src": "src/environments/environment.ts",
+                  "replaceWith": "src/environments/environment.prod.ts"
+                }
+              ],
               "sourceMap": false,
-              "namedChunks": false,
-              "extractLicenses": true
+              "optimization": true
             }
+          }
+        },
+        "serve-ssr": {
+          "builder": "@nguniversal/builders:ssr-dev-server",
+          "options": {
+            "browserTarget": "app:build",
+            "serverTarget": "app:server"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "app:build:production",
+              "serverTarget": "app:server:production"
+            }
+          }
+        },
+        "prerender": {
+          "builder": "@nguniversal/builders:prerender",
+          "options": {
+            "browserTarget": "app:build:production",
+            "serverTarget": "app:server:production",
+            "routes": ["/"]
+          },
+          "configurations": {
+            "production": {}
           }
         }
       }

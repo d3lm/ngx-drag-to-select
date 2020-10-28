@@ -12,7 +12,6 @@ import { MatButtonModule } from '@angular/material/button';
 
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { ModuleMapLoaderModule } from '@nguniversal/module-map-ngfactory-loader';
 
 import { DragToSelectModule } from '../../projects/ngx-drag-to-select/src/public_api';
 
@@ -53,7 +52,6 @@ const MATERIAL_MODULES = [
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'demo-app' }),
-    ModuleMapLoaderModule,
     HttpClientModule,
     BrowserAnimationsModule,
     LayoutModule,
