@@ -75,16 +75,20 @@ Copy `ngx-drag-to-select.css` to your project and add it as a `style` tag to you
 
 If you are using sass you can import the css as follows:
 
-```
-@import "~ngx-drag-to-select/ngx-drag-to-select.css";
+```scss
+@import '~ngx-drag-to-select/ngx-drag-to-select.css';
 ```
 
-If you are using the [Angular CLI](https://github.com/angular/angular-cli) you can add it to your `angular.json`
+If you are using the [Angular CLI](https://github.com/angular/angular-cli) you can add it to your `angular.json`:
 
-```
+```json
 "styles": [
-  "styles.scss",
-  "../node_modules/ngx-drag-to-select/ngx-drag-to-select.css"
+  {
+    "input": "src/styles.scss"
+  },
+  {
+    "input": "node_modules/ngx-drag-to-select/ngx-drag-to-select.css"
+  }
 ]
 ```
 
@@ -92,23 +96,21 @@ If you are using the [Angular CLI](https://github.com/angular/angular-cli) you c
 
 If you're using sass you can simply import the sass package. This allows you to [override the default variables](#overriding-sass-variables) to customize the library to your needs.
 
-```
-@import "~ngx-drag-to-select/scss/ngx-drag-to-select";
+```scss
+@import '~ngx-drag-to-select/scss/ngx-drag-to-select';
 ```
 
 ### Adding the module
 
 In your `AppModule` import `DragToSelectModule` from `ngx-drag-to-select` and add it to the module imports:
 
-```
+```ts
 import { DragToSelectModule } from 'ngx-drag-to-select';
 
 @NgModule({
-  imports: [
-    DragToSelectModule.forRoot()
-  ]
+  imports: [DragToSelectModule.forRoot()],
 })
-export class AppModule { }
+export class AppModule {}
 ```
 
 That's it. You are now ready to use this library in your project. Make sure to call `forRoot()` only **once** in your `AppModule` and for feature modules you simply add the `DragToSelectModule` as is **without** calling `forRoot()`.
@@ -123,8 +125,12 @@ Next, mark all selectable items with the `dtsSelectItem` directive. This connect
 
 Here's a complete example:
 
-```
-<dts-select-container #container="dts-select-container" [(selectedItems)]="selectedDocuments" (select)="someMethod($event)">
+```html
+<dts-select-container
+  #container="dts-select-container"
+  [(selectedItems)]="selectedDocuments"
+  (select)="someMethod($event)"
+>
   <ul>
     <li [dtsSelectItem]="document" *ngFor="let document of documents">{{ document.name }}</li>
   </ul>
@@ -156,11 +162,11 @@ If you wish to override one of these variables, make sure to do that **before** 
 
 Example:
 
-```
+```scss
 // Example for overriding the color of the selection retangle
 $select-box-color: red;
 
-@import "~ngx-drag-to-select/scss/ngx-drag-to-select";
+@import '~ngx-drag-to-select/scss/ngx-drag-to-select';
 ```
 
 Keep in mind that default styles are applied to all drag-to-select instances in your application. This means that if you override the color of the select box and set it so something like `red` then all instances render a `red` selection rectangle.
@@ -189,7 +195,7 @@ You can override these options by passing a configuration object to `forRoot()`.
 
 Here's an example:
 
-```
+```ts
 import { DragToSelectModule } from 'ngx-drag-to-select';
 
 @NgModule({
@@ -197,12 +203,12 @@ import { DragToSelectModule } from 'ngx-drag-to-select';
     DragToSelectModule.forRoot({
       selectedClass: 'my-selected-item',
       shortcuts: {
-        disableSelection: 'alt+meta,d'
-      }
-    })
-  ]
+        disableSelection: 'alt+meta,d',
+      },
+    }),
+  ],
 })
-export class AppModule { }
+export class AppModule {}
 ```
 
 This will override the `disableSelection` with **two** possible shortcuts, either `alt + meta` **or** just `d`. If you want to learn more about shortcut alternatives, check [this](shortcutAlternatives) section.
@@ -226,9 +232,9 @@ When using `meta`, it will be substituted with `ctrl` (for Windows) **and** `cmd
 
 You can also define alternative shortcuts. For that, simply chain the shortcuts with a comma. Here's an example:
 
-```
+```ts
 shortcuts: {
-  disableSelection: 'alt+meta,shift+alt'
+  disableSelection: 'alt+meta,shift+alt';
 }
 ```
 
@@ -253,7 +259,7 @@ shortcuts: {
 
 Here's an example of all inputs in action:
 
-```
+```html
 <dts-select-container
   [(selectedItems)]="selectedDocuments"
   [selectOnDrag]="true"
@@ -261,7 +267,8 @@ Here's an example of all inputs in action:
   [disableDrag]="true"
   [selectMode]="true"
   [custom]="true"
-  [selectWithShortcut]="false">
+  [selectWithShortcut]="false"
+>
   ...
 </dts-select-container>
 ```
@@ -282,8 +289,12 @@ Here's an example of all inputs in action:
 
 Example:
 
-```
-<dts-select-container (select)="someMethod($event)" (itemSelected)="itemSelected($event)" (itemDeselected)="itemDeselected($event)">
+```html
+<dts-select-container
+  (select)="someMethod($event)"
+  (itemSelected)="itemSelected($event)"
+  (itemDeselected)="itemDeselected($event)"
+>
   ...
 </dts-select-container>
 ```
@@ -301,7 +312,7 @@ Example:
 
 To access these methods on the container component you can either use the `@ViewChild()` decorator
 
-```
+```ts
 import { Component, ViewChild } from '@angular/core';
 import { SelectContainerComponent } from 'ngx-drag-to-select';
 
@@ -319,7 +330,7 @@ export class AppComponent {
 
 or use it within the template with a template reference variable
 
-```
+```html
 <button (click)="selectContainer.selectAll()">Select All</button>
 <button (click)="selectContainer.clearSelection()">Clear Selection</button>
 
@@ -334,21 +345,17 @@ In that case I would recommend to add template reference variables to your selec
 
 Here's an example:
 
-```
-<dts-select-container #documents>
-  ...
-</dts-select-container>
+```html
+<dts-select-container #documents> ... </dts-select-container>
 
 ...
 
-<dts-select-container #images>
-  ...
-</dts-select-container>
+<dts-select-container #images> ... </dts-select-container>
 ```
 
 In the component you can then query them one by one:
 
-```
+```ts
 import { Component, ViewChild } from '@angular/core';
 import { SelectContainerComponent } from 'ngx-drag-to-select';
 
@@ -386,7 +393,7 @@ Iterates over collection of `SelectItemDirective`'s, selecting all items from th
 
 **Example**
 
-```
+```ts
 import { Component, ViewChild } from '@angular/core';
 import { SelectContainerComponent } from 'ngx-drag-to-select';
 
@@ -412,7 +419,7 @@ Iterates over collection of `SelectItemDirective`'s, deselecting all items from 
 
 **Example**
 
-```
+```ts
 import { Component, ViewChild } from '@angular/core';
 import { SelectContainerComponent } from 'ngx-drag-to-select';
 
@@ -438,7 +445,7 @@ Iterates over collection of `SelectItemDirective`'s, toggling all items from tha
 
 **Example**
 
-```
+```ts
 import { Component, ViewChild } from '@angular/core';
 import { SelectContainerComponent } from 'ngx-drag-to-select';
 
@@ -466,7 +473,7 @@ The `dtsSelectItem` directive is used to mark DOM elements as selectable items. 
 
 Example:
 
-```
+```html
 <dts-select-container>
   <ul>
     <li [dtsSelectItem]="document" *ngFor="let document of documents">{{ document.name }}</li>
@@ -484,7 +491,7 @@ You can access this property in a similar why you access methods on the `dts-sel
 
 Example:
 
-```
+```html
 <dts-select-container>
   <ul>
     <li [dtsSelectItem]="document" #item *ngFor="let document of documents">
@@ -507,11 +514,11 @@ Yep you totally can! But this also means you won't be able to use the latest fea
 
 What does that mean for you now? We recommend to stay up to date with new Angular versions. If for some reasons you can't then here's an overview of versions you could use with older versions of Angular:
 
-| Angular        | ngx-drag-to-select |
-| -------------- | ------------------ |
-| 5.x.x          | <= 1.1.1           |
-| 6.x.x - 7.x.x  | > 1.1.1 <= 3.1.1   |
-| >= 8.0.0       | >= 4.0.0           |
+| Angular       | ngx-drag-to-select |
+| ------------- | ------------------ |
+| 5.x.x         | <= 1.1.1           |
+| 6.x.x - 7.x.x | > 1.1.1 <= 3.1.1   |
+| >= 8.0.0      | >= 4.0.0           |
 
 To install a specific version run for example `npm install ngx-drag-to-select@x.x.x`.
 
