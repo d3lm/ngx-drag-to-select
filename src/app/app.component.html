@@ -4,11 +4,15 @@
     <h3>Keyboard Shortcuts</h3>
     <mat-tab-group [@.disabled]="true">
       <mat-tab>
-        <ng-template mat-tab-label> <mat-icon svgIcon="apple"></mat-icon> </ng-template>
+        <ng-template mat-tab-label>
+          <mat-icon svgIcon="apple"></mat-icon>
+        </ng-template>
         <app-shortcuts os="mac"></app-shortcuts>
       </mat-tab>
       <mat-tab>
-        <ng-template mat-tab-label> <mat-icon svgIcon="windows"></mat-icon> </ng-template>
+        <ng-template mat-tab-label>
+          <mat-icon svgIcon="windows"></mat-icon>
+        </ng-template>
         <app-shortcuts os="windows"></app-shortcuts>
       </mat-tab>
     </mat-tab-group>
@@ -21,9 +25,8 @@
 
     <mat-checkbox data-cy="selectOnDrag" [(ngModel)]="selectOnDrag">Select on Drag</mat-checkbox>
     <mat-checkbox data-cy="disable" [(ngModel)]="disable">Disable</mat-checkbox>
-    <mat-checkbox data-cy="disableRangeSelection" [(ngModel)]="disableRangeSelection"
-      >Disable Range Selection</mat-checkbox
-    >
+    <mat-checkbox data-cy="disableRangeSelection" [(ngModel)]="disableRangeSelection">Disable Range Selection
+    </mat-checkbox>
     <mat-checkbox data-cy="selectMode" [(ngModel)]="selectMode">Select Mode</mat-checkbox>
     <mat-checkbox data-cy="selectWithShortcut" [(ngModel)]="selectWithShortcut">Select with Shortcut</mat-checkbox>
 
@@ -43,8 +46,7 @@
         [disabled]="disable"
         [disableRangeSelection]="disableRangeSelection"
         [selectOnDrag]="selectOnDrag"
-        [selectWithShortcut]="selectWithShortcut"
-      >
+        [selectWithShortcut]="selectWithShortcut">
         <mat-grid-list cols="4" rowHeight="200px" gutterSize="20px">
           <mat-grid-tile [dtsSelectItem]="document" *ngFor="let document of documents">
             {{ document.name }}
@@ -69,7 +71,19 @@
       <span>Mobile Demo</span> <a href="https://github.com/d3lm/ngx-drag-to-select/blob/master/src/app/phone">SOURCE</a>
     </h3>
 
-    <div class="mobile-wrapper"><app-phone></app-phone></div>
+    <div class="mobile-wrapper">
+      <app-phone></app-phone>
+    </div>
+  </section>
+
+  <section data-cy="dragndrop">
+    <h3>
+      <span>Drag & Drop Demo</span> <a
+        href="https://github.com/d3lm/ngx-drag-to-select/blob/master/src/app/dragndrop">SOURCE</a>
+    </h3>
+
+    <app-dragndrop></app-dragndrop>
+
   </section>
 </main>
 <app-footer></app-footer>

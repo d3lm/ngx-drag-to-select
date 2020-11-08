@@ -53,6 +53,7 @@ import {
   UpdateActions,
   PredicateFn,
   BoundingBox,
+  SelectContainer,
 } from './models';
 
 import { AUDIT_TIME, NO_SELECT_CLASS } from './constants';
@@ -68,8 +69,7 @@ import {
   hasMinimumSize,
 } from './utils';
 import { KeyboardEventsService } from './keyboard-events.service';
-
-export const DTS_SELECT_CONTAINER = new InjectionToken<SelectContainerComponent>('SelectContainerComponent');
+import { DTS_SELECT_CONTAINER } from './tokens';
 
 @Component({
   selector: 'dts-select-container',
@@ -89,16 +89,14 @@ export const DTS_SELECT_CONTAINER = new InjectionToken<SelectContainerComponent>
   styleUrls: ['./select-container.component.scss'],
   providers: [{ provide: DTS_SELECT_CONTAINER, useExisting: SelectContainerComponent }],
 })
-export class SelectContainerComponent implements AfterViewInit, OnDestroy, AfterContentInit {
+export class SelectContainerComponent
+  implements AfterViewInit, OnDestroy, AfterContentInit, SelectContainer<SelectItemDirective> {
   host: SelectContainerHost;
   selectBoxStyles$: Observable<SelectBox<string>>;
   selectBoxClasses$: Observable<{ [key: string]: boolean }>;
 
   @ViewChild('selectBox', { static: true })
   private $selectBox: ElementRef;
-
-  @ContentChildren(SelectItemDirective, { descendants: true })
-  private $selectableItems: QueryList<SelectItemDirective>;
 
   @Input() selectedItems: any;
   @Input() selectOnDrag = true;
@@ -263,11 +261,11 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy, After
   }
 
   ngAfterContentInit() {
-    this._selectableItems = this.$selectableItems.toArray();
+    // removed query list, maybe remove this too
   }
 
   updateSelectableItems() {
-    this._selectableItems = Array.from(this._registry); //this.$selectableItems.toArray();
+    this._selectableItems = Array.from(this._registry);
   }
 
   selectAll() {
