@@ -1,5 +1,4 @@
-import { CdkDragStart, CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
-import { ThrowStmt } from '@angular/compiler';
+import { CdkDragStart, CdkDragDrop } from '@angular/cdk/drag-drop';
 import { Component, HostBinding, Inject, Input, Optional, SkipSelf } from '@angular/core';
 import { DTS_SELECT_CONTAINER } from 'projects/ngx-drag-to-select/src/lib/tokens';
 import { SelectContainerComponent } from 'projects/ngx-drag-to-select/src/public_api';
