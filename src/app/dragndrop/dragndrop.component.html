@@ -1,0 +1,9 @@
+<dts-select-container data-cy="dragndrop-container" [custom]="true" [(selectedItems)]="selectedItems">
+  <div class="list-wrapper" cdkDropListGroup>
+
+    <app-task-list title="Todo" [tasks]="todo"></app-task-list>
+    <app-task-list title="Doing" [tasks]="doing"></app-task-list>
+    <app-task-list title="Done" [tasks]="done"></app-task-list>
+
+  </div>
+</dts-select-container>

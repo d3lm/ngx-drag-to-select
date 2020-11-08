@@ -1,3 +1,4 @@
+import { ComponentType } from '@angular/cdk/portal';
 import { Observable } from 'rxjs';
 import { SelectItemDirective } from './select-item.directive';
 
@@ -61,4 +62,10 @@ export enum Action {
   Add,
   Delete,
   None,
+}
+
+export interface SelectContainer<T = any> {
+  selectedItems: T[];
+  register(item: T): void;
+  unregister(item: T): void;
 }

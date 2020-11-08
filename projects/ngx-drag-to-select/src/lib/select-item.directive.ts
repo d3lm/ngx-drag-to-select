@@ -15,9 +15,8 @@ import {
   OnDestroy,
 } from '@angular/core';
 
-import { DragToSelectConfig, BoundingBox } from './models';
-import { DTS_SELECT_CONTAINER, SelectContainerComponent } from './select-container.component';
-import { CONFIG } from './tokens';
+import { DragToSelectConfig, BoundingBox, SelectContainer } from './models';
+import { CONFIG, DTS_SELECT_CONTAINER } from './tokens';
 import { calculateBoundingClientRect } from './utils';
 
 export const SELECT_ITEM_INSTANCE = Symbol();
@@ -50,7 +49,7 @@ export class SelectItemDirective implements OnInit, DoCheck, OnDestroy {
   constructor(
     @Inject(CONFIG) private config: DragToSelectConfig,
     @Inject(PLATFORM_ID) private platformId: Record<string, unknown>,
-    @Inject(DTS_SELECT_CONTAINER) @Optional() @SkipSelf() public container: SelectContainerComponent,
+    @Inject(DTS_SELECT_CONTAINER) @Optional() @SkipSelf() public container: SelectContainer,
     private host: ElementRef,
     private renderer: Renderer2
   ) {}

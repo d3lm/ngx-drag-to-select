@@ -52,9 +52,10 @@
       >
         <mat-grid-list cols="4" rowHeight="200px" gutterSize="20px">
           <mat-grid-tile
-              [dtsSelectItem]="document"
-              [dtsDisabled]="disableEvenItems && document.disabled"
-              *ngFor="let document of documents">
+            [dtsSelectItem]="document"
+            [dtsDisabled]="disableEvenItems && document.disabled"
+            *ngFor="let document of documents"
+          >
             {{ document.name }}
           </mat-grid-tile>
         </mat-grid-list>
@@ -77,7 +78,19 @@
       <span>Mobile Demo</span> <a href="https://github.com/d3lm/ngx-drag-to-select/blob/master/src/app/phone">SOURCE</a>
     </h3>
 
-    <div class="mobile-wrapper"><app-phone></app-phone></div>
+    <div class="mobile-wrapper">
+      <app-phone></app-phone>
+    </div>
+  </section>
+
+  <section data-cy="dragndrop">
+    <h3>
+      <span>Drag & Drop Demo</span> <a
+        href="https://github.com/d3lm/ngx-drag-to-select/blob/master/src/app/dragndrop">SOURCE</a>
+    </h3>
+
+    <app-dragndrop></app-dragndrop>
+
   </section>
 </main>
 <app-footer></app-footer>
