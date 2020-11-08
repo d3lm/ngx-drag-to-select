@@ -134,6 +134,8 @@ export class SelectContainerComponent
   private _newRangeStart = false;
   private _lastRangeSelection: Map<SelectItemDirective, boolean> = new Map();
 
+  private _registry: Set<SelectItemDirective> = new Set();
+
   constructor(
     @Inject(PLATFORM_ID) private platformId: Record<string, unknown>,
     private shortcuts: ShortcutService,
@@ -299,8 +301,6 @@ export class SelectContainerComponent
       this._deselectItem(item);
     });
   }
-
-  _registry: Set<SelectItemDirective> = new Set();
 
   register(item: SelectItemDirective) {
     this._registry.add(item);
