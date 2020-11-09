@@ -9,6 +9,10 @@ import { DTS_SELECT_CONTAINER } from 'projects/ngx-drag-to-select/src/lib/tokens
 })
 export class TaskComponent {
   @Input() item = '';
-  // @Input() selectedItems = [];
-  constructor(@Inject(DTS_SELECT_CONTAINER) @Optional() @SkipSelf() public container: SelectContainerComponent) {}
+  constructor(@Inject(DTS_SELECT_CONTAINER) @Optional() public container: SelectContainerComponent) {}
+
+  select() {
+    this.container.clearSelection();
+    this.container.selectItems((it) => it === this.item);
+  }
 }

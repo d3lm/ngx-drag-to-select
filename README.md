@@ -568,7 +568,11 @@ export class TaskListComponent {
     public container: SelectContainerComponent) {}
 ```
 
-You can see an example of the this in the [drag and drop example](https://github.com/d3lm/ngx-drag-to-select/blob/master/src/app/dragndrop). You can see that the `[selectItem]` directive is set in `app-task` component and the `dts-select-container` is in the `drag-n-drop` component.
+You can see an example of the this in the [drag and drop example](https://github.com/d3lm/ngx-drag-to-select/blob/master/src/app/dragndrop). You can see that the `[selectItem]` directive is set in `app-task` component and the `dts-select-container` is in the `dragndrop` component.
+
+### Why is my `selectItem` directive not selecting why I click on it?
+
+If you are using the `selectItem` within a nested component then your mousedown/up events might being captured by another directive or component in your code. For example if you are using this libary with Angular CDK's DragDropModule, the mouse events are captured by the `cdkDrag` directive, [see here](https://github.com/angular/components/pull/19674).
 
 ## Want to contribute?
 

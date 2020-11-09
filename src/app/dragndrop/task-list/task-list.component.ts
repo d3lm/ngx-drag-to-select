@@ -15,7 +15,7 @@ export class TaskListComponent {
   @HostBinding('class.item-dragging')
   dragging = false;
 
-  constructor(@Inject(DTS_SELECT_CONTAINER) @Optional() @SkipSelf() public container: SelectContainerComponent) {}
+  constructor(@Inject(DTS_SELECT_CONTAINER) @Optional() public container: SelectContainerComponent) {}
 
   dragStarted(ev: CdkDragStart, index: number): void {
     this.dragging = !!ev.source._dragRef;
@@ -46,7 +46,7 @@ export class TaskListComponent {
     const spliceIntoIndex = event.currentIndex;
     this.tasks.splice(spliceIntoIndex, 0, ...this.container.selectedItems);
 
-    this.container.update();
+    setTimeout(() => this.container.update());
     // if (event.previousContainer === event.container) {
     //   for (const item of this.container.selectedItems) {
     //     moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
