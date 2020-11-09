@@ -1,4 +1,6 @@
 <mat-card
-  [dtsSelectItem]="item">
+  data-cy="selected-item"
+  [dtsSelectItem]="item"
+  (click)="select()">
   {{ item }}
 </mat-card>

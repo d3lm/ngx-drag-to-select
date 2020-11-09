@@ -8,14 +8,11 @@ import {
   Renderer2,
   ViewChild,
   NgZone,
-  ContentChildren,
-  QueryList,
   HostBinding,
   AfterViewInit,
   PLATFORM_ID,
   Inject,
   AfterContentInit,
-  InjectionToken,
 } from '@angular/core';
 
 import { isPlatformBrowser } from '@angular/common';
@@ -33,7 +30,6 @@ import {
   share,
   withLatestFrom,
   distinctUntilChanged,
-  observeOn,
   startWith,
   concatMapTo,
   first,
@@ -410,6 +406,7 @@ export class SelectContainerComponent
   }
 
   private _onMouseDown(event: MouseEvent) {
+    console.log('Mouse Down');
     if (this.shortcuts.disableSelection(event) || this.disabled) {
       return;
     }
