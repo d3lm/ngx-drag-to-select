@@ -22,9 +22,9 @@ import { AppComponent } from './app.component';
 import { FooterComponent } from './footer/footer.component';
 import { HeaderComponent } from './header/header.component';
 import { PhoneComponent } from './phone/phone.component';
-import { DragNDropComponent } from './dragndrop/dragndrop.component';
-import { TaskComponent } from './dragndrop/task/task.component';
-import { TaskListComponent } from './dragndrop/task-list/task-list.component';
+import { DragAndDropComponent } from './drag-and-drop/drag-and-drop.component';
+import { TaskComponent } from './drag-and-drop/task/task.component';
+import { TaskListComponent } from './drag-and-drop/task-list/task-list.component';
 
 import {
   KeyComponent,
@@ -57,7 +57,7 @@ const MATERIAL_MODULES = [
     FooterComponent,
     HeaderComponent,
     PhoneComponent,
-    DragNDropComponent,
+    DragAndDropComponent,
     TaskComponent,
     TaskListComponent,
   ],
