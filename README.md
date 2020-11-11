@@ -567,6 +567,7 @@ export class TaskListComponent {
     @Inject(DTS_SELECT_CONTAINER) @Optional()
     public container: SelectContainerComponent
   ) {}
+}
 ```
 
 You can find an example of this in the [drag and drop example](https://github.com/d3lm/ngx-drag-to-select/blob/master/src/app/dragndrop).
