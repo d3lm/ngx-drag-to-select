@@ -1,17 +1,6 @@
 import { DEFAULT_CONFIG } from '../../projects/ngx-drag-to-select/src/lib/config';
 
-import {
-  disableSelection,
-  disableSelectOnDrag,
-  enableSelectMode,
-  getDesktopExample,
-  getDoingList,
-  getDragAndDropExample,
-  getTodoList,
-  shouldBeInvisible,
-  shouldBeVisible,
-  toggleItem,
-} from '../support/utils';
+import { getDoingList, getDragAndDropExample, getTodoList } from '../support/utils';
 
 const SELECTED_CLASS = DEFAULT_CONFIG.selectedClass;
 
@@ -36,15 +25,15 @@ describe('Drag And Drop', () => {
     it('should drag to new list', () => {
       getDragAndDropExample().within(() => {
         getTodoList()
-          // Select First 3 items in list
+          // select first 3 items in list
           .dispatch('mousedown', 'topLeft', { button: 0 })
           .getSelectItem(2)
           .dispatch('mousemove')
           .dispatch('mouseup')
-          // Click on second item
+          // click on second item
           .getSelectItem(1)
           .dispatch('mousedown', { button: 0 })
-          // Drag to Select Item in other list
+          // drag to SelectItem in other list
           .getSelectItem(5)
           .wait(16)
           .dispatch('mousemove')

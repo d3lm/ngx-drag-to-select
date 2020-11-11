@@ -295,6 +295,7 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy, Selec
     this._registry.add(item);
     this.updateSelectableItems();
   }
+
   unregister(item: SelectItemDirective) {
     this._registry.delete(item);
     this.updateSelectableItems();
