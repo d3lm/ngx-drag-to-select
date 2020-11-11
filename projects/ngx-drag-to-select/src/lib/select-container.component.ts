@@ -12,7 +12,6 @@ import {
   AfterViewInit,
   PLATFORM_ID,
   Inject,
-  AfterContentInit,
 } from '@angular/core';
 
 import { isPlatformBrowser } from '@angular/common';
@@ -38,7 +37,7 @@ import {
 import { SelectItemDirective, SELECT_ITEM_INSTANCE } from './select-item.directive';
 import { ShortcutService } from './shortcut.service';
 
-import { createSelectBox, whenSelectBoxVisible, distinctKeyEvents } from './operators';
+import { createSelectBox, whenSelectBoxVisible } from './operators';
 
 import {
   Action,
@@ -82,9 +81,7 @@ import { DTS_SELECT_CONTAINER } from './tokens';
   styleUrls: ['./select-container.component.scss'],
   providers: [{ provide: DTS_SELECT_CONTAINER, useExisting: SelectContainerComponent }],
 })
-export class SelectContainerComponent
-  implements AfterViewInit, OnDestroy, AfterContentInit, SelectContainer<SelectItemDirective>
-{
+export class SelectContainerComponent implements AfterViewInit, OnDestroy, SelectContainer<SelectItemDirective> {
   host: SelectContainerHost;
   selectBoxStyles$: Observable<SelectBox<string>>;
   selectBoxClasses$: Observable<{ [key: string]: boolean }>;
@@ -263,10 +260,6 @@ export class SelectContainerComponent
 
       this._initSelectionOutputs(mousedown$, mouseup$);
     }
-  }
-
-  ngAfterContentInit() {
-    // removed query list, maybe remove this too
   }
 
   updateSelectableItems() {

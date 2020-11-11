@@ -1,4 +1,3 @@
-import { ComponentType } from '@angular/cdk/portal';
 import { Observable } from 'rxjs';
 import { SelectItemDirective } from './select-item.directive';
 
@@ -69,3 +68,5 @@ export interface SelectContainer<T = any> {
   register(item: T): void;
   unregister(item: T): void;
 }
+
+export type ComponentType<T> = new (...args: any[]) => T;

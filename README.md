@@ -553,25 +553,26 @@ Here we listen for `scroll` on the `div` and call `container.update()` in case t
 
 In order not to kill the performance, because the `scroll` event is called many many times, you may want to **throttle** it to only call `update` every 16ms or so.
 
-### Does the `selectItem` directive need to be a direct child of the `dts-select-container`?
+### Does the `dtsSelectItem` directive need to be a direct child of the `dts-select-container`?
 
-As of version `4.1.0`, an injetion token is used to pass the SelectContainerComponent parent to the directive. You can use this in any component nested within the `dts-select-container`.
+As of version `4.1.0`, an injection token is used to pass the `SelectContainerComponent` parent to the directive. You can use this in any component nested within the `dts-select-container`.
 
-```javascript
+```ts
 import { DTS_SELECT_CONTAINER } from 'ngx-drag-to-select';
 
 @Component({...})
 export class TaskListComponent {
   constructor(
     @Inject(DTS_SELECT_CONTAINER) @Optional()
-    public container: SelectContainerComponent) {}
+    public container: SelectContainerComponent
+  ) {}
 ```
 
-You can see an example of the this in the [drag and drop example](https://github.com/d3lm/ngx-drag-to-select/blob/master/src/app/dragndrop). You can see that the `[selectItem]` directive is set in `app-task` component and the `dts-select-container` is in the `dragndrop` component.
+You can find an example of this in the [drag and drop example](https://github.com/d3lm/ngx-drag-to-select/blob/master/src/app/dragndrop).
 
-### Why is my `selectItem` directive not selecting why I click on it?
+### Why is my `dtsSelectItem` directive not selecting when I click on it?
 
-If you are using the `selectItem` within a nested component then your mousedown/up events might being captured by another directive or component in your code. For example if you are using this libary with Angular CDK's DragDropModule, the mouse events are captured by the `cdkDrag` directive, [see here](https://github.com/angular/components/pull/19674).
+If you are using the `dtsSelectItem` within a nested component then your mousedown/up events might being captured by another directive or component in your code. For example if you are using this libary with Angular CDK's DragDropModule, the mouse events are captured by the `cdkDrag` directive, [see here](https://github.com/angular/components/pull/19674).
 
 ## Want to contribute?
 
