@@ -49,14 +49,13 @@ describe('Drag And Drop', () => {
     it('should reorder within list', () => {
       getDragAndDropExample().within(() => {
         getTodoList()
-          .dispatch('mousedown', 'bottomRight', { button: 0 })
-          .getSelectItem(2)
+          .dispatch('mousedown', 'topRight', { button: 0 })
+          .getSelectItem(1)
           .dispatch('mousemove')
           .dispatch('mouseup')
-          .getSelectItem(3)
-          .dispatch('mousedown', { button: 0 })
           .getSelectItem(0)
-          .wait(16)
+          .dispatch('mousedown', 'bottom', { button: 0 })
+          .getSelectItem(4)
           .dispatch('mousemove')
           .dispatch('mousemove')
           .dispatch('mouseup');
