@@ -10,7 +10,6 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
-
 import { DragDropModule } from '@angular/cdk/drag-drop';
 
 import { BrowserModule } from '@angular/platform-browser';

@@ -39,6 +39,7 @@
   display: flex;
   flex-flow: column;
   gap: 0.5rem;
+
   mat-card {
     opacity: 0.5;
   }
@@ -54,12 +55,14 @@
     top: -10px;
     left: -25px;
   }
+
   mat-card:nth-child(2) {
     left: -40px;
     top: -10px;
     transform: rotate(-1deg);
     z-index: -1;
   }
+
   mat-card:nth-child(3) {
     top: -5px;
     left: -20px;
