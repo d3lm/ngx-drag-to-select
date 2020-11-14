@@ -28,10 +28,8 @@
 }
 
 :host(.item-dragging) {
-  ::ng-deep {
-    mat-card.selected:not(.cdk-drag-placeholder) {
-      display: none; //opacity: 0.3;
-    }
+  app-task.selected:not(.cdk-drag-placeholder) {
+    display: none;
   }
 }
 
@@ -39,6 +37,8 @@
   display: flex;
   flex-flow: column;
   gap: 0.5rem;
+  min-height: 53px;
+  height: min-content;
 
   mat-card {
     opacity: 0.5;
