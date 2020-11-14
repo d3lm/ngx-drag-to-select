@@ -1,5 +1,5 @@
 import { CdkDragStart, CdkDragDrop } from '@angular/cdk/drag-drop';
-import { Component, HostBinding, Inject, Input, Optional, SkipSelf } from '@angular/core';
+import { Component, ElementRef, HostBinding, Inject, Input, Optional, SkipSelf } from '@angular/core';
 import { DTS_SELECT_CONTAINER } from 'projects/ngx-drag-to-select/src/lib/tokens';
 import { SelectContainerComponent } from 'projects/ngx-drag-to-select/src/public_api';
 
@@ -15,16 +15,40 @@ export class TaskListComponent {
   @HostBinding('class.item-dragging')
   dragging = false;
 
-  constructor(@Inject(DTS_SELECT_CONTAINER) @Optional() public container: SelectContainerComponent) {}
+  // CdkDragModule only supports dragging a single dom element
+  private selectDomRefs: { parent: Node; node: Node }[] = [];
+
+  constructor(
+    @Inject(DTS_SELECT_CONTAINER) @Optional() public container: SelectContainerComponent,
+    private element: ElementRef
+  ) {}
 
   dragStarted(ev: CdkDragStart, index: number): void {
     this.dragging = !!ev.source._dragRef;
     this.container.selectItems((item) => {
       return item === this.tasks[index];
     });
+
+    /**
+     * We remove the selected elements from the DOM, because the
+     * CdkDragDropModule includes them when reordering even if they.
+     * are hidden.
+     **/
+    this.selectDomRefs = [];
+    this.element.nativeElement.querySelectorAll('.selected').forEach((node: Node) => {
+      this.selectDomRefs.push({ parent: node.parentNode, node });
+      node.parentNode.removeChild(node);
+    });
   }
 
   dragEnded(): void {
+    /**
+     * Add the DOM elements back in because the Angular refs are still
+     * bound to them.
+     **/
+    this.selectDomRefs.forEach(({ parent, node }) => {
+      parent.appendChild(node);
+    });
     this.dragging = null;
   }
 
@@ -40,9 +64,6 @@ export class TaskListComponent {
   }
 
   drop(event: CdkDragDrop<string[]>) {
-    const indices = this.container.selectedItems.map((it) => event.previousContainer.data.findIndex((i) => it === i));
-    console.log('Selected', indices);
-
     const spliceIntoIndex = event.currentIndex;
     this.tasks.splice(spliceIntoIndex, 0, ...this.container.selectedItems);
 

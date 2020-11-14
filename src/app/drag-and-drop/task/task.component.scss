@@ -1,11 +1,12 @@
 :host {
-  height: min-content;
+  display: block;
+  &.selected {
+    mat-card {
+      border: 1px solid #2196f3;
+    }
+  }
 }
 
 mat-card {
   border: 1px solid transparent;
-
-  &.selected {
-    border: 1px solid #2196f3;
-  }
 }
