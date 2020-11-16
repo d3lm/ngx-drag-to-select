@@ -62,3 +62,11 @@ export enum Action {
   Delete,
   None,
 }
+
+export interface SelectContainer<T = any> {
+  selectedItems: T[];
+  register(item: T): void;
+  unregister(item: T): void;
+}
+
+export type ComponentType<T> = new (...args: any[]) => T;

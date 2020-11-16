@@ -8,13 +8,10 @@ import {
   Renderer2,
   ViewChild,
   NgZone,
-  ContentChildren,
-  QueryList,
   HostBinding,
   AfterViewInit,
   PLATFORM_ID,
   Inject,
-  AfterContentInit,
 } from '@angular/core';
 
 import { isPlatformBrowser } from '@angular/common';
@@ -32,7 +29,6 @@ import {
   share,
   withLatestFrom,
   distinctUntilChanged,
-  observeOn,
   startWith,
   concatMapTo,
   first,
@@ -41,7 +37,7 @@ import {
 import { SelectItemDirective, SELECT_ITEM_INSTANCE } from './select-item.directive';
 import { ShortcutService } from './shortcut.service';
 
-import { createSelectBox, whenSelectBoxVisible, distinctKeyEvents } from './operators';
+import { createSelectBox, whenSelectBoxVisible } from './operators';
 
 import {
   Action,
@@ -52,6 +48,7 @@ import {
   UpdateActions,
   PredicateFn,
   BoundingBox,
+  SelectContainer,
 } from './models';
 
 import { AUDIT_TIME, NO_SELECT_CLASS } from './constants';
@@ -67,6 +64,7 @@ import {
   hasMinimumSize,
 } from './utils';
 import { KeyboardEventsService } from './keyboard-events.service';
+import { DTS_SELECT_CONTAINER } from './tokens';
 
 @Component({
   selector: 'dts-select-container',
@@ -84,17 +82,15 @@ import { KeyboardEventsService } from './keyboard-events.service';
     ></div>
   `,
   styleUrls: ['./select-container.component.scss'],
+  providers: [{ provide: DTS_SELECT_CONTAINER, useExisting: SelectContainerComponent }],
 })
-export class SelectContainerComponent implements AfterViewInit, OnDestroy, AfterContentInit {
+export class SelectContainerComponent implements AfterViewInit, OnDestroy, SelectContainer<SelectItemDirective> {
   host: SelectContainerHost;
   selectBoxStyles$: Observable<SelectBox<string>>;
   selectBoxClasses$: Observable<{ [key: string]: boolean }>;
 
   @ViewChild('selectBox', { static: true })
   private $selectBox: ElementRef;
-
-  @ContentChildren(SelectItemDirective, { descendants: true })
-  private $selectableItems: QueryList<SelectItemDirective>;
 
   @Input() selectedItems: any;
   @Input() selectOnDrag = true;
@@ -126,6 +122,8 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy, After
   private _lastStartIndex: number | undefined = undefined;
   private _newRangeStart = false;
   private _lastRangeSelection: Map<SelectItemDirective, boolean> = new Map();
+
+  private _registry: Set<SelectItemDirective> = new Set();
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
@@ -258,12 +256,12 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy, After
     }
   }
 
-  ngAfterContentInit() {
-    this._selectableItems = this.$selectableItems.toArray();
+  updateSelectableItems() {
+    this._selectableItems = Array.from(this._registry);
   }
 
   selectAll() {
-    this.$selectableItems.forEach((item) => {
+    this._selectableItems.forEach((item) => {
       this._selectItem(item);
     });
   }
@@ -281,14 +279,25 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy, After
   }
 
   clearSelection() {
-    this.$selectableItems.forEach((item) => {
+    this._selectableItems.forEach((item) => {
       this._deselectItem(item);
     });
   }
 
+  register(item: SelectItemDirective) {
+    this._registry.add(item);
+    this.updateSelectableItems();
+  }
+
+  unregister(item: SelectItemDirective) {
+    this._registry.delete(item);
+    this.updateSelectableItems();
+    this._removeItem(item, this.selectedItems);
+  }
+
   update() {
     this._calculateBoundingClientRect();
-    this.$selectableItems.forEach((item) => item.calculateBoundingClientRect());
+    this._selectableItems.forEach((item) => item.calculateBoundingClientRect());
   }
 
   ngOnDestroy() {
@@ -335,21 +344,6 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy, After
             break;
         }
       });
-
-    // Update the container as well as all selectable items if the list has changed
-    this.$selectableItems.changes
-      .pipe(withLatestFrom(this._selectedItems$), observeOn(asyncScheduler), takeUntil(this.destroy$))
-      .subscribe(([items, selectedItems]: [QueryList<SelectItemDirective>, any[]]) => {
-        const newList = items.toArray();
-        this._selectableItems = newList;
-        const removedItems = selectedItems.filter((item) => !newList.includes(item.value));
-
-        if (removedItems.length) {
-          removedItems.forEach((item) => this._removeItem(item, selectedItems));
-        }
-
-        this.update();
-      });
   }
 
   private _observeBoundingRectChanges() {
@@ -395,6 +389,7 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy, After
   }
 
   private _onMouseDown(event: MouseEvent) {
+    console.log('Mouse Down');
     if (this.shortcuts.disableSelection(event) || this.disabled) {
       return;
     }
@@ -446,7 +441,7 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy, After
       return;
     }
 
-    this.$selectableItems.forEach((item, index) => {
+    this._selectableItems.forEach((item, index) => {
       const itemRect = item.getBoundingClientRect();
       const withinBoundingBox = inBoundingBox(mousePoint, itemRect);
 
@@ -509,7 +504,7 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy, After
   private _selectItems(event: Event) {
     const selectionBox = calculateBoundingClientRect(this.$selectBox.nativeElement);
 
-    this.$selectableItems.forEach((item, index) => {
+    this._selectableItems.forEach((item, index) => {
       if (this._isExtendedSelection(event)) {
         this._extendedSelectionMode(selectionBox, item, event);
       } else {

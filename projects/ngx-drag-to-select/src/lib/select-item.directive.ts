@@ -10,10 +10,13 @@ import {
   Renderer2,
   OnInit,
   HostBinding,
+  Optional,
+  SkipSelf,
+  OnDestroy,
 } from '@angular/core';
 
-import { DragToSelectConfig, BoundingBox } from './models';
-import { CONFIG } from './tokens';
+import { DragToSelectConfig, BoundingBox, SelectContainer } from './models';
+import { CONFIG, DTS_SELECT_CONTAINER } from './tokens';
 import { calculateBoundingClientRect } from './utils';
 
 export const SELECT_ITEM_INSTANCE = Symbol();
@@ -25,7 +28,7 @@ export const SELECT_ITEM_INSTANCE = Symbol();
     class: 'dts-select-item',
   },
 })
-export class SelectItemDirective implements OnInit, DoCheck {
+export class SelectItemDirective implements OnInit, DoCheck, OnDestroy {
   private _boundingClientRect: BoundingBox | undefined;
 
   selected = false;
@@ -41,16 +44,22 @@ export class SelectItemDirective implements OnInit, DoCheck {
   constructor(
     @Inject(CONFIG) private config: DragToSelectConfig,
     @Inject(PLATFORM_ID) private platformId: Object,
+    @Inject(DTS_SELECT_CONTAINER) @Optional() @SkipSelf() public container: SelectContainer,
     private host: ElementRef,
     private renderer: Renderer2
   ) {}
 
   ngOnInit() {
     this.nativeElememnt[SELECT_ITEM_INSTANCE] = this;
+    this.container.register(this);
   }
 
   ngDoCheck() {
     this.applySelectedClass();
+  }
+
+  ngOnDestroy() {
+    this.container.unregister(this);
   }
 
   toggleRangeStart() {
