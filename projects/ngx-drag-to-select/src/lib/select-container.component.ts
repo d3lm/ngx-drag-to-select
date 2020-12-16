@@ -409,7 +409,7 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy, After
       return;
     }
 
-    const mousePoint = getMousePosition(event);
+    const mousePoint = getRelativeMousePosition(event);
     const [currentIndex, clickedItem] = this._getClosestSelectItem(event);
 
     let [startIndex, endIndex] = this._lastRange;
