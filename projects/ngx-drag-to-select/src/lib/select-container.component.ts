@@ -100,6 +100,7 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy, After
   @Input() selectOnDrag = true;
   @Input() disabled = false;
   @Input() disableDrag = false;
+  @Input() dragOverItems = true;
   @Input() disableRangeSelection = false;
   @Input() selectMode = false;
   @Input() selectWithShortcut = false;
@@ -168,6 +169,7 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy, After
         filter((event) => !this.shortcuts.disableSelection(event)),
         filter(() => !this.selectMode),
         filter(() => !this.disableDrag),
+        filter((event) => this.dragOverItems || event.target === this.host),
         switchMap(() => mousemove$.pipe(takeUntil(mouseup$))),
         share()
       );
