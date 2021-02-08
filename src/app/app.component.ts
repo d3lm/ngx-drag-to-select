@@ -19,6 +19,7 @@ export class AppComponent implements OnInit {
   disableRangeSelection = false;
   isDesktop = false;
   selectWithShortcut = false;
+  dragOverItems = true;
 
   constructor(
     private titleService: Title,
