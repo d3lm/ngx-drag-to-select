@@ -1,6 +1,6 @@
 {
   "name": "ngx-drag-to-select",
-  "version": "4.0.0",
+  "version": "4.1.0",
   "description": "A lightweight, fast, configurable and reactive drag-to-select component for Angular 8 and beyond",
   "sideEffects": false,
   "peerDependencies": {

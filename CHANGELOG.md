@@ -1,3 +1,13 @@
+# [4.1.0](https://github.com/d3lm/ngx-drag-to-select/compare/v4.0.0...v4.1.0) (2021-06-17)
+
+
+### Features
+
+* **lib:** add option to control starting drag select over items ([#117](https://github.com/d3lm/ngx-drag-to-select/issues/117)) ([868a117](https://github.com/d3lm/ngx-drag-to-select/commit/868a117ef9d2f6e7d9cabf6e6c4a813aabe39f1b))
+* upgrade cypress ([d40d3ff](https://github.com/d3lm/ngx-drag-to-select/commit/d40d3ff57e7d6f19cf5f954b17c22be8caadd334))
+
+
+
 # [4.0.0](https://github.com/d3lm/ngx-drag-to-select/compare/v3.2.0-rc.0...v4.0.0) (2020-10-28)
 
 
