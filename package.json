@@ -4,11 +4,9 @@
   "license": "MIT",
   "scripts": {
     "start": "ng serve",
-    "build": "npm run clean && npm run build:app && npm run build:server",
+    "build": "npm run clean && npm run build:app",
     "build:app": "ng build app --prod",
-    "build:server": "ng build server --prod",
     "serve:ssr": "node dist/server/main.js",
-    "build:ssr": "ng build --prod && ng run app:server:production",
     "dev:ssr": "ng run app:serve-ssr",
     "prerender": "ng run app:prerender",
     "build:prerender-ghpages": "npm run clean && npm run prerender -- --browser-target=app:build:production,ghpages",
