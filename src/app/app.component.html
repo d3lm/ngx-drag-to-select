@@ -19,6 +19,7 @@
       <span>Desktop Demo</span> <a href="https://github.com/d3lm/ngx-drag-to-select/blob/master/src/app">SOURCE</a>
     </h3>
 
+    <mat-checkbox data-cy="selectOnClick" [(ngModel)]="selectOnClick">Select on Click</mat-checkbox>
     <mat-checkbox data-cy="selectOnDrag" [(ngModel)]="selectOnDrag">Select on Drag</mat-checkbox>
     <mat-checkbox data-cy="dragOverItems" [(ngModel)]="dragOverItems">Drag Over Items</mat-checkbox>
     <mat-checkbox data-cy="disable" [(ngModel)]="disable">Disable</mat-checkbox>
@@ -43,6 +44,7 @@
         [(selectedItems)]="selectedDocuments"
         [disabled]="disable"
         [disableRangeSelection]="disableRangeSelection"
+        [selectOnClick]="selectOnClick"
         [selectOnDrag]="selectOnDrag"
         [selectWithShortcut]="selectWithShortcut"
         [dragOverItems]="dragOverItems"

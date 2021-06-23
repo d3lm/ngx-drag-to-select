@@ -100,6 +100,7 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy, After
   @Input() selectOnDrag = true;
   @Input() disabled = false;
   @Input() disableDrag = false;
+  @Input() selectOnClick = true;
   @Input() dragOverItems = true;
   @Input() disableRangeSelection = false;
   @Input() selectMode = false;
@@ -161,6 +162,7 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy, After
       const mousedown$ = fromEvent<MouseEvent>(this.host, 'mousedown').pipe(
         filter((event) => event.button === 0), // only emit left mouse
         filter(() => !this.disabled),
+        filter((event) => this.selectOnClick || event.target === this.host),
         tap((event) => this._onMouseDown(event)),
         share()
       );
