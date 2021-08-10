@@ -320,7 +320,11 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy, After
   private _observeSelectableItems() {
     // Listen for updates and either select or deselect an item
     this.updateItems$
-      .pipe(withLatestFrom(this._selectedItems$), takeUntil(this.destroy$))
+      .pipe(
+        withLatestFrom(this._selectedItems$),
+        takeUntil(this.destroy$),
+        filter(([update]) => !update.item.dtsDisabled)
+      )
       .subscribe(([update, selectedItems]: [UpdateAction, any[]]) => {
         const item = update.item;
 

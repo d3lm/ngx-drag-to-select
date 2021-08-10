@@ -41,6 +41,10 @@ class TestComponent {
 
   itemSelected(value: any) {}
   itemDeselected(value: any) {}
+
+  getByIndex(index: number) {
+    return this.selectItems.find((_, i) => i === index);
+  }
 }
 
 describe('SelectContainerComponent', () => {
@@ -109,6 +113,21 @@ describe('SelectContainerComponent', () => {
 
       selectContainerInstance.selectItems((item: SelectItemValue) => item.id === -1);
       selectContainerInstance.selectItems((item: SelectItemValue) => item.id === 100);
+    });
+
+    it('should not select disabled item', (done) => {
+      const ids = [1, 3];
+      const result = [{ id: 1 }, { id: 3 }];
+
+      selectContainerInstance.select.subscribe((items) => {
+        expect(testComponent.selectedItems.length).toBe(result.length);
+        expect(items).toEqual(result);
+        expect(testComponent.selectedItems).toEqual(result);
+        done();
+      });
+
+      testComponent.getByIndex(1).dtsDisabled = true;
+      selectContainerInstance.selectAll();
     });
   });
 
