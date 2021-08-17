@@ -127,6 +127,7 @@ describe('SelectContainerComponent', () => {
       });
 
       testComponent.getByIndex(1).dtsDisabled = true;
+
       selectContainerInstance.selectAll();
     });
   });

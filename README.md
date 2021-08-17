@@ -471,7 +471,7 @@ The `dtsSelectItem` directive is used to mark DOM elements as selectable items. 
 | Input         | Type     | Default            | Description                                  |
 | ------------- | -------- | ------------------ | -------------------------------------------- |
 | dtsSelectItem | any      | Directive Instance | Value that is used when the item is selected |
-| dtsDisabled   | boolean  | false              | Disable selection for item                   |
+| dtsDisabled   | boolean  | false              | Whether the item is selectable or not        |
 
 Example:
 
