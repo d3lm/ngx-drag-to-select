@@ -19,7 +19,7 @@ describe('ShortcutService', () => {
       });
 
       expect(() => {
-        TestBed.get(ShortcutService);
+        TestBed.inject(ShortcutService);
       }).toThrowError(`[ShortcutService] Key 'foo' in shortcut foo not supported`);
     });
 
@@ -35,7 +35,7 @@ describe('ShortcutService', () => {
       });
 
       expect(() => {
-        TestBed.get(ShortcutService);
+        TestBed.inject(ShortcutService);
       }).toThrowError(`[ShortcutService] Shortcut foo not supported`);
     });
   });
@@ -55,7 +55,7 @@ describe('ShortcutService', () => {
         providers: [KeyboardEventsService, ShortcutService, { provide: CONFIG, useValue: CUSTOM_CONFIG }],
       });
 
-      shortcutService = TestBed.get(ShortcutService);
+      shortcutService = TestBed.inject(ShortcutService);
     });
 
     describe('disableSelection', () => {
