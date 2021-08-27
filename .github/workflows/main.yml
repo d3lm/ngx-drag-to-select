@@ -13,7 +13,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Setup Node
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v2
         with:
           node-version: '14'
 
@@ -22,15 +22,15 @@ jobs:
         env:
           cache-name: cache-node-modules
         with:
-          path: '~/.npm'
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          path: '**/node_modules'
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}-
             ${{ runner.os }}-build-
             ${{ runner.os }}-
 
       - name: Install
-        run: npm install
+        run: yarn --frozen-lockfile
 
       - name: Lint and Format
         run: npm run lint:ci
