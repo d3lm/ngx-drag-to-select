@@ -1,8 +1,8 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { Component, ViewChild, ViewChildren, QueryList } from '@angular/core';
+import { Component, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
 import { DragToSelectModule } from './drag-to-select.module';
 import { SelectContainerComponent } from './select-container.component';
-import { By } from '@angular/platform-browser';
 import { SelectItemDirective } from './select-item.directive';
 
 function triggerDomEvent(eventType: string, target: HTMLElement | Element, eventData: object = {}): void {
@@ -48,12 +48,14 @@ describe('SelectContainerComponent', () => {
   let testComponent: TestComponent;
   let selectContainerInstance: SelectContainerComponent;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [TestComponent],
-      imports: [DragToSelectModule.forRoot()],
-    }).compileComponents();
-  }));
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [TestComponent],
+        imports: [DragToSelectModule.forRoot()],
+      }).compileComponents();
+    })
+  );
 
   beforeEach(() => {
     window.getSelection = jest.fn().mockReturnValue({});
