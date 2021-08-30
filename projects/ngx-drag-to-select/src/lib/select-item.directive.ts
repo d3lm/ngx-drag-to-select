@@ -34,8 +34,8 @@ export class SelectItemDirective implements OnInit, DoCheck {
 
   @Input() dtsSelectItem: any | undefined;
 
-  @HostBinding('class.dts-disabled')
   @Input()
+  @HostBinding('class.dts-disabled')
   dtsDisabled = false;
 
   get value(): SelectItemDirective | any {

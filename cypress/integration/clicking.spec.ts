@@ -1,10 +1,12 @@
 import { DEFAULT_CONFIG } from '../../projects/ngx-drag-to-select/src/lib/config';
 
 import {
+  disableEvenItems,
   disableRangeSelection,
   disableSelectOnDrag,
   enableSelectWithShortcut,
   getDesktopExample,
+  selectAll,
   toggleItem,
 } from '../support/utils';
 
@@ -48,6 +50,15 @@ describe('Clicking', () => {
             .shouldSelect([3])
             .get(`.${SELECTED_CLASS}`)
             .should('have.length', 1);
+        });
+      });
+
+      it('should not select disabled items', () => {
+        getDesktopExample().within(() => {
+          disableEvenItems();
+          selectAll();
+
+          cy.getSelectedItems().should('have.length', 6);
         });
       });
     });

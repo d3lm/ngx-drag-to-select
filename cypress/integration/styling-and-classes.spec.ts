@@ -1,6 +1,6 @@
 import { DEFAULT_CONFIG } from '../../projects/ngx-drag-to-select/src/lib/config';
 import { NO_SELECT_CLASS } from '../../projects/ngx-drag-to-select/src/lib/constants';
-import { getDesktopExample } from '../support/utils';
+import { disableEvenItems, getDesktopExample, selectAll } from '../support/utils';
 
 const SELECTED_CLASS = DEFAULT_CONFIG.selectedClass;
 
@@ -102,6 +102,15 @@ describe('Styling and Classes', () => {
         .then(($element) => {
           expect($element.css('border')).to.eq('1px solid rgb(210, 210, 210)');
         });
+    });
+  });
+
+  it.only('should add `.dts-disabled` class to disabled items', () => {
+    getDesktopExample().within(() => {
+      disableEvenItems();
+      selectAll();
+
+      cy.get('.dts-disabled').should('have.length', 6);
     });
   });
 });
