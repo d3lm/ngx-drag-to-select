@@ -56,6 +56,10 @@ export const disableRangeSelection = () => {
   return cy.get('[data-cy="disableRangeSelection"]').click();
 };
 
+export const disableEvenItems = () => {
+  return cy.get('[data-cy="disableEvenItems"]').click();
+};
+
 export const enableSelectMode = () => {
   return cy.get('[data-cy="selectMode"]').click();
 };
