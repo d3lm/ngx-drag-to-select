@@ -105,7 +105,7 @@ describe('Styling and Classes', () => {
     });
   });
 
-  it(`should add '.dts-disabled' class to disabled items`, () => {
+  it(`should add 'dts-disabled' class to disabled items`, () => {
     getDesktopExample().within(() => {
       disableEvenItems();
       selectAll();
