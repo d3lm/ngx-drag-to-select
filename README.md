@@ -250,7 +250,7 @@ shortcuts: {
 | --------------------- | ---------- | ------- | ------------------------------------------------------------------------------------------------------------- |
 | selectedItems         | Array<any> | /       | Collection of items that are currently selected                                                               |
 | selectOnDrag          | Boolean    | `true`  | Whether items should be selected while dragging                                                               |
-| selectOnClick         | Boolean    | `true`  | Whether items should be selected when clicking them                                                           |
+| selectOnClick         | Boolean    | `true`  | Whether items should be selected when clicked                                                           |
 | dragOverItems         | Boolean    | `true`  | Whether drag selection is allowed to start from inside an item                                                |
 | disabled              | Boolean    | `false` | Disable selection                                                                                             |
 | disableRangeSelection | Boolean    | `false` | Disable range selection                                                                                       |
