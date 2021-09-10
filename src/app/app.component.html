@@ -23,6 +23,7 @@
     <mat-checkbox data-cy="selectOnDrag" [(ngModel)]="selectOnDrag">Select on Drag</mat-checkbox>
     <mat-checkbox data-cy="dragOverItems" [(ngModel)]="dragOverItems">Drag Over Items</mat-checkbox>
     <mat-checkbox data-cy="disable" [(ngModel)]="disable">Disable</mat-checkbox>
+    <mat-checkbox data-cy="disableEvenItems" [(ngModel)]="disableEvenItems">Disable even items</mat-checkbox>
     <mat-checkbox data-cy="disableRangeSelection" [(ngModel)]="disableRangeSelection"
       >Disable Range Selection</mat-checkbox
     >
@@ -50,7 +51,10 @@
         [dragOverItems]="dragOverItems"
       >
         <mat-grid-list cols="4" rowHeight="200px" gutterSize="20px">
-          <mat-grid-tile [dtsSelectItem]="document" *ngFor="let document of documents">
+          <mat-grid-tile
+              [dtsSelectItem]="document"
+              [dtsDisabled]="disableEvenItems && document.disabled"
+              *ngFor="let document of documents">
             {{ document.name }}
           </mat-grid-tile>
         </mat-grid-list>

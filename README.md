@@ -469,16 +469,22 @@ The `dtsSelectItem` directive is used to mark DOM elements as selectable items. 
 
 **Inputs**
 
-| Input         | Type | Default            | Description                                  |
-| ------------- | ---- | ------------------ | -------------------------------------------- |
-| dtsSelectItem | any  | Directive Instance | Value that is used when the item is selected |
+| Input         | Type     | Default            | Description                                  |
+| ------------- | -------- | ------------------ | -------------------------------------------- |
+| dtsSelectItem | any      | Directive Instance | Value that is used when the item is selected |
+| dtsDisabled   | boolean  | false              | Whether the item is selectable or not        |
 
 Example:
 
 ```html
 <dts-select-container>
   <ul>
-    <li [dtsSelectItem]="document" *ngFor="let document of documents">{{ document.name }}</li>
+    <li
+        *ngFor="let document of documents"
+        [dtsSelectItem]="document"
+        [dtsDisabled]="document.disabled">
+      {{ document.name }}
+    </li>
   </ul>
 </dts-select-container>
 ```

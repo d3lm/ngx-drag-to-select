@@ -21,6 +21,7 @@ export class AppComponent implements OnInit {
   isDesktop = false;
   selectWithShortcut = false;
   dragOverItems = true;
+  disableEvenItems = false;
 
   constructor(
     private titleService: Title,
@@ -49,6 +50,7 @@ export class AppComponent implements OnInit {
       this.documents.push({
         id,
         name: `Document ${id}`,
+        disabled: id % 2 === 0,
       });
     }
   }

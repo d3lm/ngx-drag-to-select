@@ -70,12 +70,14 @@ dts-select-container {
     font-family: Raleway;
     color: $primary-color;
   }
+
+  &::ng-deep .dts-disabled {
+    color: #b5b5b5;
+  }
 }
 
 mat-checkbox {
-  & + & {
-    margin-left: 1rem;
-  }
+  margin-right: 1rem;
 }
 
 .action-buttons {
