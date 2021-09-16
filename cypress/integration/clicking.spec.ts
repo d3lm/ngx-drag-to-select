@@ -4,6 +4,7 @@ import {
   disableEvenItems,
   disableRangeSelection,
   disableSelectOnDrag,
+  disableSelectOnClick,
   enableSelectWithShortcut,
   getDesktopExample,
   selectAll,
@@ -181,6 +182,18 @@ describe('Clicking', () => {
   it('should not select a single item when selectWithShortcut is true', () => {
     getDesktopExample().within(() => {
       enableSelectWithShortcut();
+      cy.getSelectItem(0)
+        .dispatch('mousedown', { button: 0 })
+        .dispatch('mouseup')
+        .shouldSelect([])
+        .get(`.${SELECTED_CLASS}`)
+        .should('have.length', 0);
+    });
+  });
+
+  it('should not select a single item when selectOnClick is false', () => {
+    getDesktopExample().within(() => {
+      disableSelectOnClick();
       cy.getSelectItem(0)
         .dispatch('mousedown', { button: 0 })
         .dispatch('mouseup')
