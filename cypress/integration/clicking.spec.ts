@@ -194,6 +194,7 @@ describe('Clicking', () => {
   it('should not select a single item when selectOnClick is false', () => {
     getDesktopExample().within(() => {
       disableSelectOnClick();
+
       cy.getSelectItem(0)
         .dispatch('mousedown', { button: 0 })
         .dispatch('mouseup')
