@@ -1,3 +1,13 @@
+# [4.2.0](https://github.com/d3lm/ngx-drag-to-select/compare/v4.1.0...v4.2.0) (2021-09-19)
+
+
+### Features
+
+* **lib:** add input to control select on click ([#129](https://github.com/d3lm/ngx-drag-to-select/issues/129)) ([abeeb1b](https://github.com/d3lm/ngx-drag-to-select/commit/abeeb1b905475e589ebaf6777dcd9aa42549771b))
+* **lib:** allow select items to be disabled ([#130](https://github.com/d3lm/ngx-drag-to-select/issues/130)) ([ec1116e](https://github.com/d3lm/ngx-drag-to-select/commit/ec1116e27f7d8d6c94f7c5f51ee917bee46c5bc4))
+
+
+
 # [4.1.0](https://github.com/d3lm/ngx-drag-to-select/compare/v4.0.0...v4.1.0) (2021-06-17)
 
 
