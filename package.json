@@ -12,7 +12,7 @@
     "build:prerender-ghpages": "npm run clean && npm run prerender -- --browser-target=app:build:production,ghpages",
     "build:lib": "npm run clean && npm run build:lib:code && npm run build:lib:sass && npm run copy:styles && npm run copy:readme",
     "build:lib:code": "ng build ngx-drag-to-select --prod",
-    "build:lib:sass": "sass projects/ngx-drag-to-select/src/scss/ngx-drag-to-select.scss dist/ngx-drag-to-select.css",
+    "build:lib:sass": "sass --no-source-map projects/ngx-drag-to-select/src/scss/ngx-drag-to-select.scss dist/ngx-drag-to-select/ngx-drag-to-select.css",
     "deploy": "ngh --dir dist/browser",
     "copy:styles": "cpr projects/ngx-drag-to-select/src/scss dist/ngx-drag-to-select/scss",
     "copy:readme": "copyfiles README.md dist/ngx-drag-to-select",
