@@ -91,6 +91,7 @@ describe('SelectContainerComponent', () => {
 
   it('should update its selection when selectable items change', (done) => {
     selectContainerInstance.selectItems((item: SelectItemValue) => item.id === 1 || item.id === 2);
+
     selectContainerInstance.itemDeselected.subscribe((item: SelectItemValue) => {
       expect(item).toEqual({ id: 1 });
     });
@@ -101,7 +102,9 @@ describe('SelectContainerComponent', () => {
     });
 
     const previousData = testComponent.data$.value;
+
     testComponent.data$.next([previousData[1], previousData[2], { id: 4 }]);
+
     fixture.detectChanges();
   });
 
