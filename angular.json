@@ -29,7 +29,8 @@
             ],
             "styles": [
               {
-                "input": "src/styles.scss"
+                "input": "src/styles.scss",
+                "inject": true
               }
             ],
             "scripts": []
@@ -45,7 +46,6 @@
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
-              "extractCss": true,
               "namedChunks": false,
               "extractLicenses": true,
               "vendorChunk": false,
@@ -140,7 +140,7 @@
       "prefix": "ngx",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "tsConfig": "projects/ngx-drag-to-select/tsconfig.lib.json",
             "project": "projects/ngx-drag-to-select/ng-package.json"
