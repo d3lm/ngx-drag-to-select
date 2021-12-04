@@ -3,7 +3,7 @@ import { ngExpressEngine } from '@nguniversal/express-engine';
 import * as express from 'express';
 import { existsSync } from 'fs';
 import { join } from 'path';
-import 'zone.js/dist/zone-node';
+import 'zone.js/node';
 import { AppServerModule } from './src/main.server';
 
 export function app(): express.Express {
