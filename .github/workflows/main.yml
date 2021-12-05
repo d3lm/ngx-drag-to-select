@@ -5,9 +5,9 @@ on:
     branches: [master]
 
 jobs:
-  test-and-lint:
+  build-test-and-lint:
     runs-on: ubuntu-latest
-    name: Test and Lint
+    name: Build, Test and Lint
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -32,11 +32,14 @@ jobs:
       - name: Install
         run: yarn --frozen-lockfile
 
+      - name: Build
+        run: yarn build:lib
+
       - name: Test
-        run: npm run test
+        run: yarn test
 
       - name: Lint and Format
-        run: npm run lint:ci
+        run: yarn lint:ci
   e2e:
     name: Cypress on Chrome
     runs-on: ubuntu-latest
