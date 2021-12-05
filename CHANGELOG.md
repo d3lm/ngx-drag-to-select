@@ -1,3 +1,12 @@
+## [4.2.1](https://github.com/d3lm/ngx-drag-to-select/compare/v4.2.0...v4.2.1) (2021-12-05)
+
+
+### Bug Fixes
+
+* **lib:** keep selection when selectable items change ([#142](https://github.com/d3lm/ngx-drag-to-select/issues/142)) ([24514ca](https://github.com/d3lm/ngx-drag-to-select/commit/24514cac0990f4ccc85c3914b9880d6ca7d3bd95))
+
+
+
 # [4.2.0](https://github.com/d3lm/ngx-drag-to-select/compare/v4.1.0...v4.2.0) (2021-09-19)
 
 
