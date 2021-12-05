@@ -103,12 +103,12 @@ export const shouldBeInSelectMode = (inSelectMode: boolean = true) => {
 
     return cy
       .then(getAddButton)
-      .should(`${addButtonVisibility}be.visible`)
+      .should(`${addButtonVisibility}exist`)
       .then(getClearButton)
-      .should(`${selectModeButtonVisibility}be.visible`)
+      .should(`${selectModeButtonVisibility}exist`)
       .then(getSelectAllButton)
-      .should(`${selectModeButtonVisibility}be.visible`)
+      .should(`${selectModeButtonVisibility}exist`)
       .then(getDeleteButton)
-      .should(`${selectModeButtonVisibility}be.visible`);
+      .should(`${selectModeButtonVisibility}exist`);
   };
 };

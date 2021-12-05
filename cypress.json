@@ -1,6 +1,10 @@
 {
   "baseUrl": "http://localhost:4200",
+  "projectId": "innrjb",
+  "integrationFolder": "cypress/integration",
+  "supportFile": "cypress/support/index.ts",
+  "screenshotsFolder": "cypress/screenshots",
+  "pluginsFile": "cypress/plugins/index.ts",
   "fixturesFolder": false,
-  "video": false,
-  "projectId": "innrjb"
+  "video": false
 }

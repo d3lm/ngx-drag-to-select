@@ -1,5 +1,3 @@
-# See http://help.github.com/ignore-files/ for more about ignoring files.
-
 # compiled output
 /dist
 /dist-server
@@ -38,6 +36,9 @@ testem.log
 # e2e
 /e2e/*.js
 /e2e/*.map
+
+# cypress
+/cypress/downloads
 
 # System Files
 .DS_Store
