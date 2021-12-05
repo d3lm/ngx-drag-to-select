@@ -7,6 +7,8 @@
 
 A lightweight, fast, configurable and reactive drag-to-select component for Angular 6 and beyond
 
+> ⚠️ If your application does **not** use Angular >= v13.x then please use `ngx-drag-to-select@4.x`. Version 5 only supports the new package format which removes ViewEngine specific metadata.
+
 ## Demo
 
 [Live Demo](https://d3lm.github.io/ngx-drag-to-select/)
