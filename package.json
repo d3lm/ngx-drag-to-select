@@ -27,11 +27,11 @@
     "e2e": "ng e2e",
     "cypress:open": "ng run app:cypress-open",
     "cypress:run": "ng run app:cypress-run",
+    "lint": "ng lint",
     "lint:check": "ng lint",
     "lint:fix": "ng lint app --fix && ng lint ngx-drag-to-select --fix",
     "lint:ci": "npm run lint:check && npm run format:check",
-    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0 -k ./projects/ngx-drag-to-select",
-    "lint": "ng lint"
+    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0 -k ./projects/ngx-drag-to-select"
   },
   "husky": {
     "hooks": {
