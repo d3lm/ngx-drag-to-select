@@ -21,16 +21,17 @@ export const SELECT_ITEM_INSTANCE = Symbol();
 @Directive({
   selector: '[dtsSelectItem]',
   exportAs: 'dtsSelectItem',
-  host: {
-    class: 'dts-select-item',
-  },
 })
 export class SelectItemDirective implements OnInit, DoCheck {
   private _boundingClientRect: BoundingBox | undefined;
 
   selected = false;
 
-  @HostBinding('class.dts-range-start') rangeStart = false;
+  @HostBinding('class.dts-range-start')
+  rangeStart = false;
+
+  @HostBinding('class.dts-select-item')
+  readonly hostClass = true;
 
   @Input() dtsSelectItem: any | undefined;
 
@@ -44,7 +45,7 @@ export class SelectItemDirective implements OnInit, DoCheck {
 
   constructor(
     @Inject(CONFIG) private config: DragToSelectConfig,
-    @Inject(PLATFORM_ID) private platformId: Object,
+    @Inject(PLATFORM_ID) private platformId: Record<string, unknown>,
     private host: ElementRef,
     private renderer: Renderer2
   ) {}

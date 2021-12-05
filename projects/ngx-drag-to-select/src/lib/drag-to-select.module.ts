@@ -11,7 +11,7 @@ import { mergeDeep } from './utils';
 
 const COMPONENTS = [SelectContainerComponent, SelectItemDirective];
 
-export function CONFIG_FACTORY(config: Partial<DragToSelectConfig>) {
+function configFactory(config: Partial<DragToSelectConfig>) {
   return mergeDeep(DEFAULT_CONFIG, config);
 }
 
@@ -30,7 +30,7 @@ export class DragToSelectModule {
         { provide: USER_CONFIG, useValue: config },
         {
           provide: CONFIG,
-          useFactory: CONFIG_FACTORY,
+          useFactory: configFactory,
           deps: [USER_CONFIG],
         },
       ],

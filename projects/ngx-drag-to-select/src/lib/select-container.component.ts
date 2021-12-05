@@ -71,9 +71,6 @@ import { KeyboardEventsService } from './keyboard-events.service';
 @Component({
   selector: 'dts-select-container',
   exportAs: 'dts-select-container',
-  host: {
-    class: 'dts-select-container',
-  },
   template: `
     <ng-content></ng-content>
     <div
@@ -110,7 +107,11 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy, After
   @HostBinding('class.dts-custom')
   custom = false;
 
-  @Output() selectedItemsChange = new EventEmitter<any>();
+  @HostBinding('class.dts-select-container')
+  readonly hostClass = true;
+
+  @Output()
+  selectedItemsChange = new EventEmitter<any>();
   @Output() select = new EventEmitter<any>();
   @Output() itemSelected = new EventEmitter<any>();
   @Output() itemDeselected = new EventEmitter<any>();
@@ -130,7 +131,7 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy, After
   private _lastRangeSelection: Map<SelectItemDirective, boolean> = new Map();
 
   constructor(
-    @Inject(PLATFORM_ID) private platformId: Object,
+    @Inject(PLATFORM_ID) private platformId: Record<string, unknown>,
     private shortcuts: ShortcutService,
     private keyboardEvents: KeyboardEventsService,
     private hostElementRef: ElementRef,
@@ -564,7 +565,11 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy, After
       (!inSelection && !item.selected && this.shortcuts.removeFromSelection(event) && this._tmpItems.has(item));
 
     if (shoudlAdd) {
-      item.selected ? item._deselect() : item._select();
+      if (item.selected) {
+        item._deselect();
+      } else {
+        item._select();
+      }
 
       const action = this.shortcuts.removeFromSelection(event)
         ? Action.Delete
@@ -574,7 +579,12 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy, After
 
       this._tmpItems.set(item, action);
     } else if (shouldRemove) {
-      this.shortcuts.removeFromSelection(event) ? item._select() : item._deselect();
+      if (this.shortcuts.removeFromSelection(event)) {
+        item._select();
+      } else {
+        item._deselect();
+      }
+
       this._tmpItems.delete(item);
     }
   }
