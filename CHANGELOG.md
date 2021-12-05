@@ -3,7 +3,12 @@
 
 ### Features
 
-* upgrade to angular v13 ([#146](https://github.com/d3lm/ngx-drag-to-select/issues/146)) ([b65e018](https://github.com/d3lm/ngx-drag-to-select/commit/b65e018b034f889abfc7dfd226dfc816fdda6ef9))
+* upgrade to angular v13 ([#146](https://github.com/d3lm/ngx-drag-to-select/issues/146)) ([e13cf8a](https://github.com/d3lm/ngx-drag-to-select/commit/e13cf8a6bc4061f28708f33f5a06435623d556af))
+
+
+### BREAKING CHANGES
+
+* dropping support for Angular < 13.x
 
 
 
