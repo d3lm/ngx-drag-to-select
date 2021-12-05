@@ -250,7 +250,7 @@ shortcuts: {
 | --------------------- | ---------- | ------- | ------------------------------------------------------------------------------------------------------------- |
 | selectedItems         | Array<any> | /       | Collection of items that are currently selected                                                               |
 | selectOnDrag          | Boolean    | `true`  | Whether items should be selected while dragging                                                               |
-| selectOnClick         | Boolean    | `true`  | Whether items should be selected when clicked                                                           |
+| selectOnClick         | Boolean    | `true`  | Whether items should be selected when clicked                                                                 |
 | dragOverItems         | Boolean    | `true`  | Whether drag selection is allowed to start from inside an item                                                |
 | disabled              | Boolean    | `false` | Disable selection                                                                                             |
 | disableRangeSelection | Boolean    | `false` | Disable range selection                                                                                       |
@@ -469,20 +469,17 @@ The `dtsSelectItem` directive is used to mark DOM elements as selectable items. 
 
 **Inputs**
 
-| Input         | Type     | Default            | Description                                  |
-| ------------- | -------- | ------------------ | -------------------------------------------- |
-| dtsSelectItem | any      | Directive Instance | Value that is used when the item is selected |
-| dtsDisabled   | boolean  | false              | Whether the item is selectable or not        |
+| Input         | Type    | Default            | Description                                  |
+| ------------- | ------- | ------------------ | -------------------------------------------- |
+| dtsSelectItem | any     | Directive Instance | Value that is used when the item is selected |
+| dtsDisabled   | boolean | false              | Whether the item is selectable or not        |
 
 Example:
 
 ```html
 <dts-select-container>
   <ul>
-    <li
-        *ngFor="let document of documents"
-        [dtsSelectItem]="document"
-        [dtsDisabled]="document.disabled">
+    <li *ngFor="let document of documents" [dtsSelectItem]="document" [dtsDisabled]="document.disabled">
       {{ document.name }}
     </li>
   </ul>
@@ -522,11 +519,12 @@ Yep you totally can! But this also means you won't be able to use the latest fea
 
 What does that mean for you now? We recommend to stay up to date with new Angular versions. If for some reasons you can't then here's an overview of versions you could use with older versions of Angular:
 
-| Angular       | ngx-drag-to-select |
-| ------------- | ------------------ |
-| 5.x.x         | <= 1.1.1           |
-| 6.x.x - 7.x.x | > 1.1.1 <= 3.1.1   |
-| >= 8.0.0      | >= 4.0.0           |
+| Angular             | ngx-drag-to-select |
+| ------------------- | ------------------ |
+| 5.x.x               | <= 1.1.1           |
+| 6.x.x - 7.x.x       | > 1.1.1 <= 3.1.1   |
+| >= 10.x.x <= 12.x.x | >= 4.0.0           |
+| >= 13.x.x           | >= 5.0.0           |
 
 To install a specific version run for example `npm install ngx-drag-to-select@x.x.x`.
 
