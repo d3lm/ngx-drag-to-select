@@ -7,7 +7,7 @@
 
 A lightweight, fast, configurable and reactive drag-to-select component for Angular 6 and beyond
 
-> ⚠️ If your application does **not** use Angular >= v13.x then please use `ngx-drag-to-select@4.x`. Version 5 only supports the new package format which removes ViewEngine specific metadata.
+> ⚠️ If your application does **not** use Angular >= v13.x then please use `ngx-drag-to-select@4.x`. Version 5 only supports the new package format which removes ViewEngine specific metadata. For more information check out the [FAQ](#versionOverview).
 
 ## Demo
 
@@ -515,7 +515,7 @@ Example:
 
 Yes.
 
-### Can I use this library with an older version of Angular?
+### <a id="versionOverview"></a> Can I use this library with an older version of Angular?
 
 Yep you totally can! But this also means you won't be able to use the latest features. We are not back porting new features due to the maintenance overhead it would create. Severe bugs and security issues, however, are back ported.
 
