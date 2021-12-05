@@ -5,7 +5,7 @@ export const isObject = (item: any) => {
   return item && typeof item === 'object' && !Array.isArray(item) && item !== null;
 };
 
-export function mergeDeep(target: Object, source: Object) {
+export function mergeDeep(target: Record<string, any>, source: Record<string, any>) {
   if (isObject(target) && isObject(source)) {
     Object.keys(source).forEach((key) => {
       if (isObject(source[key])) {

@@ -6,7 +6,11 @@ import { SelectContainerComponent } from './select-container.component';
 import { SelectItemDirective } from './select-item.directive';
 import { BehaviorSubject } from 'rxjs';
 
-function triggerDomEvent(eventType: string, target: HTMLElement | Element, eventData: object = {}): void {
+function triggerDomEvent(
+  eventType: string,
+  target: HTMLElement | Element,
+  eventData: Record<string, unknown> = {}
+): void {
   const event: Event = document.createEvent('Event');
   Object.assign(event, eventData);
   event.initEvent(eventType, true, true);

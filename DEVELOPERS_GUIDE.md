@@ -77,12 +77,9 @@ yarn e2e
 - `clean`: Remove dist folder
 - `test`: Run unit tests (Jest)
 - `test:watch`: Run unit tests in watch mode
-- `test:ci`: Run test suite for CI build including unit and e2e tests
 - `e2e`: Run end-to-end test suite (Cypress)
-- `e2e:ci`: Run end-to-end test suite for CI build
-- `ci`: Run CI pipeline (includes linting, formatting, tests and deployment to GitHub Pages)
-- `commitmsg`: Git hook to validate the commit message
-- `precommit`: Git hook to format staged files using Prettier
+- `cypress:open`: Open Cypress
+- `cypress:run`: Run Cypress in headless mode
 
 ## Folder Structure
 

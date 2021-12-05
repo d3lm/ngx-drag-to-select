@@ -146,7 +146,7 @@ describe('Mobile', () => {
         .should('contain', 2)
         .then(clearSelection)
         .get('@selectCount')
-        .should('not.be.visible');
+        .should('not.exist');
     });
   });
 });

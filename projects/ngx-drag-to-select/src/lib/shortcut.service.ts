@@ -43,7 +43,7 @@ export class ShortcutService {
   private _latestShortcut: Map<string, boolean> = new Map();
 
   constructor(
-    @Inject(PLATFORM_ID) private platformId: Object,
+    @Inject(PLATFORM_ID) private platformId: Record<string, unknown>,
     @Inject(CONFIG) config: DragToSelectConfig,
     private keyboardEvents: KeyboardEventsService
   ) {

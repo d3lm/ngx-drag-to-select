@@ -13,7 +13,7 @@ export class KeyboardEventsService {
   mouseup$: Observable<MouseEvent>;
   mousemove$: Observable<MouseEvent>;
 
-  constructor(@Inject(PLATFORM_ID) private platformId: Object) {
+  constructor(@Inject(PLATFORM_ID) private platformId: Record<string, unknown>) {
     if (isPlatformBrowser(this.platformId)) {
       this._initializeKeyboardStreams();
     }
