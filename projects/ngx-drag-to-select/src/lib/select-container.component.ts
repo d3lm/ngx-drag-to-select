@@ -350,7 +350,8 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy, After
       .subscribe(([items, selectedItems]: [QueryList<SelectItemDirective>, any[]]) => {
         const newList = items.toArray();
         this._selectableItems = newList;
-        const removedItems = selectedItems.filter((item) => !newList.includes(item.value));
+        const newValues = newList.map((item) => item.value);
+        const removedItems = selectedItems.filter((item) => !newValues.includes(item));
 
         if (removedItems.length) {
           removedItems.forEach((item) => this._removeItem(item, selectedItems));
@@ -614,7 +615,7 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy, After
       success = true;
       selectedItems.splice(index, 1);
       this._selectedItems$.next(selectedItems);
-      this.itemDeselected.emit(item.value);
+      this.itemDeselected.emit(value);
     }
 
     return success;

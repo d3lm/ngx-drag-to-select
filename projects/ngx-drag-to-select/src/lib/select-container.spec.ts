@@ -4,6 +4,7 @@ import { By } from '@angular/platform-browser';
 import { DragToSelectModule } from './drag-to-select.module';
 import { SelectContainerComponent } from './select-container.component';
 import { SelectItemDirective } from './select-item.directive';
+import { BehaviorSubject } from 'rxjs';
 
 function triggerDomEvent(eventType: string, target: HTMLElement | Element, eventData: object = {}): void {
   const event: Event = document.createEvent('Event');
@@ -24,9 +25,9 @@ interface SelectItemValue {
       (itemDeselected)="itemDeselected($event)"
       #selectContainer
     >
-      <span [dtsSelectItem]="{ id: 1 }" #selectItem="dtsSelectItem">Item #1</span>
-      <span [dtsSelectItem]="{ id: 2 }" #selectItem="dtsSelectItem">Item #2</span>
-      <span [dtsSelectItem]="{ id: 3 }" #selectItem="dtsSelectItem">Item #3</span>
+      <ng-container *ngIf="data$ | async as data">
+        <span *ngFor="let item of data" [dtsSelectItem]="item" #selectItem="dtsSelectItem">Item #{{ item.id }}</span>
+      </ng-container>
     </dts-select-container>
   `,
 })
@@ -38,6 +39,8 @@ class TestComponent {
   selectItems: QueryList<SelectItemDirective>;
 
   selectedItems = [];
+
+  data$ = new BehaviorSubject<SelectItemValue[]>([{ id: 1 }, { id: 2 }, { id: 3 }]);
 
   itemSelected(value: any) {}
   itemDeselected(value: any) {}
@@ -84,6 +87,25 @@ describe('SelectContainerComponent', () => {
 
     expect(selectContainer.componentInstance._calculateBoundingClientRect).toHaveBeenCalled();
     expect(fixture.componentInstance.selectItems.first.calculateBoundingClientRect).toHaveBeenCalled();
+  });
+
+  it('should update its selection when selectable items change', (done) => {
+    selectContainerInstance.selectItems((item: SelectItemValue) => item.id === 1 || item.id === 2);
+
+    selectContainerInstance.itemDeselected.subscribe((item: SelectItemValue) => {
+      expect(item).toEqual({ id: 1 });
+    });
+
+    selectContainerInstance.select.subscribe((items) => {
+      expect(items).toEqual([{ id: 2 }]);
+      done();
+    });
+
+    const previousData = testComponent.data$.value;
+
+    testComponent.data$.next([previousData[1], previousData[2], { id: 4 }]);
+
+    fixture.detectChanges();
   });
 
   describe('selectItems()', () => {
