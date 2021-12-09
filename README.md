@@ -75,31 +75,22 @@ The first step is to add the CSS and for that you have two options. Either you u
 
 Copy `ngx-drag-to-select.css` to your project and add it as a `style` tag to your `index.html`.
 
-If you are using sass you can import the css as follows:
+It's not recommended, and not supported, to load the CSS in your SCSS files. Instead, if you don't need to customize
+the styles, and you're using the [Angular CLI](https://github.com/angular/angular-cli) you can add it to your `angular.json`:
 
-```scss
-@import '~ngx-drag-to-select/ngx-drag-to-select.css';
-```
-
-If you are using the [Angular CLI](https://github.com/angular/angular-cli) you can add it to your `angular.json`:
-
-```json
+```diff
 "styles": [
-  {
-    "input": "src/styles.scss"
-  },
-  {
-    "input": "node_modules/ngx-drag-to-select/ngx-drag-to-select.css"
-  }
+  "src/styles.scss",
++ "node_modules/ngx-drag-to-select/ngx-drag-to-select.css"
 ]
 ```
 
-**Using the sass package**
+**Using Sass**
 
-If you're using sass you can simply import the sass package. This allows you to [override the default variables](#overriding-sass-variables) to customize the library to your needs.
+If you're using Sass you can simply import `ngx-drag-to-select` into `src/styles.scss`. This allows you to [override the default variables](#overriding-sass-variables) to customize the library to your needs.
 
 ```scss
-@import '~ngx-drag-to-select/scss/ngx-drag-to-select';
+@import 'ngx-drag-to-select';
 ```
 
 ### Adding the module
@@ -107,7 +98,7 @@ If you're using sass you can simply import the sass package. This allows you to 
 In your `AppModule` import `DragToSelectModule` from `ngx-drag-to-select` and add it to the module imports:
 
 ```ts
-import { DragToSelectModule } from 'ngx-drag-to-select';
+import { value DragToSelectModule } from 'ngx-drag-to-select';
 
 @NgModule({
   imports: [DragToSelectModule.forRoot()],
@@ -198,7 +189,7 @@ You can override these options by passing a configuration object to `forRoot()`.
 Here's an example:
 
 ```ts
-import { DragToSelectModule } from 'ngx-drag-to-select';
+import { value DragToSelectModule } from 'ngx-drag-to-select';
 
 @NgModule({
   imports: [
