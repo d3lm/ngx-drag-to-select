@@ -40,7 +40,7 @@ export class SelectItemDirective implements OnInit, DoCheck {
   dtsDisabled = false;
 
   get value(): SelectItemDirective | any {
-    return this.dtsSelectItem !== undefined ? this.dtsSelectItem : this;
+    return this.dtsSelectItem != null ? this.dtsSelectItem : this;
   }
 
   constructor(
