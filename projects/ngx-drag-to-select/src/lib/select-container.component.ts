@@ -314,9 +314,6 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy, After
         this.selectedItemsChange.emit(selectedItems);
         this.select.emit(selectedItems);
       },
-      complete: () => {
-        this.selectedItemsChange.emit([]);
-      },
     });
   }
 
