@@ -52,6 +52,10 @@ export const disableSelectOnDrag = () => {
   return cy.get('[data-cy="selectOnDrag"]').click();
 };
 
+export const disableDragOverItems = () => {
+  return cy.get('[data-cy="dragOverItems"]').click();
+};
+
 export const disableSelectOnClick = () => {
   return cy.get('[data-cy="selectOnClick"]').click();
 };
