@@ -122,6 +122,7 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy, After
 
   private _selectedItems$ = new BehaviorSubject<Array<any>>([]);
   private _selectableItems: Array<SelectItemDirective> = [];
+  private _selectableItemsNative: Array<HTMLElement> = [];
   private updateItems$ = new Subject<UpdateAction>();
   private destroy$ = new Subject<void>();
 
@@ -163,7 +164,7 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy, After
       const mousedown$ = fromEvent<MouseEvent>(this.host, 'mousedown').pipe(
         filter((event) => event.button === 0), // only emit left mouse
         filter(() => !this.disabled),
-        filter((event) => this.selectOnClick || event.target === this.host),
+        filter((event) => this.selectOnClick || this._isClickOutsideSelectableItem(event.target)),
         tap((event) => this._onMouseDown(event)),
         share()
       );
@@ -172,7 +173,7 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy, After
         filter((event) => !this.shortcuts.disableSelection(event)),
         filter(() => !this.selectMode),
         filter(() => !this.disableDrag),
-        filter((event) => this.dragOverItems || event.target === this.host),
+        filter((event) => this.dragOverItems || this._isClickOutsideSelectableItem(event.target)),
         switchMap(() => mousemove$.pipe(takeUntil(mouseup$))),
         share()
       );
@@ -265,6 +266,7 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy, After
 
   ngAfterContentInit() {
     this._selectableItems = this.$selectableItems.toArray();
+    this._selectableItemsNative = this._selectableItems.map((directive) => directive.nativeElememnt);
   }
 
   selectAll() {
@@ -351,6 +353,7 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy, After
       .subscribe(([items, selectedItems]: [QueryList<SelectItemDirective>, any[]]) => {
         const newList = items.toArray();
         this._selectableItems = newList;
+        this._selectableItemsNative = this._selectableItems.map((directive) => directive.nativeElememnt);
         const newValues = newList.map((item) => item.value);
         const removedItems = selectedItems.filter((item) => !newValues.includes(item));
 
@@ -679,5 +682,14 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy, After
     }
 
     return null;
+  }
+
+  private _isClickOutsideSelectableItem(element: EventTarget): boolean {
+    if (!(element instanceof HTMLElement)) return false;
+
+    if (element === this.host) return true;
+    if (this._selectableItemsNative.includes(element)) return false;
+
+    return this._isClickOutsideSelectableItem(element.parentElement);
   }
 }
