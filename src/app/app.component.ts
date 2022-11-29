@@ -22,6 +22,7 @@ export class AppComponent implements OnInit {
   selectWithShortcut = false;
   dragOverItems = true;
   disableEvenItems = false;
+  intersectionMode: 'intersection' | 'full' = 'intersection';
 
   constructor(
     private titleService: Title,

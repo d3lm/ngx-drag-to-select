@@ -30,6 +30,14 @@
     <mat-checkbox data-cy="selectMode" [(ngModel)]="selectMode">Select Mode</mat-checkbox>
     <mat-checkbox data-cy="selectWithShortcut" [(ngModel)]="selectWithShortcut">Select with Shortcut</mat-checkbox>
 
+    <mat-form-field>
+      <mat-label>Intersection Mode</mat-label>
+      <mat-select data-cy="intersectionMode" [(ngModel)]="intersectionMode">
+        <mat-option value="intersection">intersection</mat-option>
+        <mat-option value="included">included</mat-option>
+      </mat-select>
+    </mat-form-field>
+
     <div class="action-buttons">
       <button data-cy="selectAll" mat-raised-button (click)="selectContainer.selectAll()">Select All</button>
       <button data-cy="clearSelection" mat-raised-button (click)="selectContainer.clearSelection()">
@@ -49,12 +57,14 @@
         [selectOnDrag]="selectOnDrag"
         [selectWithShortcut]="selectWithShortcut"
         [dragOverItems]="dragOverItems"
+        [intersectionMode]="intersectionMode"
       >
         <mat-grid-list cols="4" rowHeight="200px" gutterSize="20px">
           <mat-grid-tile
-              [dtsSelectItem]="document"
-              [dtsDisabled]="disableEvenItems && document.disabled"
-              *ngFor="let document of documents">
+            [dtsSelectItem]="document"
+            [dtsDisabled]="disableEvenItems && document.disabled"
+            *ngFor="let document of documents"
+          >
             {{ document.name }}
           </mat-grid-tile>
         </mat-grid-list>

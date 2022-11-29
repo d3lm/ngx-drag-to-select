@@ -76,6 +76,15 @@ export const enableSelectWithShortcut = () => {
   return cy.get('[data-cy="selectWithShortcut"]').click();
 };
 
+export const setDragIntersectionMode = (mode: 'intersection' | 'included') => {
+  return cy
+    .get('[data-cy="intersectionMode"]')
+    .click()
+    .then(() => {
+      cy.get(`.cdk-overlay-container .mat-select-panel-wrap .mat-option-text:contains("${mode}")`).click();
+    });
+};
+
 export const selectAll = () => {
   return getSelectAllButton().click();
 };
