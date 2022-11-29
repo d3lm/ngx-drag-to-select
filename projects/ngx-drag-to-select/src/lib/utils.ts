@@ -55,6 +55,15 @@ export const boxIntersects = (boxA: BoundingBox, boxB: BoundingBox) => {
   );
 };
 
+export const boxIncluded = (boxA: BoundingBox, boxB: BoundingBox) => {
+  return (
+    boxA.left <= boxB.left &&
+    boxA.left + boxA.width >= boxB.left + boxB.width &&
+    boxA.top <= boxB.top &&
+    boxA.top + boxA.height >= boxB.top + boxB.height
+  );
+};
+
 export const calculateBoundingClientRect = (element: HTMLElement): BoundingBox => {
   return element.getBoundingClientRect();
 };

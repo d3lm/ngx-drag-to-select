@@ -5,6 +5,7 @@ import {
   disableSelectOnDrag,
   enableSelectMode,
   getDesktopExample,
+  setDragIntersectionMode,
   shouldBeInvisible,
   shouldBeVisible,
   toggleItem,
@@ -455,6 +456,27 @@ describe('Dragging', () => {
           .shouldSelect([])
           .get(`.${SELECTED_CLASS}`)
           .should('have.length', 0)
+          .get('@end')
+          .dispatch('mouseup');
+      });
+    });
+  });
+
+  describe('intersection mode "included"', () => {
+    beforeEach(() => {
+      setDragIntersectionMode('included');
+    });
+
+    it('should only select items that have their bounding box fully included in the select box', () => {
+      getDesktopExample().within(() => {
+        cy.getSelectItem(0)
+          .dispatch('mousedown', { button: 0 })
+          .getSelectItem(11)
+          .dispatch('mousemove')
+          .as('end')
+          .getSelectBox()
+          .then(shouldBeVisible)
+          .shouldSelect([6, 7])
           .get('@end')
           .dispatch('mouseup');
       });
