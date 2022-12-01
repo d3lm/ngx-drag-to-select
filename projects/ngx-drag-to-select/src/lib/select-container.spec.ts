@@ -4,7 +4,8 @@ import { By } from '@angular/platform-browser';
 import { DragToSelectModule } from './drag-to-select.module';
 import { SelectContainerComponent } from './select-container.component';
 import { SelectItemDirective } from './select-item.directive';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 function triggerDomEvent(
   eventType: string,
@@ -94,14 +95,16 @@ describe('SelectContainerComponent', () => {
   });
 
   it('should update its selection when selectable items change', (done) => {
+    const done$ = new Subject<void>();
     selectContainerInstance.selectItems((item: SelectItemValue) => item.id === 1 || item.id === 2);
 
-    selectContainerInstance.itemDeselected.subscribe((item: SelectItemValue) => {
+    selectContainerInstance.itemDeselected.pipe(takeUntil(done$)).subscribe((item: SelectItemValue) => {
       expect(item).toEqual({ id: 1 });
     });
 
     selectContainerInstance.select.subscribe((items) => {
       expect(items).toEqual([{ id: 2 }]);
+      done$.next();
       done();
     });
 
