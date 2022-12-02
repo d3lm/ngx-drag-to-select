@@ -1,0 +1,20 @@
+<h4 class="list-header">{{title}}</h4>
+
+<div
+  class="list-cards"
+  cdkDropList
+  [cdkDropListData]="tasks"
+  (cdkDropListDropped)="drop($event)">
+  <app-task *ngFor="let item of tasks; let index = index;" [item]="item" cdkDrag
+    (cdkDragStarted)="dragStarted($event, index)"
+    (cdkDragEnded)="dragEnded()"
+    (cdkDragDropped)="dropped($event)"
+    [dtsSelectItem]="item">
+    <div class="drag-preview-container" *cdkDragPreview>
+      <mat-card *ngFor="let selected of container.selectedItems">{{ selected }}</mat-card>
+    </div>
+    <div class="drag-placeholder-container" *cdkDragPlaceholder>
+      <mat-card *ngFor="let selected of container.selectedItems">{{ selected }}</mat-card>
+    </div>
+  </app-task>
+</div>

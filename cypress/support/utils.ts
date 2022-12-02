@@ -28,6 +28,10 @@ export const getMobileExample = () => {
   return cy.get('[data-cy="mobile"]');
 };
 
+export const getDragAndDropExample = () => {
+  return cy.get('[data-cy="drag-and-drop"]');
+};
+
 export const getSelectCount = () => {
   return cy.get('[data-cy="select-count"]');
 };
@@ -48,8 +52,24 @@ export const getClearButton = () => {
   return cy.get('[data-cy="clearSelection"]');
 };
 
+export const getTodoList = () => {
+  return cy.get('[data-cy="todo-list"]');
+};
+
+export const getDoingList = () => {
+  return cy.get('[data-cy="doing-list"]');
+};
+
+export const getDoneList = () => {
+  return cy.get('[data-cy="done-list"]');
+};
+
 export const disableSelectOnDrag = () => {
   return cy.get('[data-cy="selectOnDrag"]').click();
+};
+
+export const disableDragOverItems = () => {
+  return cy.get('[data-cy="dragOverItems"]').click();
 };
 
 export const disableSelectOnClick = () => {
