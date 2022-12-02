@@ -36,8 +36,8 @@ describe('Drag And Drop', () => {
           // drag to SelectItem in other list
           .getSelectItem(5)
           .wait(16)
-          .dispatch('mousemove')
-          .dispatch('mousemove')
+          .dispatch('mousemove', { force: true })
+          .dispatch('mousemove', { force: true })
           .dispatch('mouseup');
 
         getDoingList().within(() => {
@@ -56,8 +56,8 @@ describe('Drag And Drop', () => {
           .getSelectItem(0)
           .dispatch('mousedown', 'bottom', { button: 0 })
           .getSelectItem(4)
-          .dispatch('mousemove')
-          .dispatch('mousemove')
+          .dispatch('mousemove', { force: true })
+          .dispatch('mousemove', { force: true })
           .dispatch('mouseup');
 
         cy.get('app-task').eq(0).should('contain', 'Open Ticket #1');
