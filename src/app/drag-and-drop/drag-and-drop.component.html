@@ -1,4 +1,10 @@
-<dts-select-container data-cy="-container" [custom]="true" [(selectedItems)]="selectedItems">
+<dts-select-container
+  data-cy="-container"
+  [custom]="true"
+  [(selectedItems)]="selectedItems"
+  [selectOnClick]="false"
+  [dragOverItems]="false"
+>
   <div class="list-wrapper" cdkDropListGroup>
     <app-task-list title="Todo" [tasks]="todo" data-cy="todo-list"></app-task-list>
     <app-task-list title="Doing" [tasks]="doing" data-cy="doing-list"></app-task-list>
