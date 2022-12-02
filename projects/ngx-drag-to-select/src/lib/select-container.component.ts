@@ -400,7 +400,6 @@ export class SelectContainerComponent implements AfterViewInit, OnDestroy, Selec
   }
 
   private _onMouseDown(event: MouseEvent) {
-    console.log('Mouse Down');
     if (this.shortcuts.disableSelection(event) || this.disabled) {
       return;
     }
