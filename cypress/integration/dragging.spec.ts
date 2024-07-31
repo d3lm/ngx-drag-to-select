@@ -1,7 +1,9 @@
 import { DEFAULT_CONFIG } from '../../projects/ngx-drag-to-select/src/lib/config';
 
 import {
+  disableDragOverItems,
   disableSelection,
+  disableSelectOnClick,
   disableSelectOnDrag,
   enableSelectMode,
   getDesktopExample,
@@ -89,6 +91,78 @@ describe('Dragging', () => {
           .then(shouldBeVisible)
           .get('@end')
           .dispatch('mouseup');
+      });
+    });
+
+    describe('Selection with dragOverItems set to false', () => {
+      it('should not start selection over items', () => {
+        disableDragOverItems().then(() => {
+          getDesktopExample().within(() => {
+            cy.getSelectItem(0)
+              .dispatch('mousedown', { button: 0 })
+              .getSelectItem(6, 'end')
+              .dispatch('mousemove')
+              .shouldSelect([1])
+              .getSelectBox()
+              .then(shouldBeInvisible)
+              .get('@end')
+              .dispatch('mouseup');
+          });
+        });
+      });
+
+      it('should start selection on element inbetween SelectContainer and SelectItem', () => {
+        disableDragOverItems().then(() => {
+          getDesktopExample().within(() => {
+            cy.get('mat-grid-list')
+              .as('end')
+              .scrollIntoView()
+              .trigger('mousedown', 210, 50, { button: 0 })
+              .getSelectItem(6)
+              .dispatch('mousemove')
+              .shouldSelect([2, 3, 6, 7])
+              .getSelectBox()
+              .then(shouldBeVisible)
+              .get('@end')
+              .dispatch('mouseup');
+          });
+        });
+      });
+    });
+
+    describe('Selection with selectOnClick set to false', () => {
+      it('should not start selection over items', () => {
+        disableSelectOnClick().then(() => {
+          getDesktopExample().within(() => {
+            cy.getSelectItem(0)
+              .dispatch('mousedown', { button: 0 })
+              .getSelectItem(6, 'end')
+              .dispatch('mousemove')
+              .shouldSelect([])
+              .getSelectBox()
+              .then(shouldBeInvisible)
+              .get('@end')
+              .dispatch('mouseup');
+          });
+        });
+      });
+
+      it('should start selection on element inbetween SelectContainer and SelectItem', () => {
+        disableSelectOnClick().then(() => {
+          getDesktopExample().within(() => {
+            cy.get('mat-grid-list')
+              .as('end')
+              .scrollIntoView()
+              .trigger('mousedown', 210, 50, { button: 0 })
+              .getSelectItem(6)
+              .dispatch('mousemove')
+              .shouldSelect([2, 3, 6, 7])
+              .getSelectBox()
+              .then(shouldBeVisible)
+              .get('@end')
+              .dispatch('mouseup');
+          });
+        });
       });
     });
   });
